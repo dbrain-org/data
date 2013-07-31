@@ -23,6 +23,13 @@ import epic.data.Adapter;
  */
 public class Adapters {
 
+    /**
+     * Combine 2 adapters that process the same type. This method allows null since each adapter is interchangeable.
+     * @param adapter1 The adapter 1 to plug, or null.
+     * @param adapter2 The adapter 2 to plug, or null.
+     * @param <T> The type these adapter processes.
+     * @return
+     */
     public static <T> Adapter<T, T> combineAlike( final Adapter<T, T> adapter1, final Adapter<T, T> adapter2 ) {
         if (adapter1 == null) {
             return adapter2;

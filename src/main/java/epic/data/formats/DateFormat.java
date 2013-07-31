@@ -27,7 +27,7 @@ public class DateFormat implements Format<Date> {
     }
 
     @Override
-    public String format( Date value ) throws FormatException {
+    public synchronized String format( Date value ) throws FormatException {
         if ( value == null ) {
             return null;
         } else {
@@ -36,7 +36,7 @@ public class DateFormat implements Format<Date> {
     }
 
     @Override
-    public Date parse( String value ) throws ParseException {
+    public synchronized Date parse( String value ) throws ParseException {
         if ( Strings.isBlank( value ) ) {
             return null;
         } else {
