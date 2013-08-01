@@ -35,7 +35,7 @@ public class StringToNumberAdapter extends DecimalFormat implements Adapter<Stri
     }
 
     @Override
-    public Number adapt( String s ) {
+    public Number apply( String s ) {
         if ( s == null ) {
             return null;
         } else synchronized ( this ) {

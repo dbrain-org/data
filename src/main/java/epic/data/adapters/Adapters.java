@@ -63,8 +63,8 @@ public class Adapters {
     public static <FROM, TO, MIDDLE> Adapter<FROM, TO> combine( final Adapter<FROM, ? extends MIDDLE> adapter1, final Adapter<MIDDLE, TO> adapter2 ) {
         return new Adapter<FROM, TO>() {
             @Override
-            public TO adapt( FROM from ) {
-                return adapter2.adapt( adapter1.adapt( from ) );
+            public TO apply( FROM from ) {
+                return adapter2.apply( adapter1.apply( from ) );
             }
         };
     }

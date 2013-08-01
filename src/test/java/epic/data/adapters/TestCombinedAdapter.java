@@ -35,13 +35,13 @@ public class TestCombinedAdapter {
     @Test
     public void testCombine2() throws Exception {
         Adapter<String, String> slc = StringAdapters.maxLength( 10 );
-        Adapter<Object, String> combined = Adapters.combine( ObjectAdapters.STRING, StringAdapters.TRIM, slc );
+        Adapter<Object, String> combined = Adapters.combine( ObjectAdapters.TO_STRING, StringAdapters.TRIM, slc );
 
-        Assert.assertEquals( combined.adapt( new StringBuilder("test  " ) ), "test" );
+        Assert.assertEquals( combined.apply( new StringBuilder( "test  " ) ), "test" );
     }
 
     public void testString2Int() {
-        Adapter<Object, Integer> o2i = ObjectAdapters.INTEGER;
+        Adapter<Object, Integer> o2i = ObjectAdapters.TO_INTEGER;
         StringToNumberAdapter s2n = new StringToNumberAdapter( new DecimalFormat( "####" ) );
 
         Adapter<String, Integer> s2i = Adapters.combine( s2n, o2i );

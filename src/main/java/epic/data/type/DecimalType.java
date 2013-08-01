@@ -4,7 +4,7 @@ import epic.data.Adapter;
 import epic.data.adapters.Adapters;
 import epic.data.adapters.NumberAdapters;
 import epic.data.adapters.ObjectAdapters;
-import epic.data.formats.Formats;
+import epic.data.formats.ObjectFormats;
 import epic.data.Formatter;
 
 import java.math.BigDecimal;
@@ -44,12 +44,12 @@ public class DecimalType extends AbstractDataType<BigDecimal> {
     }
 
     public DecimalType( Integer precision, Integer scale, RoundingMode roundingMode ) {
-        castAdapter = Adapters.combine( ObjectAdapters.BIG_DECIMAL, NumberAdapters.setDecimalParameters( precision, scale, roundingMode ) );
+        castAdapter = Adapters.combine( ObjectAdapters.TO_BIG_DECIMAL, NumberAdapters.setDecimalParameters( precision, scale, roundingMode ) );
     }
 
     @Override
     public Formatter<? super BigDecimal> getDisplayFormatter() {
-        return Formats.TO_STRING;
+        return ObjectFormats.TO_STRING;
     }
 
     @Override

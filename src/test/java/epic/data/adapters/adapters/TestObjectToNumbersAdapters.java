@@ -37,37 +37,37 @@ public class TestObjectToNumbersAdapters {
     private <T extends Number> void testObjectToNumberAdaptation( Adapter<Object, T> adapter, Number numberValue, T expected ) {
         BigDecimal value = new BigDecimal( numberValue.toString() );
 
-        Assert.assertEquals( adapter.adapt( value.toString() ), expected );
+        Assert.assertEquals( adapter.apply( value.toString() ), expected );
         if ( value.unscaledValue().toString().length() <= 9 ) {
-            Assert.assertEquals( adapter.adapt( value.floatValue() ), expected );
+            Assert.assertEquals( adapter.apply( value.floatValue() ), expected );
         }
         if ( value.unscaledValue().toString().length() <= 18 ) {
-            Assert.assertEquals( adapter.adapt( value.doubleValue() ), expected );
+            Assert.assertEquals( adapter.apply( value.doubleValue() ), expected );
         }
-        Assert.assertEquals( adapter.adapt( new BigDecimal( value.toString() ) ), expected );
+        Assert.assertEquals( adapter.apply( new BigDecimal( value.toString() ) ), expected );
         if ( !( numberValue instanceof Float || numberValue instanceof Double ) ) {
-            Assert.assertEquals( adapter.adapt( new BigInteger( value.toString() ) ), expected );
+            Assert.assertEquals( adapter.apply( new BigInteger( value.toString() ) ), expected );
         }
         if ( value.compareTo( BigDecimal.valueOf( Long.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf( Long.MAX_VALUE ) ) <= 0 ) {
-            Assert.assertEquals( adapter.adapt( value.longValue() ), expected );
-            Assert.assertEquals( adapter.adapt( new AtomicLong( value.longValue() ) ), expected );
+            Assert.assertEquals( adapter.apply( value.longValue() ), expected );
+            Assert.assertEquals( adapter.apply( new AtomicLong( value.longValue() ) ), expected );
         }
         if ( value.compareTo( BigDecimal.valueOf( Integer.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf( Integer.MAX_VALUE ) ) <= 0 ) {
-            Assert.assertEquals( adapter.adapt( value.intValue() ), expected );
-            Assert.assertEquals( adapter.adapt( new AtomicInteger( value.intValue() ) ), expected );
+            Assert.assertEquals( adapter.apply( value.intValue() ), expected );
+            Assert.assertEquals( adapter.apply( new AtomicInteger( value.intValue() ) ), expected );
         }
         if ( value.compareTo( BigDecimal.valueOf( Short.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf( Short.MAX_VALUE ) ) <= 0 ) {
-            Assert.assertEquals( adapter.adapt( value.shortValue() ), expected );
+            Assert.assertEquals( adapter.apply( value.shortValue() ), expected );
         }
         if ( value.compareTo( BigDecimal.valueOf( Byte.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf( Byte.MAX_VALUE ) ) <= 0 ) {
-            Assert.assertEquals( adapter.adapt( value.byteValue() ), expected );
+            Assert.assertEquals( adapter.apply( value.byteValue() ), expected );
         }
 
     }
 
     private <T extends Number> boolean testOneNumberAdaptationFailure( Adapter<Object, T> adapter, Object value ) {
         try {
-            adapter.adapt( value );
+            adapter.apply( value );
         } catch ( Exception e ) {
             return true;
         }
@@ -106,86 +106,86 @@ public class TestObjectToNumbersAdapters {
     @Test
     public void testObjectToByteAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.BYTE, Byte.MIN_VALUE, Byte.MIN_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.BYTE, Byte.MAX_VALUE, Byte.MAX_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.BYTE, (byte) 0, (byte) 0 );
-        testNumberAdaptationFailure( ObjectAdapters.BYTE, -500 );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BYTE, Byte.MIN_VALUE, Byte.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BYTE, Byte.MAX_VALUE, Byte.MAX_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BYTE, (byte) 0, (byte) 0 );
+        testNumberAdaptationFailure( ObjectAdapters.TO_BYTE, -500 );
 
     }
 
     @Test
     public void testObjectToShortAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.SHORT, Short.MIN_VALUE, Short.MIN_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.SHORT, Short.MAX_VALUE, Short.MAX_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.SHORT, (short) 0, (short) 0 );
-        testNumberAdaptationFailure( ObjectAdapters.SHORT, -500000 );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_SHORT, Short.MIN_VALUE, Short.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_SHORT, Short.MAX_VALUE, Short.MAX_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_SHORT, (short) 0, (short) 0 );
+        testNumberAdaptationFailure( ObjectAdapters.TO_SHORT, -500000 );
 
     }
 
     @Test
     public void testObjectToIntegerAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.INTEGER, Integer.MIN_VALUE, Integer.MIN_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.INTEGER, Integer.MAX_VALUE, Integer.MAX_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.INTEGER, 0, 0 );
-        testNumberAdaptationFailure( ObjectAdapters.INTEGER, Long.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_INTEGER, Integer.MIN_VALUE, Integer.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_INTEGER, Integer.MAX_VALUE, Integer.MAX_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_INTEGER, 0, 0 );
+        testNumberAdaptationFailure( ObjectAdapters.TO_INTEGER, Long.MIN_VALUE );
 
     }
 
     @Test
     public void testObjectToLongAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.LONG, Long.MIN_VALUE, Long.MIN_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.LONG, Long.MAX_VALUE, Long.MAX_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.LONG, 0L, 0L );
-        testNumberAdaptationFailure( ObjectAdapters.LONG, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ) );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_LONG, Long.MIN_VALUE, Long.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_LONG, Long.MAX_VALUE, Long.MAX_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_LONG, 0L, 0L );
+        testNumberAdaptationFailure( ObjectAdapters.TO_LONG, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ) );
 
     }
 
     @Test
     public void testObjectToFloatAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.FLOAT, (float) Long.MIN_VALUE, (float) Long.MIN_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.FLOAT, (float) Long.MAX_VALUE, (float) Long.MAX_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.FLOAT, 0f, 0f );
-        testObjectToNumberAdaptation( ObjectAdapters.FLOAT, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).floatValue() );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_FLOAT, (float) Long.MIN_VALUE, (float) Long.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_FLOAT, (float) Long.MAX_VALUE, (float) Long.MAX_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_FLOAT, 0f, 0f );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_FLOAT, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).floatValue() );
 
     }
 
     @Test
     public void testObjectToDoubleAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.DOUBLE, (double) Long.MIN_VALUE, (double) Long.MIN_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.DOUBLE, (double) Long.MAX_VALUE, (double) Long.MAX_VALUE );
-        testObjectToNumberAdaptation( ObjectAdapters.DOUBLE, 0d, 0d );
-        testObjectToNumberAdaptation( ObjectAdapters.DOUBLE, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).doubleValue() );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_DOUBLE, (double) Long.MIN_VALUE, (double) Long.MIN_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_DOUBLE, (double) Long.MAX_VALUE, (double) Long.MAX_VALUE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_DOUBLE, 0d, 0d );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_DOUBLE, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).doubleValue() );
 
     }
 
     @Test
     public void testObjectToBigDecimalAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.BIG_DECIMAL, BigDecimal.ONE, BigDecimal.ONE );
-        testObjectToNumberAdaptation( ObjectAdapters.BIG_DECIMAL, BigDecimal.ONE.negate(), BigDecimal.ONE.negate() );
-        testObjectToNumberAdaptation( ObjectAdapters.BIG_DECIMAL, BigDecimal.ZERO, BigDecimal.ZERO );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BIG_DECIMAL, BigDecimal.ONE, BigDecimal.ONE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BIG_DECIMAL, BigDecimal.ONE.negate(), BigDecimal.ONE.negate() );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BIG_DECIMAL, BigDecimal.ZERO, BigDecimal.ZERO );
 
     }
 
     @Test
     public void testObjectToBigIntegerAdapter() {
 
-        testObjectToNumberAdaptation( ObjectAdapters.BIG_INTEGER, BigInteger.ONE, BigInteger.ONE );
-        testObjectToNumberAdaptation( ObjectAdapters.BIG_INTEGER, BigInteger.ONE.negate(), BigInteger.ONE.negate() );
-        testObjectToNumberAdaptation( ObjectAdapters.BIG_INTEGER, BigInteger.ZERO, BigInteger.ZERO );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BIG_INTEGER, BigInteger.ONE, BigInteger.ONE );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BIG_INTEGER, BigInteger.ONE.negate(), BigInteger.ONE.negate() );
+        testObjectToNumberAdaptation( ObjectAdapters.TO_BIG_INTEGER, BigInteger.ZERO, BigInteger.ZERO );
 
     }
 
     @Test
     public void testBigDecimalScientificNotation() throws Exception {
         String test = "123123E-100";
-        BigDecimal bdvalue = ObjectAdapters.BIG_DECIMAL.adapt( test );
-        Double dvalue = ObjectAdapters.DOUBLE.adapt( test );
+        BigDecimal bdvalue = ObjectAdapters.TO_BIG_DECIMAL.apply( test );
+        Double dvalue = ObjectAdapters.TO_DOUBLE.apply( test );
 
 
 

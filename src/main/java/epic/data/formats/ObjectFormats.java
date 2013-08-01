@@ -1,7 +1,10 @@
 package epic.data.formats;
 
+import epic.data.Adapter;
+import epic.data.Format;
 import epic.data.FormatException;
 import epic.data.Formatter;
+import epic.data.ParseException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +13,7 @@ import epic.data.Formatter;
  * Time: 9:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Formats {
+public class ObjectFormats {
 
     public static Formatter<Object> TO_STRING = new Formatter<Object>() {
 

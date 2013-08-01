@@ -33,12 +33,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ObjectAdapters {
 
     /**
-     * Adapter that adapt Object to BigInteger.
+     * Adapter that apply Object to BigInteger.
      */
-    public static final Adapter<Object, BigInteger> BIG_INTEGER = new Adapter<Object, BigInteger>() {
+    public static final Adapter<Object, BigInteger> TO_BIG_INTEGER = new Adapter<Object, BigInteger>() {
 
         @Override
-        public BigInteger adapt( Object o ) {
+        public BigInteger apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof BigInteger ) return (BigInteger) o;
             if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
@@ -62,10 +62,10 @@ public class ObjectAdapters {
      * Time: 8:10 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static final Adapter<Object, Double> DOUBLE = new Adapter<Object, Double>() {
+    public static final Adapter<Object, Double> TO_DOUBLE = new Adapter<Object, Double>() {
 
         @Override
-        public Double adapt( Object o ) {
+        public Double apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Double ) return (Double) o;
             if ( o instanceof Number ) {
@@ -85,10 +85,10 @@ public class ObjectAdapters {
      * Time: 8:10 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static final Adapter<Object, Float> FLOAT = new Adapter<Object, Float>() {
+    public static final Adapter<Object, Float> TO_FLOAT = new Adapter<Object, Float>() {
 
         @Override
-        public Float adapt( Object o ) {
+        public Float apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Float ) return (Float) o;
             if ( o instanceof Number ) {
@@ -108,7 +108,7 @@ public class ObjectAdapters {
      * Time: 8:08 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static final Adapter<Object, Long> LONG = new Adapter<Object, Long>() {
+    public static final Adapter<Object, Long> TO_LONG = new Adapter<Object, Long>() {
 
         private BigDecimal BD_MIN = new BigDecimal( Long.MIN_VALUE );
         private BigDecimal BD_MAX = new BigDecimal( Long.MAX_VALUE );
@@ -116,7 +116,7 @@ public class ObjectAdapters {
         private BigInteger BI_MAX = new BigInteger( Long.toString( Long.MAX_VALUE ) );
 
         @Override
-        public Long adapt( Object o ) {
+        public Long apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Long ) return (Long) o;
             if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof AtomicInteger || o instanceof AtomicLong ) {
@@ -157,21 +157,21 @@ public class ObjectAdapters {
      * Time: 4:35 PM
      * To change this template use File | Settings | File Templates.
      */
-    public static final Adapter<Object, String> STRING = new Adapter<Object, String>() {
+    public static final Adapter<Object, String> TO_STRING = new Adapter<Object, String>() {
 
         @Override
-        public String adapt( Object o ) {
+        public String apply( Object o ) {
             return o != null ? o.toString() : null;
         }
     };
 
     /**
-     * Adapter that adapt Object to BigDecimal.
+     * Adapter that apply Object to BigDecimal.
      */
-    public static Adapter<Object, BigDecimal> BIG_DECIMAL = new Adapter<Object, BigDecimal>() {
+    public static Adapter<Object, BigDecimal> TO_BIG_DECIMAL = new Adapter<Object, BigDecimal>() {
 
         @Override
-        public BigDecimal adapt( Object o ) {
+        public BigDecimal apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof BigDecimal ) return (BigDecimal) o;
             if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
@@ -195,10 +195,10 @@ public class ObjectAdapters {
      * Time: 8:06 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static Adapter<Object, Boolean> BOOLEAN = new Adapter<Object, Boolean>() {
+    public static Adapter<Object, Boolean> TO_BOOLEAN = new Adapter<Object, Boolean>() {
 
         @Override
-        public Boolean adapt( Object o ) {
+        public Boolean apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Boolean ) return (Boolean) o;
             if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
@@ -222,7 +222,7 @@ public class ObjectAdapters {
      * Time: 8:06 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static Adapter<Object, Byte> BYTE = new Adapter<Object, Byte>() {
+    public static Adapter<Object, Byte> TO_BYTE = new Adapter<Object, Byte>() {
 
         private BigDecimal BD_MIN = new BigDecimal( Byte.MIN_VALUE );
         private BigDecimal BD_MAX = new BigDecimal( Byte.MAX_VALUE );
@@ -230,7 +230,7 @@ public class ObjectAdapters {
         private BigInteger BI_MAX = new BigInteger( Byte.toString( Byte.MAX_VALUE ) );
 
         @Override
-        public Byte adapt( Object o ) {
+        public Byte apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Byte ) return (Byte) o;
             if ( o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
@@ -276,7 +276,7 @@ public class ObjectAdapters {
      * Time: 8:08 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static Adapter<Object, Integer> INTEGER = new Adapter<Object, Integer>() {
+    public static Adapter<Object, Integer> TO_INTEGER = new Adapter<Object, Integer>() {
 
         private BigDecimal BD_MIN = new BigDecimal( Integer.MIN_VALUE );
         private BigDecimal BD_MAX = new BigDecimal( Integer.MAX_VALUE );
@@ -284,7 +284,7 @@ public class ObjectAdapters {
         private BigInteger BI_MAX = new BigInteger( Integer.toString( Integer.MAX_VALUE ) );
 
         @Override
-        public Integer adapt( Object o ) {
+        public Integer apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Integer ) return (Integer) o;
             if ( o instanceof Byte || o instanceof Short || o instanceof AtomicInteger ) {
@@ -332,7 +332,7 @@ public class ObjectAdapters {
      * Time: 8:07 AM
      * To change this template use File | Settings | File Templates.
      */
-    public static Adapter<Object, Short> SHORT = new Adapter<Object, Short>() {
+    public static Adapter<Object, Short> TO_SHORT = new Adapter<Object, Short>() {
 
         private BigDecimal BD_MIN = new BigDecimal( Short.MIN_VALUE );
         private BigDecimal BD_MAX = new BigDecimal( Short.MAX_VALUE );
@@ -340,7 +340,7 @@ public class ObjectAdapters {
         private BigInteger BI_MAX = new BigInteger( Short.toString( Short.MAX_VALUE ) );
 
         @Override
-        public Short adapt( Object o ) {
+        public Short apply( Object o ) {
             if ( o == null ) return null;
             if ( o instanceof Short ) return (Short) o;
             if ( o instanceof Byte || o instanceof Short ) {

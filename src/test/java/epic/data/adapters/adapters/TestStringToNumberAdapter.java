@@ -32,7 +32,7 @@ public class TestStringToNumberAdapter {
     public void testSimpleAdapt() {
 
         StringToNumberAdapter dfa = new StringToNumberAdapter( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
-        Number n = dfa.adapt( "124" );
+        Number n = dfa.apply( "124" );
 
         Assert.assertEquals( n.intValue(), 124 );
     }
@@ -40,7 +40,7 @@ public class TestStringToNumberAdapter {
     @Test
     public void testSimpleFailure() {
         StringToNumberAdapter dfa = new StringToNumberAdapter( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
-        Number n = dfa.adapt( "NAN" );
+        Number n = dfa.apply( "NAN" );
 
         Assert.assertEquals( n.intValue(), 124 );
 

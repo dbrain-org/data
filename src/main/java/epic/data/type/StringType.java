@@ -1,11 +1,11 @@
 package epic.data.type;
 
+import epic.data.formats.ObjectFormats;
 import epic.data.shared.Strings;
 import epic.data.Adapter;
 import epic.data.adapters.Adapters;
 import epic.data.adapters.ObjectAdapters;
 import epic.data.adapters.StringAdapters;
-import epic.data.formats.Formats;
 import epic.data.Formatter;
 
 import java.util.Comparator;
@@ -82,9 +82,9 @@ public class StringType extends AbstractDataType<String> {
         // Combine them
         Adapter<String, String> combinedAdapter = Adapters.combineAlike( trimAdapter, lengthAdapter, caseAdapter, blankAdapter );
         if ( combinedAdapter != null ) {
-            castAdapter = Adapters.combine( ObjectAdapters.STRING, combinedAdapter );
+            castAdapter = Adapters.combine( ObjectAdapters.TO_STRING, combinedAdapter );
         } else {
-            castAdapter = ObjectAdapters.STRING;
+            castAdapter = ObjectAdapters.TO_STRING;
         }
 
     }
@@ -92,7 +92,7 @@ public class StringType extends AbstractDataType<String> {
 
     @Override
     public Formatter<? super String> getDisplayFormatter() {
-        return Formats.TO_STRING;
+        return ObjectFormats.TO_STRING;
     }
 
     @Override

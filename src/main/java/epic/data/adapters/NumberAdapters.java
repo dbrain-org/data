@@ -21,8 +21,11 @@ public class NumberAdapters {
             final MathContext mathContext = new MathContext( precision, rounding );
 
             @Override
-            public BigDecimal adapt( BigDecimal bigDecimal ) {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            public BigDecimal apply( BigDecimal bigDecimal ) {
+                if ( bigDecimal == null ) {
+                    return null;
+                }
+                return bigDecimal.setScale( scale, mathContext.getRoundingMode() );
             }
         };
     }

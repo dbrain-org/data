@@ -21,6 +21,6 @@ package epic.data;
  */
 public interface Adapter<FROM, TO> {
 
-    public TO adapt( FROM from );
+    public TO apply( FROM from );
 
 }

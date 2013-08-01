@@ -34,7 +34,7 @@ public abstract class AbstractDataType<T> implements DataType<T> {
 
     @Override
     public final T cast( Object value ) {
-        return getCastAdapter().adapt( value );
+        return getCastAdapter().apply( value );
     }
 
     @Override

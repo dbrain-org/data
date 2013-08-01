@@ -35,7 +35,7 @@ public class StringAdapters {
      */
     public static Adapter<String, String> BLANK_TO_NULL = new Adapter<String, String>() {
         @Override
-        public String adapt( String s ) {
+        public String apply( String s ) {
             return s == null || Strings.isBlank( s ) ? null : s;
         }
     };
@@ -45,7 +45,7 @@ public class StringAdapters {
      */
     public static Adapter<String, String> NULL_TO_BLANK = new Adapter<String, String>() {
         @Override
-        public String adapt( String s ) {
+        public String apply( String s ) {
             return s == null ? "" : s;
         }
     };
@@ -56,7 +56,7 @@ public class StringAdapters {
      */
     public static Adapter<String, String> TRIM = new Adapter<String, String>() {
         @Override
-        public String adapt( String s ) {
+        public String apply( String s ) {
             if ( s == null ) {
                 return null;
             } else {
@@ -70,7 +70,7 @@ public class StringAdapters {
      */
     public static Adapter<String, String> RTRIM = new Adapter<String, String>() {
         @Override
-        public String adapt( String s ) {
+        public String apply( String s ) {
             if ( s == null ) {
                 return null;
             } else {
@@ -84,7 +84,7 @@ public class StringAdapters {
      */
     public static Adapter<String, String> LTRIM = new Adapter<String, String>() {
         @Override
-        public String adapt( String s ) {
+        public String apply( String s ) {
             if ( s == null ) {
                 return null;
             } else {
@@ -99,7 +99,7 @@ public class StringAdapters {
     public static Adapter<String, String> maxLength( final int length ) {
         return new Adapter<String, String>() {
             @Override
-            public String adapt( String s ) {
+            public String apply( String s ) {
                 if ( s == null ) {
                     return null;
                 } else if ( s.length() <= length ) {
@@ -119,7 +119,7 @@ public class StringAdapters {
     public static Adapter<String, String> lowercase( final Locale locale ) {
         return new Adapter<String, String>() {
             @Override
-            public String adapt( String s ) {
+            public String apply( String s ) {
                 return s != null ? s.toLowerCase( locale ) : null;
             }
         };
@@ -133,7 +133,7 @@ public class StringAdapters {
     public static Adapter<String, String> uppercase( final Locale locale ) {
         return new Adapter<String, String>() {
             @Override
-            public String adapt( String s ) {
+            public String apply( String s ) {
                 return s != null ? s.toUpperCase( locale ) : null;
             }
         };
