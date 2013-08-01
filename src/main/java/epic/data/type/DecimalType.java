@@ -4,7 +4,7 @@ import epic.data.Adapter;
 import epic.data.adapters.Adapters;
 import epic.data.adapters.NumberAdapters;
 import epic.data.adapters.ObjectAdapters;
-import epic.data.formats.ObjectFormats;
+import epic.data.formats.Formats;
 import epic.data.Formatter;
 
 import java.math.BigDecimal;
@@ -49,7 +49,7 @@ public class DecimalType extends AbstractDataType<BigDecimal> {
 
     @Override
     public Formatter<? super BigDecimal> getDisplayFormatter() {
-        return ObjectFormats.TO_STRING;
+        return Formats.TO_STRING;
     }
 
     @Override
