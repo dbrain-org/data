@@ -16,9 +16,10 @@
 
 package epic.data.adapters.adapters;
 
+import epic.data.adapters.DataTruncationException;
+import epic.data.adapters.transforms.StringToNumberAdapter;
 import junit.framework.Assert;
 import org.junit.Test;
-import epic.data.adapters.transforms.StringToNumberAdapter;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
@@ -37,7 +38,7 @@ public class TestStringToNumberAdapter {
         Assert.assertEquals( n.intValue(), 124 );
     }
 
-    @Test
+    @Test(expected = DataTruncationException.class)
     public void testSimpleFailure() {
         StringToNumberAdapter dfa = new StringToNumberAdapter( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
         Number n = dfa.apply( "NAN" );
