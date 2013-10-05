@@ -16,7 +16,7 @@
 
 package epic.data.type.impl;
 
-import epic.data.shared.Strings;
+import epic.data.util.Strings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

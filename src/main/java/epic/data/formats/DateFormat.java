@@ -3,7 +3,7 @@ package epic.data.formats;
 import epic.data.Format;
 import epic.data.FormatException;
 import epic.data.ParseException;
-import epic.data.shared.Strings;
+import epic.data.util.Strings;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;

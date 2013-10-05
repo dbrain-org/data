@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package epic.data.shared;
+package epic.data.util;
 
 import java.util.Comparator;
 

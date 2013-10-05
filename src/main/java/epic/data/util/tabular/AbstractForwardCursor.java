@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package epic.data.shared.tabular;
+package epic.data.util.tabular;
 
 import epic.data.Adapter;
 import epic.data.adapters.ObjectAdapters;

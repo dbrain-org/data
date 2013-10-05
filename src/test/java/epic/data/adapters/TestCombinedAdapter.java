@@ -19,7 +19,6 @@ package epic.data.adapters;
 import junit.framework.Assert;
 import org.junit.Test;
 import epic.data.Adapter;
-import epic.data.adapters.transforms.StringToNumberAdapter;
 
 import java.text.DecimalFormat;
 

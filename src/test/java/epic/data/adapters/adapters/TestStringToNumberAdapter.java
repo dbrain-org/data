@@ -16,8 +16,8 @@
 
 package epic.data.adapters.adapters;
 
-import epic.data.adapters.DataTruncationException;
-import epic.data.adapters.transforms.StringToNumberAdapter;
+import epic.data.DataTruncationException;
+import epic.data.adapters.StringToNumberAdapter;
 import junit.framework.Assert;
 import org.junit.Test;
 

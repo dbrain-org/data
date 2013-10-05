@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package epic.data.adapters.transforms;
+package epic.data.adapters;
 
 import epic.data.Adapter;
-import epic.data.adapters.DataTruncationException;
+import epic.data.DataTruncationException;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

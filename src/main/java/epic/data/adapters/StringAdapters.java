@@ -17,7 +17,8 @@
 package epic.data.adapters;
 
 import epic.data.Adapter;
-import epic.data.shared.Strings;
+import epic.data.DataTruncationException;
+import epic.data.util.Strings;
 
 import java.util.Locale;
 

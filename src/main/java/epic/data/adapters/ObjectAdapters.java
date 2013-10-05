@@ -17,6 +17,7 @@
 package epic.data.adapters;
 
 import epic.data.Adapter;
+import epic.data.DataTruncationException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

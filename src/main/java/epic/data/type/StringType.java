@@ -1,7 +1,7 @@
 package epic.data.type;
 
 import epic.data.formats.Formats;
-import epic.data.shared.Strings;
+import epic.data.util.Strings;
 import epic.data.Adapter;
 import epic.data.adapters.Adapters;
 import epic.data.adapters.ObjectAdapters;

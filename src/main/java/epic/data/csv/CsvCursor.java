@@ -16,7 +16,7 @@
 
 package epic.data.csv;
 
-import epic.data.shared.tabular.AbstractForwardCursor;
+import epic.data.util.tabular.AbstractForwardCursor;
 import epic.data.parsing.ParseCursor;
 import epic.data.ParseException;
 

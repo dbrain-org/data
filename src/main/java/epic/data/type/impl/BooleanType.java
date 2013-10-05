@@ -17,7 +17,7 @@
 package epic.data.type.impl;
 
 
-import epic.data.shared.Strings;
+import epic.data.util.Strings;
 
 /**
  * Base type for boolean values.

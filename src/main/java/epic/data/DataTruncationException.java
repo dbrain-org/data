@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package epic.data.adapters;
+package epic.data;
 
 /**
  * Created with IntelliJ IDEA.
