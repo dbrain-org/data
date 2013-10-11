@@ -134,7 +134,7 @@ public class Adapters {
      * @param toValue   initial to value.
      * @return A Builder to continue building a lookup.
      */
-    public static <FROM, TO> LookupBuilder<FROM, TO> lookupFrom( FROM fromValue, TO toValue ) {
+    public static <FROM, TO> LookupBuilder<FROM, TO> map( FROM fromValue, TO toValue ) {
         LookupBuilder<FROM, TO> result = new LookupBuilder<>();
         return result.map( fromValue, toValue );
     }
