@@ -21,21 +21,17 @@ import epic.data.adapters.ObjectAdapters;
 import epic.data.ForwardCursor;
 
 /**
- * Created with IntelliJ IDEA.
- * User: epoitras
- * Date: 12/02/13
- * Time: 9:13 PM
- * To change this template use File | Settings | File Templates.
+ * Abstract class to simplify implementing concrete versions of ForwardCursor.
  */
 public abstract class AbstractForwardCursor implements ForwardCursor {
 
     @Override
-    public <T> T get( int fieldIndex, Adapter<Object, T> adapter ) {
+    public <T> T getAs( int fieldIndex, Adapter<Object, T> adapter ) {
         return adapter.apply( get( fieldIndex ) );
     }
 
     @Override
-    public <T> T get( String fieldName, Adapter<Object, T> adapter ) {
+    public <T> T getAs( String fieldName, Adapter<Object, T> adapter ) {
         return adapter.apply( get( fieldName ) );
     }
 
@@ -50,12 +46,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getByte( int fieldIndex, Adapter<? super Byte, T> adapter ) {
+    public <T> T getByteAs( int fieldIndex, Adapter<? super Byte, T> adapter ) {
         return adapter.apply( getByte( fieldIndex ) );
     }
 
     @Override
-    public <T> T getByte( String fieldName, Adapter<? super Byte, T> adapter ) {
+    public <T> T getByteAs( String fieldName, Adapter<? super Byte, T> adapter ) {
         return adapter.apply( getByte( fieldName ) );
     }
 
@@ -70,12 +66,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getShort( int fieldIndex, Adapter<? super Short, T> adapter ) {
+    public <T> T getShortAs( int fieldIndex, Adapter<? super Short, T> adapter ) {
         return adapter.apply( getShort( fieldIndex ) );
     }
 
     @Override
-    public <T> T getShort( String fieldName, Adapter<? super Short, T> adapter ) {
+    public <T> T getShortAs( String fieldName, Adapter<? super Short, T> adapter ) {
         return adapter.apply( getShort( fieldName ) );
     }
 
@@ -90,12 +86,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getInt( int fieldIndex, Adapter<? super Integer, T> adapter ) {
+    public <T> T getIntAs( int fieldIndex, Adapter<? super Integer, T> adapter ) {
         return adapter.apply( getInt( fieldIndex ) );
     }
 
     @Override
-    public <T> T getInt( String fieldName, Adapter<? super Integer, T> adapter ) {
+    public <T> T getIntAs( String fieldName, Adapter<? super Integer, T> adapter ) {
         return adapter.apply( getInt( fieldName ) );
     }
 
@@ -110,12 +106,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getLong( int fieldIndex, Adapter<? super Long, T> adapter ) {
+    public <T> T getLongAs( int fieldIndex, Adapter<? super Long, T> adapter ) {
         return adapter.apply( getLong( fieldIndex ) );
     }
 
     @Override
-    public <T> T getLong( String fieldName, Adapter<? super Long, T> adapter ) {
+    public <T> T getLongAs( String fieldName, Adapter<? super Long, T> adapter ) {
         return adapter.apply( getLong( fieldName ) );
     }
 
@@ -130,12 +126,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getFloat( int fieldIndex, Adapter<? super Float, T> adapter ) {
+    public <T> T getFloatAs( int fieldIndex, Adapter<? super Float, T> adapter ) {
         return adapter.apply( getFloat( fieldIndex ) );
     }
 
     @Override
-    public <T> T getFloat( String fieldName, Adapter<? super Float, T> adapter ) {
+    public <T> T getFloatAs( String fieldName, Adapter<? super Float, T> adapter ) {
         return adapter.apply( getFloat( fieldName ) );
     }
 
@@ -145,17 +141,17 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public Double getDouble( String fiendName ) {
-        return ObjectAdapters.TO_DOUBLE.apply( get( fiendName ) );
+    public Double getDouble( String fieldName ) {
+        return ObjectAdapters.TO_DOUBLE.apply( get( fieldName ) );
     }
 
     @Override
-    public <T> T getDouble( int fieldIndex, Adapter<? super Double, T> adapter ) {
+    public <T> T getDoubleAs( int fieldIndex, Adapter<? super Double, T> adapter ) {
         return adapter.apply( getDouble( fieldIndex ) );
     }
 
     @Override
-    public <T> T getDouble( String fieldName, Adapter<? super Double, T> adapter ) {
+    public <T> T getDoubleAs( String fieldName, Adapter<? super Double, T> adapter ) {
         return adapter.apply( getDouble( fieldName ) );
     }
 
@@ -170,12 +166,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getBoolean( int fieldIndex, Adapter<? super Boolean, T> adapter ) {
+    public <T> T getBooleanAs( int fieldIndex, Adapter<? super Boolean, T> adapter ) {
         return adapter.apply( getBoolean( fieldIndex ) );
     }
 
     @Override
-    public <T> T getBoolean( String fieldName, Adapter<? super Boolean, T> adapter ) {
+    public <T> T getBooleanAs( String fieldName, Adapter<? super Boolean, T> adapter ) {
         return adapter.apply( getBoolean( fieldName ) );
     }
 
@@ -190,12 +186,12 @@ public abstract class AbstractForwardCursor implements ForwardCursor {
     }
 
     @Override
-    public <T> T getString( int fieldIndex, Adapter<? super String, T> adapter ) {
+    public <T> T getStringAs( int fieldIndex, Adapter<? super String, T> adapter ) {
         return adapter.apply( getString( fieldIndex ) );
     }
 
     @Override
-    public <T> T getString( String fieldName, Adapter<? super String, T> adapter ) {
+    public <T> T getStringAs( String fieldName, Adapter<? super String, T> adapter ) {
         return adapter.apply( getString( fieldName ) );
     }
 }

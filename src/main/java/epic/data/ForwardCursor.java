@@ -51,72 +51,282 @@ public interface ForwardCursor {
      */
     public Object get( String fieldName );
 
-    public <T> T get( int fieldIndex, Adapter<Object, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getAs( int fieldIndex, Adapter<Object, T> adapter );
 
-    public <T> T get( String fieldName, Adapter<Object, T> adapter );
+    public <T> T getAs( String fieldName, Adapter<Object, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public Byte getByte( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public Byte getByte( String fieldName );
 
-    public <T> T getByte( int fieldIndex, Adapter<? super Byte, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getByteAs( int fieldIndex, Adapter<? super Byte, T> adapter );
 
-    public <T> T getByte( String fieldName, Adapter<? super Byte, T> adapter );
+    public <T> T getByteAs( String fieldName, Adapter<? super Byte, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public Short getShort( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public Short getShort( String fieldName );
 
-    public <T> T getShort( int fieldIndex, Adapter<? super Short, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getShortAs( int fieldIndex, Adapter<? super Short, T> adapter );
 
-    public <T> T getShort( String fieldName, Adapter<? super Short, T> adapter );
+    public <T> T getShortAs( String fieldName, Adapter<? super Short, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public Integer getInt( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public Integer getInt( String fieldName );
 
-    public <T> T getInt( int fieldIndex, Adapter<? super Integer, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getIntAs( int fieldIndex, Adapter<? super Integer, T> adapter );
 
-    public <T> T getInt( String fieldName, Adapter<? super Integer, T> adapter );
+    public <T> T getIntAs( String fieldName, Adapter<? super Integer, T> adapter );
 
-    public Long getLong( int fieldindex );
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public Long getLong( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public Long getLong( String fieldName );
 
-    public <T> T getLong( int fieldIndex, Adapter<? super Long, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getLongAs( int fieldIndex, Adapter<? super Long, T> adapter );
 
-    public <T> T getLong( String fieldName, Adapter<? super Long, T> adapter );
+    /**
+     * Read the field having the specified name. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
+    public <T> T getLongAs( String fieldName, Adapter<? super Long, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public Float getFloat( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public Float getFloat( String fieldName );
 
-    public <T> T getFloat( int fieldIndex, Adapter<? super Float, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getFloatAs( int fieldIndex, Adapter<? super Float, T> adapter );
 
-    public <T> T getFloat( String fieldName, Adapter<? super Float, T> adapter );
+    /**
+     * Read the field having the specified name. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
+    public <T> T getFloatAs( String fieldName, Adapter<? super Float, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public Double getDouble( int fieldIndex );
 
-    public Double getDouble( String fiendName );
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
+    public Double getDouble( String fieldName );
 
-    public <T> T getDouble( int fieldIndex, Adapter<? super Double, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getDoubleAs( int fieldIndex, Adapter<? super Double, T> adapter );
 
-    public <T> T getDouble( String fieldName, Adapter<? super Double, T> adapter );
+    /**
+     * Read the field having the specified name. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
+    public <T> T getDoubleAs( String fieldName, Adapter<? super Double, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public Boolean getBoolean( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public Boolean getBoolean( String fieldName );
 
-    public <T> T getBoolean( int fieldIndex, Adapter<? super Boolean, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getBooleanAs( int fieldIndex, Adapter<? super Boolean, T> adapter );
 
-    public <T> T getBoolean( String fieldName, Adapter<? super Boolean, T> adapter );
+    /**
+     * Read the field having the specified name. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
+    public <T> T getBooleanAs( String fieldName, Adapter<? super Boolean, T> adapter );
 
+    /**
+     * Read the field at the specified index.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
     public String getString( int fieldIndex );
 
+    /**
+     * Read the field having the specified name.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
     public String getString( String fieldName );
 
-    public <T> T getString( int fieldIndex, Adapter<? super String, T> adapter );
+    /**
+     * Read the field at the specified index. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldIndex 0-based field index.
+     * @return The field value.
+     * @throws IndexOutOfBoundsException if the index is out of bound.
+     */
+    public <T> T getStringAs( int fieldIndex, Adapter<? super String, T> adapter );
 
-    public <T> T getString( String fieldName, Adapter<? super String, T> adapter );
+    /**
+     * Read the field having the specified name. Use the adapter to transform the object prior to return.
+     *
+     * @param fieldName The field name, non-null.
+     * @return The field value.
+     * @throws IllegalArgumentException if the field with the specified name does not exists.
+     */
+    public <T> T getStringAs( String fieldName, Adapter<? super String, T> adapter );
 
 }
