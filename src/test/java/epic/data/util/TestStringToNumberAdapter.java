@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package epic.data.adapters.adapters;
+package epic.data.util;
 
 import epic.data.DataTruncationException;
-import epic.data.adapters.StringToNumberAdapter;
+import epic.data.adapters.StringToNumberFunction;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class TestStringToNumberAdapter {
     @Test
     public void testSimpleAdapt() {
 
-        StringToNumberAdapter dfa = new StringToNumberAdapter( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
+        StringToNumberFunction dfa = new StringToNumberFunction( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
         Number n = dfa.apply( "124" );
 
         Assert.assertEquals( n.intValue(), 124 );
@@ -40,7 +40,7 @@ public class TestStringToNumberAdapter {
 
     @Test(expected = DataTruncationException.class)
     public void testSimpleFailure() {
-        StringToNumberAdapter dfa = new StringToNumberAdapter( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
+        StringToNumberFunction dfa = new StringToNumberFunction( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
         Number n = dfa.apply( "NAN" );
 
         Assert.assertEquals( n.intValue(), 124 );

@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package epic.data.adapters;
+package epic.data.util;
 
-import epic.data.Adapter;
+import java.util.function.Function;
 import epic.data.Lookup;
 
 import java.util.Collections;
@@ -27,51 +27,51 @@ import java.util.Set;
 /**
  * Classes that contains static methods to manipulate adapters.
  */
-public class Adapters {
+public class Functions {
 
     /**
      * Combine 2 adapters that process the same type. This method allows null since each adapter is interchangeable.
      *
-     * @param adapter1 The adapter 1 to plug, or null.
-     * @param adapter2 The adapter 2 to plug, or null.
+     * @param function1 The adapter 1 to plug, or null.
+     * @param function2 The adapter 2 to plug, or null.
      * @param <T>      The type these adapter processes.
      * @return
      */
-    public static <T> Adapter<T, T> combineAlike( final Adapter<T, T> adapter1, final Adapter<T, T> adapter2 ) {
-        if ( adapter1 == null ) {
-            return adapter2;
+    public static <T> Function<T, T> composeAlike( final Function<T, T> function1, final Function<T, T> function2 ) {
+        if ( function1 == null ) {
+            return function2;
         } else {
-            if ( adapter2 == null ) {
-                return adapter1;
+            if ( function2 == null ) {
+                return function1;
             } else {
-                return combine( adapter1, adapter2 );
+                return function1.compose( function2 );
             }
         }
     }
 
-    public static <T> Adapter<T, T> combineAlike( final Adapter<T, T> adapter1, final Adapter<T, T> adapter2, final Adapter<T, T> adapter3 ) {
-        return combineAlike( combineAlike( adapter1, adapter2 ), adapter3 );
+    public static <T> Function<T, T> composeAlike( final Function<T, T> function1, final Function<T, T> function2, final Function<T, T> function3 ) {
+        return composeAlike( composeAlike( function1, function2 ), function3 );
     }
 
-    public static <T> Adapter<T, T> combineAlike( final Adapter<T, T> adapter1, final Adapter<T, T> adapter2, final Adapter<T, T> adapter3, final Adapter<T, T> adapter4 ) {
-        return combineAlike( combineAlike( combineAlike( adapter1, adapter2 ), adapter3 ), adapter4 );
+    public static <T> Function<T, T> composeAlike( final Function<T, T> function1, final Function<T, T> function2, final Function<T, T> function3, final Function<T, T> function4 ) {
+        return composeAlike( composeAlike( composeAlike( function1, function2 ), function3 ), function4 );
     }
 
     /**
      * Plugs two adapters together to make a single combined adapter.
      *
-     * @param adapter1 The adapter 1 to plug.
-     * @param adapter2 The adapter 2 to plug.
+     * @param function1 The adapter 1 to plug.
+     * @param function2 The adapter 2 to plug.
      * @param <FROM>
-     * @param <TO>
+     * @param <TO>                           combineAlike
      * @param <MIDDLE>
      * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> TO
      */
-    public static <FROM, TO, MIDDLE> Adapter<FROM, TO> combine( final Adapter<FROM, ? extends MIDDLE> adapter1, final Adapter<MIDDLE, TO> adapter2 ) {
-        return new Adapter<FROM, TO>() {
+    public static <FROM, TO, MIDDLE> Function<FROM, TO> compose( final Function<FROM, ? extends MIDDLE> function1, final Function<MIDDLE, TO> function2 ) {
+        return new Function<FROM, TO>() {
             @Override
             public TO apply( FROM from ) {
-                return adapter2.apply( adapter1.apply( from ) );
+                return function2.apply( function1.apply( from ) );
             }
         };
     }
@@ -79,52 +79,34 @@ public class Adapters {
     /**
      * Combine three adapters together to make a single adapter.
      *
-     * @param adapter1  The adapter 1 to plug.
-     * @param adapter2  The adapter 2 to plug.
-     * @param adapter3  The adapter 23to plug.
+     * @param function1  The adapter 1 to plug.
+     * @param function2  The adapter 2 to plug.
+     * @param function3  The adapter 23to plug.
      * @param <FROM>
      * @param <TO>
      * @param <MIDDLE1>
      * @param <MIDDLE2>
      * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> Adapter3 --> TO
      */
-    public static <FROM, TO, MIDDLE1, MIDDLE2> Adapter<FROM, TO> combine( Adapter<FROM, ? extends MIDDLE1> adapter1, Adapter<MIDDLE1, ? extends MIDDLE2> adapter2, Adapter<MIDDLE2, TO> adapter3 ) {
-        return combine( combine( adapter1, adapter2 ), adapter3 );
+    public static <FROM, TO, MIDDLE1, MIDDLE2> Function<FROM, TO> compose( Function<FROM, ? extends MIDDLE1> function1, Function<MIDDLE1, ? extends MIDDLE2> function2, Function<MIDDLE2, TO> function3 ) {
+        return compose( compose( function1, function2 ), function3 );
     }
 
     /**
      * Combine four adapters together to make a single adapter.
      *
-     * @param adapter1  The adapter 1 to plug.
-     * @param adapter2  The adapter 2 to plug.
-     * @param adapter3  The adapter 3 to plug.
-     * @param adapter4  The adapter 3 to plug.
+     * @param function1  The adapter 1 to plug.
+     * @param function2  The adapter 2 to plug.
+     * @param function3  The adapter 3 to plug.
+     * @param function4  The adapter 3 to plug.
      * @param <FROM>
      * @param <TO>
      * @param <MIDDLE1>
      * @param <MIDDLE2>
      * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> Adapter3 --> Adapter4 --> TO
      */
-    public static <FROM, TO, MIDDLE1, MIDDLE2, MIDDLE3> Adapter<FROM, TO> combine( Adapter<FROM, ? extends MIDDLE1> adapter1, Adapter<MIDDLE1, ? extends MIDDLE2> adapter2, Adapter<MIDDLE2, ? extends MIDDLE3> adapter3, Adapter<MIDDLE3, TO> adapter4 ) {
-        return combine( combine( adapter1, adapter2 ), combine( adapter3, adapter4 ) );
-    }
-
-    /**
-     * Combine five adapters together to make a single adapter.
-     *
-     * @param adapter1  The adapter 1 to plug.
-     * @param adapter2  The adapter 2 to plug.
-     * @param adapter3  The adapter 3 to plug.
-     * @param adapter4  The adapter 4 to plug.
-     * @param adapter5  The adapter 5 to plug.
-     * @param <FROM>
-     * @param <TO>
-     * @param <MIDDLE1>
-     * @param <MIDDLE2>
-     * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> Adapter3 --> Adapter4 --> Adapter5 --> TO
-     */
-    public static <FROM, TO, MIDDLE1, MIDDLE2, MIDDLE3, MIDDLE4> Adapter<FROM, TO> combine( Adapter<FROM, ? extends MIDDLE1> adapter1, Adapter<MIDDLE1, ? extends MIDDLE2> adapter2, Adapter<MIDDLE2, ? extends MIDDLE3> adapter3, Adapter<MIDDLE3, ? extends MIDDLE4> adapter4, Adapter<MIDDLE4, TO> adapter5 ) {
-        return combine( combine( adapter1, adapter2 ), combine( combine( adapter3, adapter4 ), adapter5 ) );
+    public static <FROM, TO, MIDDLE1, MIDDLE2, MIDDLE3> Function<FROM, TO> compose( Function<FROM, ? extends MIDDLE1> function1, Function<MIDDLE1, ? extends MIDDLE2> function2, Function<MIDDLE2, ? extends MIDDLE3> function3, Function<MIDDLE3, TO> function4 ) {
+        return compose( compose( function1, function2 ), compose( function3, function4 ) );
     }
 
     /**

@@ -14,13 +14,16 @@
  *    limitations under the License.
  */
 
-package epic.data.adapters;
+package epic.data.util;
 
+import epic.data.adapters.Functions;
+import epic.data.util.Strings;
 import junit.framework.Assert;
 import org.junit.Test;
-import epic.data.Adapter;
+import java.util.function.Function;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,23 +32,13 @@ import java.text.DecimalFormat;
  * Time: 6:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TestCombinedAdapter {
+public class TestCompose {
 
     @Test
-    public void testCombine2() throws Exception {
-        Adapter<String, String> slc = StringAdapters.maxLength( 10 );
-        Adapter<Object, String> combined = Adapters.combine( ObjectAdapters.TO_STRING, StringAdapters.TRIM, slc );
-
-        Assert.assertEquals( combined.apply( new StringBuilder( "test  " ) ), "test" );
+    public void testCompose1() throws Exception {
+        Function<String, String> slc = (s) -> Strings.maxLength( s, 10 );
+        Function<Object, String> composed = Functions.compose( Objects::toString, Strings::trim, slc );
+        Assert.assertEquals( composed.apply( new StringBuilder( "test  " ) ), "test" );
     }
 
-    public void testString2Int() {
-        Adapter<Object, Integer> o2i = ObjectAdapters.TO_INTEGER;
-        StringToNumberAdapter s2n = new StringToNumberAdapter( new DecimalFormat( "####" ) );
-
-        Adapter<String, Integer> s2i = Adapters.combine( s2n, o2i );
-
-
-
-    }
 }
