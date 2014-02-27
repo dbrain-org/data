@@ -16,13 +16,19 @@
 
 package epic.data.util;
 
+import epic.data.DataTruncationException;
+
 import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * Contains static methods to manipulate strings.
  */
 public class Strings {
 
+    /**
+     * Natural order for strings.
+     */
     public static final Comparator<String> NATURAL_ORDER = new Comparator<String>() {
         @Override
         public int compare( String o1, String o2 ) {
@@ -34,6 +40,19 @@ public class Strings {
         }
     };
 
+    /**
+     * Null-safe trim.
+     *
+     * @param s The String to trim.
+     * @return A string with.
+     */
+    public static String trim( String s ) {
+        if ( s != null ) {
+            return s.trim();
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Trim trailing spaces.
@@ -42,8 +61,8 @@ public class Strings {
      * @return a copy of the string with the trailing spaces removed.
      */
     public static String rtrim( String s ) {
-        int initialPos = s.length() - 1;
         if ( s != null ) {
+            int initialPos = s.length() - 1;
             int i = initialPos;
             while ( i >= 0 ) {
                 if ( Character.isWhitespace( s.charAt( i ) ) ) i--;
@@ -81,7 +100,7 @@ public class Strings {
 
     /**
      * Verify that the string contains all blank characters or is null.
-     * <p/>
+     * <p>
      * <code>
      * Examples of blank strings :
      * "", "     ", null
@@ -90,15 +109,59 @@ public class Strings {
      * @return true if string is blank.
      */
     public static boolean isBlank( CharSequence s ) {
-        boolean retval = true;
         if ( s != null ) {
             int i = 0;
             while ( i < s.length() ) if ( !Character.isWhitespace( s.charAt( i ) ) ) {
-                retval = false;
-                break;
+                return false;
             } else i++;
         }
-        return retval;
+        return true;
     }
 
+    /**
+     * Apply a transform that will replace blank values with null.
+     */
+    public static String blankToNull( String s ) {
+        return s == null || isBlank( s ) ? null : s;
+    }
+
+    /**
+     * Apply a transform that will replace null values with blank.
+     */
+    public static String nullToBlank( String s ) {
+        return s == null ? "" : s;
+    }
+
+    /**
+     * Apply a constraint over string length.
+     */
+    public static String maxLength( String s, int length ) {
+        if ( s == null ) {
+            return null;
+        } else if ( s.length() <= length ) {
+            return s;
+        } else {
+            throw new DataTruncationException();
+        }
+    }
+
+    /**
+     * Apply a lowercase transform to the string.
+     *
+     * @param locale The locale to use in the transformation,
+     * @return A lowercase string.
+     */
+    public static String lowercase( String s, Locale locale ) {
+        return s != null ? s.toLowerCase( locale ) : null;
+    }
+
+    /**
+     * Apply an uppercase transform to the string.
+     *
+     * @param locale The locale to use in the transformation,
+     * @return A uppercase string.
+     */
+    public static String uppercase( String s, Locale locale ) {
+        return s != null ? s.toUpperCase( locale ) : null;
+    }
 }

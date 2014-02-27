@@ -1,5 +1,10 @@
 package epic.data.util;
 
+import epic.data.DataTruncationException;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.function.Function;
 
 import java.math.BigDecimal;
@@ -31,4 +36,26 @@ public class Numbers {
     }
 
 
+    /**
+     * Convert a string to a number using a NumberFormat.
+     */
+    public static Function<String, Number> numberParser( final NumberFormat df ) {
+
+        return new Function<String, Number>() {
+            @Override
+            public Number apply( String s ) {
+                if ( s == null ) {
+                    return null;
+                } else synchronized ( this ) {
+                    ParsePosition pp = new ParsePosition( 0 );
+                    Number result = df.parse( s, pp );
+                    if ( pp.getIndex() != s.length() ) {
+                        throw new DataTruncationException();
+                    }
+                    return result;
+                }
+            }
+        };
+
+    }
 }

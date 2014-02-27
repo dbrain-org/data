@@ -17,12 +17,12 @@
 package epic.data.util;
 
 import epic.data.DataTruncationException;
-import epic.data.adapters.StringToNumberFunction;
 import junit.framework.Assert;
 import org.junit.Test;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
+import java.util.function.Function;
 
 /**
  * Test String to Numbers adapters.
@@ -32,7 +32,7 @@ public class TestStringToNumberAdapter {
     @Test
     public void testSimpleAdapt() {
 
-        StringToNumberFunction dfa = new StringToNumberFunction( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
+        Function<String, Number> dfa = Numbers.numberParser( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
         Number n = dfa.apply( "124" );
 
         Assert.assertEquals( n.intValue(), 124 );
@@ -40,7 +40,7 @@ public class TestStringToNumberAdapter {
 
     @Test(expected = DataTruncationException.class)
     public void testSimpleFailure() {
-        StringToNumberFunction dfa = new StringToNumberFunction( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
+        Function<String, Number> dfa = Numbers.numberParser( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
         Number n = dfa.apply( "NAN" );
 
         Assert.assertEquals( n.intValue(), 124 );

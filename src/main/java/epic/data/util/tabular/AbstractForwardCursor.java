@@ -16,9 +16,10 @@
 
 package epic.data.util.tabular;
 
-import epic.data.Adapter;
-import epic.data.adapters.ObjectAdapters;
+import java.util.function.Function;
+
 import epic.data.ForwardCursor;
+import epic.data.util.Objects;
 
 /**
  * Abstract class to simplify implementing concrete versions of ForwardCursor.
@@ -26,172 +27,172 @@ import epic.data.ForwardCursor;
 public abstract class AbstractForwardCursor implements ForwardCursor {
 
     @Override
-    public <T> T getAs( int fieldIndex, Adapter<Object, T> adapter ) {
-        return adapter.apply( get( fieldIndex ) );
+    public <T> T getAs( int fieldIndex, Function<Object, T> function ) {
+        return function.apply( get( fieldIndex ) );
     }
 
     @Override
-    public <T> T getAs( String fieldName, Adapter<Object, T> adapter ) {
-        return adapter.apply( get( fieldName ) );
+    public <T> T getAs( String fieldName, Function<Object, T> function ) {
+        return function.apply( get( fieldName ) );
     }
 
     @Override
     public Byte getByte( int fieldIndex ) {
-        return ObjectAdapters.TO_BYTE.apply( get( fieldIndex ) );
+        return Objects.toByte( get( fieldIndex ) );
     }
 
     @Override
     public Byte getByte( String fieldName ) {
-        return ObjectAdapters.TO_BYTE.apply( get( fieldName ) );
+        return Objects.toByte( get( fieldName ) );
     }
 
     @Override
-    public <T> T getByteAs( int fieldIndex, Adapter<? super Byte, T> adapter ) {
-        return adapter.apply( getByte( fieldIndex ) );
+    public <T> T getByteAs( int fieldIndex, Function<? super Byte, T> function ) {
+        return function.apply( getByte( fieldIndex ) );
     }
 
     @Override
-    public <T> T getByteAs( String fieldName, Adapter<? super Byte, T> adapter ) {
-        return adapter.apply( getByte( fieldName ) );
+    public <T> T getByteAs( String fieldName, Function<? super Byte, T> function ) {
+        return function.apply( getByte( fieldName ) );
     }
 
     @Override
     public Short getShort( int fieldIndex ) {
-        return ObjectAdapters.TO_SHORT.apply( get( fieldIndex ) );
+        return Objects.toShort( get( fieldIndex ) );
     }
 
     @Override
     public Short getShort( String fieldName ) {
-        return ObjectAdapters.TO_SHORT.apply( get( fieldName ) );
+        return Objects.toShort( get( fieldName ) );
     }
 
     @Override
-    public <T> T getShortAs( int fieldIndex, Adapter<? super Short, T> adapter ) {
-        return adapter.apply( getShort( fieldIndex ) );
+    public <T> T getShortAs( int fieldIndex, Function<? super Short, T> function ) {
+        return function.apply( getShort( fieldIndex ) );
     }
 
     @Override
-    public <T> T getShortAs( String fieldName, Adapter<? super Short, T> adapter ) {
-        return adapter.apply( getShort( fieldName ) );
+    public <T> T getShortAs( String fieldName, Function<? super Short, T> function ) {
+        return function.apply( getShort( fieldName ) );
     }
 
     @Override
     public Integer getInt( int fieldIndex ) {
-        return ObjectAdapters.TO_INTEGER.apply( get( fieldIndex ) );
+        return Objects.toInteger( get( fieldIndex ) );
     }
 
     @Override
     public Integer getInt( String fieldName ) {
-        return ObjectAdapters.TO_INTEGER.apply( get( fieldName ) );
+        return Objects.toInteger( get( fieldName ) );
     }
 
     @Override
-    public <T> T getIntAs( int fieldIndex, Adapter<? super Integer, T> adapter ) {
-        return adapter.apply( getInt( fieldIndex ) );
+    public <T> T getIntAs( int fieldIndex, Function<? super Integer, T> function ) {
+        return function.apply( getInt( fieldIndex ) );
     }
 
     @Override
-    public <T> T getIntAs( String fieldName, Adapter<? super Integer, T> adapter ) {
-        return adapter.apply( getInt( fieldName ) );
+    public <T> T getIntAs( String fieldName, Function<? super Integer, T> function ) {
+        return function.apply( getInt( fieldName ) );
     }
 
     @Override
     public Long getLong( int fieldIndex ) {
-        return ObjectAdapters.TO_LONG.apply( getLong( fieldIndex ) );
+        return Objects.toLong( getLong( fieldIndex ) );
     }
 
     @Override
     public Long getLong( String fieldName ) {
-        return ObjectAdapters.TO_LONG.apply( getLong( fieldName ) );
+        return Objects.toLong( getLong( fieldName ) );
     }
 
     @Override
-    public <T> T getLongAs( int fieldIndex, Adapter<? super Long, T> adapter ) {
-        return adapter.apply( getLong( fieldIndex ) );
+    public <T> T getLongAs( int fieldIndex, Function<? super Long, T> function ) {
+        return function.apply( getLong( fieldIndex ) );
     }
 
     @Override
-    public <T> T getLongAs( String fieldName, Adapter<? super Long, T> adapter ) {
-        return adapter.apply( getLong( fieldName ) );
+    public <T> T getLongAs( String fieldName, Function<? super Long, T> function ) {
+        return function.apply( getLong( fieldName ) );
     }
 
     @Override
     public Float getFloat( int fieldIndex ) {
-        return ObjectAdapters.TO_FLOAT.apply( get( fieldIndex ) );
+        return Objects.toFloat( get( fieldIndex ) );
     }
 
     @Override
     public Float getFloat( String fieldName ) {
-        return ObjectAdapters.TO_FLOAT.apply( get( fieldName ) );
+        return Objects.toFloat( get( fieldName ) );
     }
 
     @Override
-    public <T> T getFloatAs( int fieldIndex, Adapter<? super Float, T> adapter ) {
-        return adapter.apply( getFloat( fieldIndex ) );
+    public <T> T getFloatAs( int fieldIndex, Function<? super Float, T> function ) {
+        return function.apply( getFloat( fieldIndex ) );
     }
 
     @Override
-    public <T> T getFloatAs( String fieldName, Adapter<? super Float, T> adapter ) {
-        return adapter.apply( getFloat( fieldName ) );
+    public <T> T getFloatAs( String fieldName, Function<? super Float, T> function ) {
+        return function.apply( getFloat( fieldName ) );
     }
 
     @Override
     public Double getDouble( int fieldIndex ) {
-        return ObjectAdapters.TO_DOUBLE.apply( get( fieldIndex ) );
+        return Objects.toDouble( get( fieldIndex ) );
     }
 
     @Override
     public Double getDouble( String fieldName ) {
-        return ObjectAdapters.TO_DOUBLE.apply( get( fieldName ) );
+        return Objects.toDouble( get( fieldName ) );
     }
 
     @Override
-    public <T> T getDoubleAs( int fieldIndex, Adapter<? super Double, T> adapter ) {
-        return adapter.apply( getDouble( fieldIndex ) );
+    public <T> T getDoubleAs( int fieldIndex, Function<? super Double, T> function ) {
+        return function.apply( getDouble( fieldIndex ) );
     }
 
     @Override
-    public <T> T getDoubleAs( String fieldName, Adapter<? super Double, T> adapter ) {
-        return adapter.apply( getDouble( fieldName ) );
+    public <T> T getDoubleAs( String fieldName, Function<? super Double, T> function ) {
+        return function.apply( getDouble( fieldName ) );
     }
 
     @Override
     public Boolean getBoolean( int fieldIndex ) {
-        return ObjectAdapters.TO_BOOLEAN.apply( get( fieldIndex ) );
+        return Objects.toBoolean( get( fieldIndex ) );
     }
 
     @Override
     public Boolean getBoolean( String fieldName ) {
-        return ObjectAdapters.TO_BOOLEAN.apply( get( fieldName ) );
+        return Objects.toBoolean( get( fieldName ) );
     }
 
     @Override
-    public <T> T getBooleanAs( int fieldIndex, Adapter<? super Boolean, T> adapter ) {
-        return adapter.apply( getBoolean( fieldIndex ) );
+    public <T> T getBooleanAs( int fieldIndex, Function<? super Boolean, T> function ) {
+        return function.apply( getBoolean( fieldIndex ) );
     }
 
     @Override
-    public <T> T getBooleanAs( String fieldName, Adapter<? super Boolean, T> adapter ) {
-        return adapter.apply( getBoolean( fieldName ) );
+    public <T> T getBooleanAs( String fieldName, Function<? super Boolean, T> function ) {
+        return function.apply( getBoolean( fieldName ) );
     }
 
     @Override
     public String getString( int fieldIndex ) {
-        return ObjectAdapters.TO_STRING.apply( get( fieldIndex ) );
+        return Objects.toString( get( fieldIndex ) );
     }
 
     @Override
     public String getString( String fieldName ) {
-        return ObjectAdapters.TO_STRING.apply( get( fieldName ) );
+        return Objects.toString( get( fieldName ) );
     }
 
     @Override
-    public <T> T getStringAs( int fieldIndex, Adapter<? super String, T> adapter ) {
-        return adapter.apply( getString( fieldIndex ) );
+    public <T> T getStringAs( int fieldIndex, Function<? super String, T> function ) {
+        return function.apply( getString( fieldIndex ) );
     }
 
     @Override
-    public <T> T getStringAs( String fieldName, Adapter<? super String, T> adapter ) {
-        return adapter.apply( getString( fieldName ) );
+    public <T> T getStringAs( String fieldName, Function<? super String, T> function ) {
+        return function.apply( getString( fieldName ) );
     }
 }

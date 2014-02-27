@@ -1,11 +1,12 @@
 package epic.data.type;
 
-import epic.data.Adapter;
-import epic.data.adapters.Adapters;
-import epic.data.adapters.NumberAdapters;
-import epic.data.adapters.ObjectAdapters;
+import java.util.function.Function;
+
+import epic.data.util.Numbers;
+import epic.data.util.Functions;
 import epic.data.formats.Formats;
 import epic.data.Formatter;
+import epic.data.util.Objects;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,7 +30,7 @@ public class DecimalType extends AbstractDataType<BigDecimal> {
             return o1.compareTo( o2 );
         }
     };
-    private final Adapter<Object, BigDecimal> castAdapter;
+    private final Function<Object, BigDecimal> castFunction;
 
     /**
      * Create a new numeric type.
@@ -44,7 +45,7 @@ public class DecimalType extends AbstractDataType<BigDecimal> {
     }
 
     public DecimalType( Integer precision, Integer scale, RoundingMode roundingMode ) {
-        castAdapter = Adapters.combine( ObjectAdapters.TO_BIG_DECIMAL, NumberAdapters.setDecimalParameters( precision, scale, roundingMode ) );
+        castFunction = Functions.compose( Objects::toBigDecimal, Numbers.setDecimalParameters( precision, scale, roundingMode ) );
     }
 
     @Override
@@ -58,8 +59,8 @@ public class DecimalType extends AbstractDataType<BigDecimal> {
     }
 
     @Override
-    public Adapter<Object, ? extends BigDecimal> getCastAdapter() {
-        return castAdapter;
+    public Function<Object, ? extends BigDecimal> getCastFunction() {
+        return castFunction;
     }
 
 }

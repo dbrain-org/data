@@ -16,6 +16,8 @@
 
 package epic.data;
 
+import java.util.function.Function;
+
 /**
  * Allows to read tabular data in a Forward-only manner.
  */
@@ -58,9 +60,9 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getAs( int fieldIndex, Adapter<Object, T> adapter );
+    public <T> T getAs( int fieldIndex, Function<Object, T> function );
 
-    public <T> T getAs( String fieldName, Adapter<Object, T> adapter );
+    public <T> T getAs( String fieldName, Function<Object, T> function );
 
     /**
      * Read the field at the specified index.
@@ -87,9 +89,9 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getByteAs( int fieldIndex, Adapter<? super Byte, T> adapter );
+    public <T> T getByteAs( int fieldIndex, Function<? super Byte, T> function );
 
-    public <T> T getByteAs( String fieldName, Adapter<? super Byte, T> adapter );
+    public <T> T getByteAs( String fieldName, Function<? super Byte, T> function );
 
     /**
      * Read the field at the specified index.
@@ -116,9 +118,9 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getShortAs( int fieldIndex, Adapter<? super Short, T> adapter );
+    public <T> T getShortAs( int fieldIndex, Function<? super Short, T> function );
 
-    public <T> T getShortAs( String fieldName, Adapter<? super Short, T> adapter );
+    public <T> T getShortAs( String fieldName, Function<? super Short, T> function );
 
     /**
      * Read the field at the specified index.
@@ -145,9 +147,9 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getIntAs( int fieldIndex, Adapter<? super Integer, T> adapter );
+    public <T> T getIntAs( int fieldIndex, Function<? super Integer, T> function );
 
-    public <T> T getIntAs( String fieldName, Adapter<? super Integer, T> adapter );
+    public <T> T getIntAs( String fieldName, Function<? super Integer, T> function );
 
     /**
      * Read the field at the specified index.
@@ -174,7 +176,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getLongAs( int fieldIndex, Adapter<? super Long, T> adapter );
+    public <T> T getLongAs( int fieldIndex, Function<? super Long, T> function );
 
     /**
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
@@ -183,7 +185,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
-    public <T> T getLongAs( String fieldName, Adapter<? super Long, T> adapter );
+    public <T> T getLongAs( String fieldName, Function<? super Long, T> function );
 
     /**
      * Read the field at the specified index.
@@ -210,7 +212,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getFloatAs( int fieldIndex, Adapter<? super Float, T> adapter );
+    public <T> T getFloatAs( int fieldIndex, Function<? super Float, T> function );
 
     /**
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
@@ -219,7 +221,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
-    public <T> T getFloatAs( String fieldName, Adapter<? super Float, T> adapter );
+    public <T> T getFloatAs( String fieldName, Function<? super Float, T> function );
 
     /**
      * Read the field at the specified index.
@@ -246,7 +248,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getDoubleAs( int fieldIndex, Adapter<? super Double, T> adapter );
+    public <T> T getDoubleAs( int fieldIndex, Function<? super Double, T> function );
 
     /**
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
@@ -255,7 +257,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
-    public <T> T getDoubleAs( String fieldName, Adapter<? super Double, T> adapter );
+    public <T> T getDoubleAs( String fieldName, Function<? super Double, T> function );
 
     /**
      * Read the field at the specified index.
@@ -282,7 +284,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getBooleanAs( int fieldIndex, Adapter<? super Boolean, T> adapter );
+    public <T> T getBooleanAs( int fieldIndex, Function<? super Boolean, T> function );
 
     /**
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
@@ -291,7 +293,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
-    public <T> T getBooleanAs( String fieldName, Adapter<? super Boolean, T> adapter );
+    public <T> T getBooleanAs( String fieldName, Function<? super Boolean, T> function );
 
     /**
      * Read the field at the specified index.
@@ -318,7 +320,7 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    public <T> T getStringAs( int fieldIndex, Adapter<? super String, T> adapter );
+    public <T> T getStringAs( int fieldIndex, Function<? super String, T> function );
 
     /**
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
@@ -327,6 +329,6 @@ public interface ForwardCursor {
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
-    public <T> T getStringAs( String fieldName, Adapter<? super String, T> adapter );
+    public <T> T getStringAs( String fieldName, Function<? super String, T> function );
 
 }

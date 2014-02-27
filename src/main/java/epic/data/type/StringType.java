@@ -1,31 +1,29 @@
 package epic.data.type;
 
-import epic.data.formats.Formats;
-import epic.data.util.Strings;
-import epic.data.Adapter;
-import epic.data.adapters.Adapters;
-import epic.data.adapters.ObjectAdapters;
-import epic.data.adapters.StringAdapters;
 import epic.data.Formatter;
+import epic.data.util.Functions;
+import epic.data.formats.Formats;
+import epic.data.util.Objects;
+import epic.data.util.Strings;
 
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.Function;
 
 /**
  * String data type. Implements feature found in SQL varchar.
- *
+ * <p>
  * - Maximum length, or zero for none.
  * - Case sensitivity.
  * - Trimming leading spaces, trailing spaces, or none.
  * - Case handling.
  * - Collation and language support.
  * - Graceful null support with possibility to map blanks values to null or vice-versa.
- *
  */
 public class StringType extends AbstractDataType<String> {
 
-    private Comparator<String> nativeComparator;
-    private Adapter<Object, String> castAdapter;
+    private Comparator<String>       comparator;
+    private Function<Object, String> castFunction;
 
     /**
      * Create a new StringType object. - This type support case sensitivity. -
@@ -33,58 +31,58 @@ public class StringType extends AbstractDataType<String> {
      */
     public StringType( int maxLength, boolean caseSensitive, TrimHandling trimHandling, CaseHandling caseHandling, BlankHandling blankHandling ) {
 
-        nativeComparator = caseSensitive ? String.CASE_INSENSITIVE_ORDER : Strings.NATURAL_ORDER;
+        comparator = caseSensitive ? String.CASE_INSENSITIVE_ORDER : Strings.NATURAL_ORDER;
 
         // First trim the string.
-        Adapter<String, String> trimAdapter;
-        switch( trimHandling ) {
+        Function<String, String> trimFunction;
+        switch ( trimHandling ) {
             case BOTH:
-                trimAdapter = StringAdapters.TRIM;
+                trimFunction = Strings::trim;
                 break;
             case LEADING:
-                trimAdapter = StringAdapters.LTRIM;
+                trimFunction = Strings::ltrim;
                 break;
             case TRAILING:
-                trimAdapter = StringAdapters.RTRIM;
+                trimFunction = Strings::rtrim;
                 break;
             default:
-                trimAdapter = null;
+                trimFunction = null;
         }
 
         // Adapter to check the length.
-        Adapter<String, String> lengthAdapter;
+        Function<String, String> lengthFunction;
         if ( maxLength > 0 ) {
-            lengthAdapter = StringAdapters.maxLength( maxLength );
+            lengthFunction = ( s ) -> Strings.maxLength( s, maxLength );
         } else {
-            lengthAdapter = null;
+            lengthFunction = null;
         }
 
-        Adapter<String, String> caseAdapter;
+        Function<String, String> caseFunction;
         switch ( caseHandling ) {
             case LOWERCASE:
-                caseAdapter = StringAdapters.lowercase( Locale.getDefault() );
+                caseFunction = ( s ) -> Strings.lowercase( s, Locale.getDefault() );
                 break;
             case UPPERCASE:
-                caseAdapter = StringAdapters.uppercase( Locale.getDefault() );
+                caseFunction = ( s ) -> Strings.uppercase( s, Locale.getDefault() );
                 break;
             default:
-                caseAdapter = null;
+                caseFunction = null;
         }
 
         // Adapter to check the blank
-        Adapter<String, String> blankAdapter = null;
+        Function<String, String> blankFunction = null;
         switch ( blankHandling ) {
             case BLANK_IS_NULL:
-                blankAdapter = StringAdapters.NULL_TO_BLANK;
+                blankFunction = Strings::nullToBlank;
                 break;
         }
 
         // Combine them
-        Adapter<String, String> combinedAdapter = Adapters.combineAlike( trimAdapter, lengthAdapter, caseAdapter, blankAdapter );
-        if ( combinedAdapter != null ) {
-            castAdapter = Adapters.combine( ObjectAdapters.TO_STRING, combinedAdapter );
+        Function<String, String> combinedFunction = Functions.composeAlike( trimFunction, lengthFunction, caseFunction, blankFunction );
+        if ( combinedFunction != null ) {
+            castFunction = Functions.compose( Objects::toString, combinedFunction );
         } else {
-            castAdapter = ObjectAdapters.TO_STRING;
+            castFunction = Objects::toString;
         }
 
     }
@@ -97,12 +95,12 @@ public class StringType extends AbstractDataType<String> {
 
     @Override
     public Comparator<String> getComparator() {
-        return nativeComparator;
+        return comparator;
     }
 
     @Override
-    public Adapter<Object, String> getCastAdapter() {
-        return castAdapter;
+    public Function<Object, String> getCastFunction() {
+        return castFunction;
     }
 
     /**

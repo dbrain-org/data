@@ -1,6 +1,6 @@
 package epic.data.type;
 
-import epic.data.Adapter;
+import java.util.function.Function;
 import epic.data.Formatter;
 
 import java.util.Comparator;
@@ -32,7 +32,7 @@ public class LocalDateType implements DateType<Date> {
     }
 
     @Override
-    public Adapter<Object, ? extends Date> getCastAdapter() {
+    public Function<Object, ? extends Date> getCastFunction() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

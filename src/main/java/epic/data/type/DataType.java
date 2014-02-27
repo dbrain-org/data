@@ -1,9 +1,9 @@
 package epic.data.type;
 
-import epic.data.Adapter;
 import epic.data.Formatter;
 
 import java.util.Comparator;
+import java.util.function.Function;
 
 /**
  * Hi-level datatype definition for domain types.
@@ -14,7 +14,7 @@ public interface DataType<T> extends Comparator<Object> {
 
     Comparator<? super T> getComparator();
 
-    Adapter<Object, ? extends T> getCastAdapter();
+    Function<Object, ? extends T> getCastFunction();
 
     boolean equals( Object value1, Object value2 );
 

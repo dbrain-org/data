@@ -16,13 +16,10 @@
 
 package epic.data.util;
 
-import epic.data.adapters.Functions;
-import epic.data.util.Strings;
 import junit.framework.Assert;
 import org.junit.Test;
 import java.util.function.Function;
 
-import java.text.DecimalFormat;
 import java.util.Objects;
 
 /**
