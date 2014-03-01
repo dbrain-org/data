@@ -74,7 +74,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Long getLong( String fieldName ) {
-        return Objects.toLong( getLong( fieldName ) );
+        return Objects.toLong( get( fieldName ) );
     }
 
     /**

@@ -115,6 +115,16 @@ public class Objects {
     }
 
     /**
+     * @return o
+     * @param o
+     * @param <T>
+     * @return
+     */
+    public static <T> T identity( T o ) {
+        return o;
+    }
+
+    /**
      * Cast object to BigInteger.
      */
     public static BigInteger toBigInteger( Object o ) {
