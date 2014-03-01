@@ -37,9 +37,13 @@ public class CsvCursorTest {
 
         Assert.assertEquals( "Eric1", csvCursor.get( 0 ));
         Assert.assertEquals( "Eric1", csvCursor.get( "Col1" ) );
-        Assert.assertEquals( csvCursor.get( 1 ), "1" );
+        Assert.assertEquals( "1", csvCursor.get( 1 ) );
         Assert.assertEquals( "1", csvCursor.get( "Col2" ) );
-        Assert.assertEquals( csvCursor.get( 2 ), "2012-01-01" );
+        Assert.assertEquals( (Byte)((byte)1), csvCursor.getByte( 1 ) );
+        Assert.assertEquals( (Short)((short)1), csvCursor.getShort( 1 ) );
+        Assert.assertEquals( (Integer)((int)1), csvCursor.getInt( 1 ) );
+        Assert.assertEquals( (Long)((long)1), csvCursor.getLong( 1 ) );
+        Assert.assertEquals( "2012-01-01", csvCursor.get( 2 ) );
         Assert.assertEquals( "2012-01-01", csvCursor.get( "Col3" ) );
 
         Assert.assertTrue( csvCursor.next() );

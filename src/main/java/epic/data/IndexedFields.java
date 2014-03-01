@@ -103,7 +103,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Long getLong( int fieldIndex ) {
-        return Objects.toLong( getLong( fieldIndex ) );
+        return Objects.toLong( get( fieldIndex ) );
     }
 
     /**
