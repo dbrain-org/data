@@ -1,7 +1,8 @@
-package epic.data.type;
+package epic.data.type.decimal;
 
 import java.util.function.Function;
 
+import epic.data.type.AbstractDataType;
 import epic.data.util.Numbers;
 import epic.data.util.Functions;
 import epic.data.formats.Formats;

@@ -16,7 +16,7 @@
 
 package epic.data.csv;
 
-import epic.data.util.tabular.AbstractForwardCursor;
+import epic.data.ForwardCursor;
 import epic.data.parsing.ParseCursor;
 import epic.data.ParseException;
 
@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author poitrae
  */
-public class CsvCursor extends AbstractForwardCursor implements AutoCloseable {
+public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     private int                  separator;
     private int                  quote;

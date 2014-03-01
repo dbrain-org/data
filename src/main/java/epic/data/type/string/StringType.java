@@ -1,6 +1,7 @@
-package epic.data.type;
+package epic.data.type.string;
 
 import epic.data.Formatter;
+import epic.data.type.AbstractDataType;
 import epic.data.util.Functions;
 import epic.data.formats.Formats;
 import epic.data.util.Objects;
@@ -11,7 +12,9 @@ import java.util.Locale;
 import java.util.function.Function;
 
 /**
- * String data type. Implements feature found in SQL varchar.
+ * String data type.
+ *
+ * Goals: Implements feature found in SQL varchar.
  * <p>
  * - Maximum length, or zero for none.
  * - Case sensitivity.

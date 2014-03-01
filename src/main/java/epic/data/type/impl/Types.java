@@ -16,8 +16,8 @@
 
 package epic.data.type.impl;
 
-import epic.data.type.DecimalType;
-import epic.data.type.StringType;
+import epic.data.type.decimal.DecimalType;
+import epic.data.type.string.StringType;
 
 import java.math.RoundingMode;
 

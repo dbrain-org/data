@@ -24,16 +24,22 @@ import java.io.Reader;
 /**
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
  * can be read multiple times without affecting the underlying reader.
- *
- * @author PoitraE
  */
 public class ParseCursor implements AutoCloseable {
+
+    private static final String ERR_IO_ERROR = "IO exception";
+    private static final String ERR_SURROGATE_ENCODING = "Surrogate encoding error";
 
     // Linked reader
     private Reader reader;
 
     // Current byte in buffer if consumed = false
     private int current = -1;
+
+    // Position in the stream.
+    private int index = 1;
+    private int line = 1;
+    private int column = 1;
 
     // Tell if current is valid or not
     private boolean consumed = true;
@@ -51,30 +57,65 @@ public class ParseCursor implements AutoCloseable {
      */
     private void load() {
         try {
-
-            if ( consumed ) current = reader.read();
-            consumed = false;
-
+            if ( consumed ) {
+                current = reader.read();
+                index++;
+                if ( current >= 0 ) {
+                    char highSurrogate = (char) current;
+                    if ( Character.isHighSurrogate( highSurrogate ) ) {
+                        int next = reader.read();
+                        index++;
+                        if ( next >= 0 ) {
+                            char lowSurrogate = (char)next;
+                            if (Character.isSurrogatePair( highSurrogate, lowSurrogate )) {
+                                current = Character.toCodePoint( highSurrogate, lowSurrogate );
+                            } else {
+                                throw error( ERR_SURROGATE_ENCODING, null );
+                            }
+                        } else {
+                            throw error( ERR_SURROGATE_ENCODING, null );
+                        }
+                    }
+                    if ( current == 13 ) {
+                        line ++;
+                        column = 1;
+                    } else if ( current == 9 ) {
+                        column += 4;
+                    } else if ( current >= ' ') {
+                        column ++;
+                    }
+                }
+                consumed = false;
+            }
         } catch ( IOException ie ) {
-            throw new ParseException( ie.getMessage(), ie );
+            throw error( ERR_IO_ERROR, ie );
         }
     }
 
     /**
+     * An exception with the specified message.
+     * @param message The message.
+     */
+    private ParseException error( String message, Throwable e ) {
+        return new ParseException( String.format( "%s at %s.", message, position() ), e );
+    }
+
+    /**
+     * @return A positional string.
+     */
+    private String position() {
+        return String.format( "position %d [%d:%d]", index, line, column );
+    }
+
+    /**
      * @return The current character in the cursor.
-     *         <p/>
-     *         Note: If the current character is consumed. The next one is loaded from
-     *         the underlying reader.
+     * <p>
+     * Note: If the current character is consumed. The next one is loaded from
+     * the underlying reader.
      */
     public int getCurrent() {
         load();
         return current;
-    }
-
-    public int getCurrent( boolean doConsume ) {
-        int retval = getCurrent();
-        if ( doConsume ) consume();
-        return retval;
     }
 
     /**

@@ -1,5 +1,6 @@
 package epic.data.type;
 
+import epic.data.type.string.StringType;
 import junit.framework.Assert;
 import org.junit.Test;
 

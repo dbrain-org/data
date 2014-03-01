@@ -35,7 +35,6 @@ public class Numbers {
         };
     }
 
-
     /**
      * Convert a string to a number using a NumberFormat.
      */
