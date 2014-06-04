@@ -48,7 +48,7 @@ public class CsvCursorTest {
         Assert.assertEquals( 1d, csvCursor.getDouble( 1 ) );
         Assert.assertEquals( "1", csvCursor.getString( 1 ) );
 
-        Assert.assertEquals( "1", csvCursor.getAs( 1, Objects::identity ) );
+        Assert.assertEquals( (Object)"1", csvCursor.getAs( 1, Objects::identity ) );
         Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByteAs( 1, Objects::identity ) );
         Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShortAs( 1, Objects::identity ) );
         Assert.assertEquals( (Integer) 1, csvCursor.getIntAs( 1, Objects::identity ) );
@@ -66,7 +66,7 @@ public class CsvCursorTest {
         Assert.assertEquals( 1d, csvCursor.getDouble( "Col2" ) );
         Assert.assertEquals( "1", csvCursor.getString( "Col2" ) );
 
-        Assert.assertEquals( "1", csvCursor.getAs( "Col2", Objects::identity ) );
+        Assert.assertEquals( (Object)"1", csvCursor.getStringAs( "Col2", Objects::identity ) );
         Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByteAs( "Col2", Objects::identity ) );
         Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShortAs( "Col2", Objects::identity ) );
         Assert.assertEquals( (Integer) ( (int) 1 ), csvCursor.getIntAs( "Col2", Objects::identity ) );

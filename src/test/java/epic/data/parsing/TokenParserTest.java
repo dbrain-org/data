@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.Collator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +32,6 @@ public class TokenParserTest {
         Assert.assertEquals( identifier, "identifier" );
         Assert.assertEquals( string1, "string1" );
         Assert.assertEquals( string2, "string2" );
-
-
     }
+
 }
