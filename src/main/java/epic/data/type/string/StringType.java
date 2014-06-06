@@ -4,7 +4,7 @@ import epic.data.Formatter;
 import epic.data.type.AbstractDataType;
 import epic.data.util.Functions;
 import epic.data.formats.Formats;
-import epic.data.util.Objects;
+import epic.data.Casts;
 import epic.data.util.Strings;
 
 import java.util.Comparator;
@@ -83,9 +83,9 @@ public class StringType extends AbstractDataType<String> {
         // Combine them
         Function<String, String> combinedFunction = Functions.composeAlike( trimFunction, lengthFunction, caseFunction, blankFunction );
         if ( combinedFunction != null ) {
-            castFunction = Functions.compose( Objects::toString, combinedFunction );
+            castFunction = Functions.compose( Casts::toString, combinedFunction );
         } else {
-            castFunction = Objects::toString;
+            castFunction = Casts::toString;
         }
 
     }

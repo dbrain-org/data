@@ -47,11 +47,7 @@ public class Strings {
      * @return A string with.
      */
     public static String trim( String s ) {
-        if ( s != null ) {
-            return s.trim();
-        } else {
-            return null;
-        }
+        return s != null ? s.trim() : null;
     }
 
     /**

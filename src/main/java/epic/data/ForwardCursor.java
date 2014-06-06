@@ -16,10 +16,6 @@
 
 package epic.data;
 
-import epic.data.util.Objects;
-
-import java.util.function.Function;
-
 /**
  * Allows to read tabular data in a Forward-only manner.
  */

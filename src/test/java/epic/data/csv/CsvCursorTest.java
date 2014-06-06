@@ -16,7 +16,7 @@
 
 package epic.data.csv;
 
-import epic.data.util.Objects;
+import epic.data.Casts;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -48,14 +48,14 @@ public class CsvCursorTest {
         Assert.assertEquals( 1d, csvCursor.getDouble( 1 ) );
         Assert.assertEquals( "1", csvCursor.getString( 1 ) );
 
-        Assert.assertEquals( (Object)"1", csvCursor.getAs( 1, Objects::identity ) );
-        Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByteAs( 1, Objects::identity ) );
-        Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShortAs( 1, Objects::identity ) );
-        Assert.assertEquals( (Integer) 1, csvCursor.getIntAs( 1, Objects::identity ) );
-        Assert.assertEquals( (Long) 1L, csvCursor.getLongAs( 1, Objects::identity ) );
-        Assert.assertEquals( 1f, csvCursor.getFloatAs( 1, Objects::identity ) );
-        Assert.assertEquals( 1d, csvCursor.getDoubleAs( 1, Objects::identity ) );
-        Assert.assertEquals( "1", csvCursor.getStringAs( 1 , Objects::identity ) );
+        Assert.assertEquals( (Object)"1", csvCursor.getAs( 1, Casts::identity ) );
+        Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByteAs( 1, Casts::identity ) );
+        Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShortAs( 1, Casts::identity ) );
+        Assert.assertEquals( (Integer) 1, csvCursor.getIntAs( 1, Casts::identity ) );
+        Assert.assertEquals( (Long) 1L, csvCursor.getLongAs( 1, Casts::identity ) );
+        Assert.assertEquals( 1f, csvCursor.getFloatAs( 1, Casts::identity ) );
+        Assert.assertEquals( 1d, csvCursor.getDoubleAs( 1, Casts::identity ) );
+        Assert.assertEquals( "1", csvCursor.getStringAs( 1 , Casts::identity ) );
 
         Assert.assertEquals( "1", csvCursor.get( "Col2" ) );
         Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByte( "Col2" ) );
@@ -66,14 +66,14 @@ public class CsvCursorTest {
         Assert.assertEquals( 1d, csvCursor.getDouble( "Col2" ) );
         Assert.assertEquals( "1", csvCursor.getString( "Col2" ) );
 
-        Assert.assertEquals( (Object)"1", csvCursor.getStringAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByteAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShortAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( (Integer) ( (int) 1 ), csvCursor.getIntAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( (Long) 1L, csvCursor.getLongAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( 1f, csvCursor.getFloatAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( 1d, csvCursor.getDoubleAs( "Col2", Objects::identity ) );
-        Assert.assertEquals( "1", csvCursor.getStringAs( "Col2", Objects::identity ) );
+        Assert.assertEquals( (Object)"1", csvCursor.getStringAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByteAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShortAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( (Integer) ( (int) 1 ), csvCursor.getIntAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( (Long) 1L, csvCursor.getLongAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( 1f, csvCursor.getFloatAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( 1d, csvCursor.getDoubleAs( "Col2", Casts::identity ) );
+        Assert.assertEquals( "1", csvCursor.getStringAs( "Col2", Casts::identity ) );
 
         Assert.assertEquals( "2012-01-01", csvCursor.get( 2 ) );
         Assert.assertEquals( "2012-01-01", csvCursor.get( "Col3" ) );

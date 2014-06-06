@@ -7,7 +7,7 @@ import epic.data.util.Numbers;
 import epic.data.util.Functions;
 import epic.data.formats.Formats;
 import epic.data.Formatter;
-import epic.data.util.Objects;
+import epic.data.Casts;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -46,7 +46,7 @@ public class DecimalType extends AbstractDataType<BigDecimal> {
     }
 
     public DecimalType( Integer precision, Integer scale, RoundingMode roundingMode ) {
-        castFunction = Functions.compose( Objects::toBigDecimal, Numbers.setDecimalParameters( precision, scale, roundingMode ) );
+        castFunction = Functions.compose( Casts::toBigDecimal, Numbers.setDecimalParameters( precision, scale, roundingMode ) );
     }
 
     @Override

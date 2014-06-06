@@ -17,12 +17,6 @@
 package epic.data.util;
 
 import java.util.function.Function;
-import epic.data.Lookup;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Classes that contains static methods to manipulate adapters.
@@ -107,117 +101,6 @@ public class Functions {
      */
     public static <FROM, TO, MIDDLE1, MIDDLE2, MIDDLE3> Function<FROM, TO> compose( Function<FROM, ? extends MIDDLE1> function1, Function<MIDDLE1, ? extends MIDDLE2> function2, Function<MIDDLE2, ? extends MIDDLE3> function3, Function<MIDDLE3, TO> function4 ) {
         return compose( compose( function1, function2 ), compose( function3, function4 ) );
-    }
-
-    /**
-     * Build a lookup table, providing initial values.
-     *
-     * @param fromValue initial from value.
-     * @param toValue   initial to value.
-     * @return A Builder to continue building a lookup.
-     */
-    public static <FROM, TO> LookupBuilder<FROM, TO> map( FROM fromValue, TO toValue ) {
-        LookupBuilder<FROM, TO> result = new LookupBuilder<>();
-        return result.map( fromValue, toValue );
-    }
-
-    /**
-     * Inverse an existing lookup table. Please note that fails if multiple from values map to the same to value.
-     *
-     * @param lookup The lookup to inverse.
-     * @return An inverse lookup.
-     */
-    public static <FROM, TO> Lookup<TO, FROM> inverseLookup( Lookup<FROM, TO> lookup ) {
-        LookupBuilder<TO, FROM> result = new LookupBuilder<TO, FROM>().preventNullMapping();
-        for ( FROM fromValue : lookup.keySet() ) {
-            TO toValue = lookup.apply( fromValue );
-            result.map( toValue, fromValue );
-        }
-        return result.build();
-    }
-
-    /**
-     * Builder for Lookup.
-     *
-     * @param <FROM>
-     * @param <TO>
-     */
-    public static class LookupBuilder<FROM, TO> {
-
-        private boolean defaultNullMapping = true;
-
-        private Map<FROM, TO> map = new HashMap<>();
-
-
-        private LookupBuilder() {
-        }
-
-        /**
-         * Map a value to another.
-         */
-        public LookupBuilder<FROM, TO> map( FROM fromValue, TO toValue ) {
-            if ( map.containsKey( fromValue ) ) {
-                throw new IllegalArgumentException();
-            }
-
-            // A null value has been manually assigned ?
-            if ( fromValue == null ) {
-                defaultNullMapping = false;
-            }
-
-            map.put( fromValue, toValue );
-            return this;
-        }
-
-        /**
-         * Prevent the default mapping of null to null.
-         */
-        public LookupBuilder<FROM, TO> preventNullMapping() {
-            defaultNullMapping = false;
-            return this;
-        }
-
-        /**
-         * Build a lookup table.
-         */
-        public Lookup<FROM, TO> build() {
-            try {
-                if ( defaultNullMapping ) {
-                    map.put( null, null );
-                }
-                return new LookupImpl<>( map );
-            } finally {
-                map = null;
-            }
-        }
-    }
-
-    /**
-     * Implementation of the lookup interface.
-     */
-    private static class LookupImpl<FROM, TO> implements Lookup<FROM, TO> {
-
-        private final Set<FROM>     possibleValues;
-        private final Map<FROM, TO> map;
-
-        private LookupImpl( Map<FROM, TO> map ) {
-            this.map = map;
-            this.possibleValues = Collections.unmodifiableSet( map.keySet() );
-        }
-
-        @Override
-        public Set<FROM> keySet() {
-            return possibleValues;
-        }
-
-        @Override
-        public TO apply( FROM from ) {
-            if ( map.containsKey( from ) ) {
-                return map.get( from );
-            } else {
-                throw new IllegalArgumentException();
-            }
-        }
     }
 
 

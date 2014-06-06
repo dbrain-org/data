@@ -1,7 +1,5 @@
 package epic.data;
 
-import epic.data.util.Objects;
-
 import java.util.function.Function;
 
 /**
@@ -37,7 +35,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Byte getByte( int fieldIndex ) {
-        return Objects.toByte( get( fieldIndex ) );
+        return Casts.toByte( get( fieldIndex ) );
     }
 
     /**
@@ -59,7 +57,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Short getShort( int fieldIndex ) {
-        return Objects.toShort( get( fieldIndex ) );
+        return Casts.toShort( get( fieldIndex ) );
     }
 
     /**
@@ -81,7 +79,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Integer getInt( int fieldIndex ) {
-        return Objects.toInteger( get( fieldIndex ) );
+        return Casts.toInteger( get( fieldIndex ) );
     }
 
     /**
@@ -103,7 +101,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Long getLong( int fieldIndex ) {
-        return Objects.toLong( get( fieldIndex ) );
+        return Casts.toLong( get( fieldIndex ) );
     }
 
     /**
@@ -125,7 +123,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Float getFloat( int fieldIndex ) {
-        return Objects.toFloat( get( fieldIndex ) );
+        return Casts.toFloat( get( fieldIndex ) );
     }
 
     /**
@@ -147,7 +145,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Double getDouble( int fieldIndex ) {
-        return Objects.toDouble( get( fieldIndex ) );
+        return Casts.toDouble( get( fieldIndex ) );
     }
 
     /**
@@ -169,7 +167,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Boolean getBoolean( int fieldIndex ) {
-        return Objects.toBoolean( get( fieldIndex ) );
+        return Casts.toBoolean( get( fieldIndex ) );
     }
 
     /**
@@ -191,7 +189,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default String getString( int fieldIndex ) {
-        return Objects.toString( get( fieldIndex ) );
+        return Casts.toString( get( fieldIndex ) );
     }
 
     /**

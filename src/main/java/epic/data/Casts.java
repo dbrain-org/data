@@ -1,24 +1,22 @@
-package epic.data.util;
+package epic.data;
 
 import epic.data.DataTruncationException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalField;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Utilitaries methods around Objects.
+ * Static methods around Objects.
  */
-public class Objects {
+public class Casts {
 
     private static final BigDecimal BD_LONG_MIN  = new BigDecimal( Long.MIN_VALUE );
     private static final BigDecimal BD_LONG_MAX  = new BigDecimal( Long.MAX_VALUE );
@@ -38,84 +36,6 @@ public class Objects {
     private static final BigInteger BI_BYTE_MAX  = new BigInteger( Byte.toString( Byte.MAX_VALUE ) );
 
     /**
-     * Retrieve a hash getValue for the provided Serializable type. The hashing algorithm is provided
-     * by the hashType parameter and can be anything supported by the java security api.
-     *
-     * @param o        The object to serialize.
-     * @param hashType The type of hash requested.
-     * @return the hash getValue.
-     */
-    public static byte[] hashSerializable( Serializable o, String hashType ) {
-        try ( ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                ObjectOutputStream out = new ObjectOutputStream( buffer ); ) {
-
-            out.writeObject( o );
-            out.close();
-            buffer.close();
-
-            byte[] digest = MessageDigest.getInstance( hashType ).digest( buffer.toByteArray() );
-
-            return digest;
-
-        } catch ( IOException e ) {
-            throw new IllegalStateException( e );
-        } catch ( NoSuchAlgorithmException e ) {
-            throw new IllegalArgumentException( e );
-        }
-    }
-
-    /**
-     * Retrieve a hash getValue for the provided Serializable type. The hashing algorithm is provided
-     * by the hashType parameter and can be anything supported by the java security api. The hash
-     * binary buffer is converted to string using an hexadecimal encoding.
-     *
-     * @param o
-     * @param hashType
-     * @return
-     */
-    public static String hashSerializableAsString( Serializable o, String hashType ) {
-        byte[] hash = hashSerializable( o, hashType );
-        StringBuilder sb = new StringBuilder();
-        for ( byte b : hash ) {
-            int hex1 = ( ( b >>> 4 ) & 0xf );
-            int hex2 = ( b & 0xf );
-            sb.append( Integer.toHexString( hex1 ) );
-            sb.append( Integer.toHexString( hex2 ) );
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Deep clone using serializable interface.
-     *
-     * @param o The objcet to clone, or null.
-     * @return The cloned object, or null if null was provided.
-     */
-    public static <T extends Serializable> T cloneSerializable( T o ) {
-
-        // return null if null is provided.
-        if ( o == null ) {
-            return null;
-        }
-
-        try ( ByteArrayOutputStream rawOut = new ByteArrayOutputStream(); ObjectOutputStream out = new ObjectOutputStream( rawOut ) ) {
-
-            out.writeObject( o );
-            out.close();
-            rawOut.close();
-
-            try ( ByteArrayInputStream rawIn = new ByteArrayInputStream( rawOut.toByteArray() ); ObjectInputStream in = new ObjectInputStream( rawIn ) ) {
-                return (T) in.readObject();
-            }
-
-        } catch ( ClassNotFoundException | IOException e ) {
-            throw new IllegalStateException( e );
-        }
-
-    }
-
-    /**
-     * @return o
      * @param o
      * @param <T>
      * @return
@@ -125,6 +45,33 @@ public class Objects {
     }
 
     /**
+     * Cast object to BigDecimal.
+     */
+    public static BigDecimal toBigDecimal( Object o ) {
+        if ( o == null ) return null;
+        if ( o instanceof BigDecimal ) return (BigDecimal) o;
+        if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
+            return new BigDecimal( ( (Number) o ).longValue() );
+        } else if ( o instanceof Float || o instanceof Double ) {
+            return new BigDecimal( ( (Number) o ).doubleValue() );
+        } else if ( o instanceof BigInteger ) {
+            return new BigDecimal( (BigInteger) o );
+        } else if ( o instanceof CharSequence ) {
+            return new BigDecimal( o.toString().trim() );
+        }
+        throw new IllegalArgumentException( "Cannot cast " + o + " to BigDecimal." );
+    }
+
+    /**
+     * Cast string to BigDecimal.
+     */
+    public static BigDecimal toBigDecimal( String o ) {
+        if ( o == null ) return null;
+        return new BigDecimal( o.trim() );
+    }
+
+
+    /**
      * Cast object to BigInteger.
      */
     public static BigInteger toBigInteger( Object o ) {
@@ -132,15 +79,27 @@ public class Objects {
         if ( o instanceof BigInteger ) return (BigInteger) o;
         if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
             return new BigInteger( o.toString() );
-        } else if ( o instanceof Float || o instanceof Double ) {
+        }
+        if ( o instanceof Float || o instanceof Double ) {
             return new BigDecimal( ( (Number) o ).doubleValue() ).toBigInteger();
-        } else if ( o instanceof BigDecimal ) {
+        }
+        if ( o instanceof BigDecimal ) {
             return ( (BigDecimal) o ).toBigInteger();
-        } else if ( o instanceof CharSequence ) {
+        }
+        if ( o instanceof CharSequence ) {
             return new BigInteger( o.toString().trim() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to BigInteger." );
     }
+
+    /**
+     * Cast String to BigInteger.
+     */
+    public static BigInteger toBigInteger( String o ) {
+        if ( o == null ) return null;
+        return new BigInteger( o.trim() );
+    }
+
 
     /**
      * Cast object to Double.
@@ -206,28 +165,18 @@ public class Objects {
     }
 
     /**
+     * Cast object to long.
+     */
+    public static Long toLong( String o ) {
+        if ( o == null ) return null;
+        return Long.parseLong( o.trim() );
+    }
+
+    /**
      * Cast object to String (null-safe).
      */
     public static String toString( Object o ) {
         return o != null ? o.toString() : null;
-    }
-
-    /**
-     * Cast object to BigDecimal.
-     */
-    public static BigDecimal toBigDecimal( Object o ) {
-        if ( o == null ) return null;
-        if ( o instanceof BigDecimal ) return (BigDecimal) o;
-        if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
-            return new BigDecimal( ( (Number) o ).longValue() );
-        } else if ( o instanceof Float || o instanceof Double ) {
-            return new BigDecimal( ( (Number) o ).doubleValue() );
-        } else if ( o instanceof BigInteger ) {
-            return new BigDecimal( (BigInteger) o );
-        } else if ( o instanceof CharSequence ) {
-            return new BigDecimal( o.toString().trim() );
-        }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to BigDecimal." );
     }
 
     /**
@@ -371,4 +320,33 @@ public class Objects {
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to Short." );
     }
+
+    /**
+     * Cast date to sql date.
+     */
+    public static java.sql.Date toSqlDate( java.util.Date date ) {
+        return date != null ? new java.sql.Date( date.getTime() ) : null;
+    }
+
+    /**
+     * Cast date to sql date.
+     */
+    public static java.sql.Date toSqlDate( LocalDate date ) {
+        return date != null ? java.sql.Date.valueOf( date ) : null;
+    }
+
+    /**
+     * Cast date to sql time.
+     */
+    public static java.sql.Time toSqlTime( java.util.Date date ) {
+        return date != null ? new java.sql.Time( date.getTime() ) : null;
+    }
+
+    /**
+     * Cast date to sql timestamp.
+     */
+    public static java.sql.Timestamp toSqlTimestamp( java.util.Date date ) {
+        return date != null ? new java.sql.Timestamp( date.getTime() ) : null;
+    }
+
 }

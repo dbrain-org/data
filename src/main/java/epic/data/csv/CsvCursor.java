@@ -217,7 +217,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * @return True if stream at End of File.
      */
     public boolean eof() {
-        return !bof && fieldValues == null;
+        return bof ? next() : fieldValues == null;
     }
 
     /**

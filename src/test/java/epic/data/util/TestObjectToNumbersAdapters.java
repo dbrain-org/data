@@ -16,7 +16,7 @@
 
 package epic.data.util;
 
-import epic.data.util.Objects;
+import epic.data.Casts;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -106,86 +106,86 @@ public class TestObjectToNumbersAdapters {
     @Test
     public void testObjectToByteAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toByte, Byte.MIN_VALUE, Byte.MIN_VALUE );
-        testObjectToNumberAdaptation( Objects::toByte, Byte.MAX_VALUE, Byte.MAX_VALUE );
-        testObjectToNumberAdaptation( Objects::toByte, (byte) 0, (byte) 0 );
-        testNumberAdaptationFailure( Objects::toByte, -500 );
+        testObjectToNumberAdaptation( Casts::toByte, Byte.MIN_VALUE, Byte.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toByte, Byte.MAX_VALUE, Byte.MAX_VALUE );
+        testObjectToNumberAdaptation( Casts::toByte, (byte) 0, (byte) 0 );
+        testNumberAdaptationFailure( Casts::toByte, -500 );
 
     }
 
     @Test
     public void testObjectToShortAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toShort, Short.MIN_VALUE, Short.MIN_VALUE );
-        testObjectToNumberAdaptation( Objects::toShort, Short.MAX_VALUE, Short.MAX_VALUE );
-        testObjectToNumberAdaptation( Objects::toShort, (short) 0, (short) 0 );
-        testNumberAdaptationFailure( Objects::toShort, -500000 );
+        testObjectToNumberAdaptation( Casts::toShort, Short.MIN_VALUE, Short.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toShort, Short.MAX_VALUE, Short.MAX_VALUE );
+        testObjectToNumberAdaptation( Casts::toShort, (short) 0, (short) 0 );
+        testNumberAdaptationFailure( Casts::toShort, -500000 );
 
     }
 
     @Test
     public void testObjectToIntegerAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toInteger, Integer.MIN_VALUE, Integer.MIN_VALUE );
-        testObjectToNumberAdaptation( Objects::toInteger, Integer.MAX_VALUE, Integer.MAX_VALUE );
-        testObjectToNumberAdaptation( Objects::toInteger, 0, 0 );
-        testNumberAdaptationFailure( Objects::toInteger, Long.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toInteger, Integer.MIN_VALUE, Integer.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toInteger, Integer.MAX_VALUE, Integer.MAX_VALUE );
+        testObjectToNumberAdaptation( Casts::toInteger, 0, 0 );
+        testNumberAdaptationFailure( Casts::toInteger, Long.MIN_VALUE );
 
     }
 
     @Test
     public void testObjectToLongAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toLong, Long.MIN_VALUE, Long.MIN_VALUE );
-        testObjectToNumberAdaptation( Objects::toLong, Long.MAX_VALUE, Long.MAX_VALUE );
-        testObjectToNumberAdaptation( Objects::toLong, 0L, 0L );
-        testNumberAdaptationFailure( Objects::toLong, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ) );
+        testObjectToNumberAdaptation( Casts::toLong, Long.MIN_VALUE, Long.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toLong, Long.MAX_VALUE, Long.MAX_VALUE );
+        testObjectToNumberAdaptation( Casts::toLong, 0L, 0L );
+        testNumberAdaptationFailure( Casts::toLong, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ) );
 
     }
 
     @Test
     public void testObjectToFloatAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toFloat, (float) Long.MIN_VALUE, (float) Long.MIN_VALUE );
-        testObjectToNumberAdaptation( Objects::toFloat, (float) Long.MAX_VALUE, (float) Long.MAX_VALUE );
-        testObjectToNumberAdaptation( Objects::toFloat, 0f, 0f );
-        testObjectToNumberAdaptation( Objects::toFloat, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).floatValue() );
+        testObjectToNumberAdaptation( Casts::toFloat, (float) Long.MIN_VALUE, (float) Long.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toFloat, (float) Long.MAX_VALUE, (float) Long.MAX_VALUE );
+        testObjectToNumberAdaptation( Casts::toFloat, 0f, 0f );
+        testObjectToNumberAdaptation( Casts::toFloat, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).floatValue() );
 
     }
 
     @Test
     public void testObjectToDoubleAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toDouble, (double) Long.MIN_VALUE, (double) Long.MIN_VALUE );
-        testObjectToNumberAdaptation( Objects::toDouble, (double) Long.MAX_VALUE, (double) Long.MAX_VALUE );
-        testObjectToNumberAdaptation( Objects::toDouble, 0d, 0d );
-        testObjectToNumberAdaptation( Objects::toDouble, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).doubleValue() );
+        testObjectToNumberAdaptation( Casts::toDouble, (double) Long.MIN_VALUE, (double) Long.MIN_VALUE );
+        testObjectToNumberAdaptation( Casts::toDouble, (double) Long.MAX_VALUE, (double) Long.MAX_VALUE );
+        testObjectToNumberAdaptation( Casts::toDouble, 0d, 0d );
+        testObjectToNumberAdaptation( Casts::toDouble, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).doubleValue() );
 
     }
 
     @Test
     public void testObjectToBigDecimalAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toBigDecimal, BigDecimal.ONE, BigDecimal.ONE );
-        testObjectToNumberAdaptation( Objects::toBigDecimal, BigDecimal.ONE.negate(), BigDecimal.ONE.negate() );
-        testObjectToNumberAdaptation( Objects::toBigDecimal, BigDecimal.ZERO, BigDecimal.ZERO );
+        testObjectToNumberAdaptation( Casts::toBigDecimal, BigDecimal.ONE, BigDecimal.ONE );
+        testObjectToNumberAdaptation( Casts::toBigDecimal, BigDecimal.ONE.negate(), BigDecimal.ONE.negate() );
+        testObjectToNumberAdaptation( Casts::toBigDecimal, BigDecimal.ZERO, BigDecimal.ZERO );
 
     }
 
     @Test
     public void testObjectToBigIntegerAdapter() {
 
-        testObjectToNumberAdaptation( Objects::toBigInteger, BigInteger.ONE, BigInteger.ONE );
-        testObjectToNumberAdaptation( Objects::toBigInteger, BigInteger.ONE.negate(), BigInteger.ONE.negate() );
-        testObjectToNumberAdaptation( Objects::toBigInteger, BigInteger.ZERO, BigInteger.ZERO );
+        testObjectToNumberAdaptation( Casts::toBigInteger, BigInteger.ONE, BigInteger.ONE );
+        testObjectToNumberAdaptation( Casts::toBigInteger, BigInteger.ONE.negate(), BigInteger.ONE.negate() );
+        testObjectToNumberAdaptation( Casts::toBigInteger, BigInteger.ZERO, BigInteger.ZERO );
 
     }
 
     @Test
     public void testBigDecimalScientificNotation() throws Exception {
         String test = "123123E-100";
-        BigDecimal bdvalue = Objects.toBigDecimal( test );
-        Double dvalue = Objects.toDouble( test );
+        BigDecimal bdvalue = Casts.toBigDecimal( test );
+        Double dvalue = Casts.toDouble( test );
 
 
     }
