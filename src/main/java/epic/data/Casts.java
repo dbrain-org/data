@@ -1,15 +1,10 @@
 package epic.data;
 
-import epic.data.DataTruncationException;
+import epic.data.util.Strings;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.TemporalField;
-import java.util.Date;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -45,6 +40,14 @@ public class Casts {
     }
 
     /**
+     * Cast string to BigDecimal.
+     */
+    public static BigDecimal toBigDecimal( String o ) {
+        if ( Strings.isBlank( o ) ) return null;
+        return new BigDecimal( o.trim() );
+    }
+
+    /**
      * Cast object to BigDecimal.
      */
     public static BigDecimal toBigDecimal( Object o ) {
@@ -57,19 +60,19 @@ public class Casts {
         } else if ( o instanceof BigInteger ) {
             return new BigDecimal( (BigInteger) o );
         } else if ( o instanceof CharSequence ) {
-            return new BigDecimal( o.toString().trim() );
+            return toBigDecimal( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to BigDecimal." );
     }
 
-    /**
-     * Cast string to BigDecimal.
-     */
-    public static BigDecimal toBigDecimal( String o ) {
-        if ( o == null ) return null;
-        return new BigDecimal( o.trim() );
-    }
 
+    /**
+     * Cast String to BigInteger.
+     */
+    public static BigInteger toBigInteger( String o ) {
+        if ( Strings.isBlank( o ) ) return null;
+        return new BigInteger( o.trim() );
+    }
 
     /**
      * Cast object to BigInteger.
@@ -87,19 +90,20 @@ public class Casts {
             return ( (BigDecimal) o ).toBigInteger();
         }
         if ( o instanceof CharSequence ) {
-            return new BigInteger( o.toString().trim() );
+            return toBigInteger( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to BigInteger." );
     }
 
     /**
-     * Cast String to BigInteger.
+     * Cast String to double.
      */
-    public static BigInteger toBigInteger( String o ) {
-        if ( o == null ) return null;
-        return new BigInteger( o.trim() );
+    public static Double toDouble( String o ) {
+        if ( Strings.isBlank( o ) ) {
+            return null;
+        }
+        return Double.parseDouble( o.trim() );
     }
-
 
     /**
      * Cast object to Double.
@@ -110,10 +114,21 @@ public class Casts {
         if ( o instanceof Number ) {
             return ( (Number) o ).doubleValue();
         } else if ( o instanceof CharSequence ) {
-            return Double.parseDouble( o.toString().trim() );
+            return toDouble( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to Double." );
     }
+
+    /**
+     * Cast String to float.
+     */
+    public static Float toFloat( String o ) {
+        if ( Strings.isBlank( o ) ) {
+            return null;
+        }
+        return Float.parseFloat( o.trim() );
+    }
+
 
     /**
      * Cast object to Float.
@@ -124,9 +139,17 @@ public class Casts {
         if ( o instanceof Number ) {
             return ( (Number) o ).floatValue();
         } else if ( o instanceof CharSequence ) {
-            return Float.parseFloat( o.toString().trim() );
+            return toFloat( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to Float." );
+    }
+
+    /**
+     * Cast object to long.
+     */
+    public static Long toLong( String o ) {
+        if ( Strings.isBlank( o ) ) return null;
+        return Long.parseLong( o.trim() );
     }
 
     /**
@@ -159,82 +182,19 @@ public class Casts {
                 throw new DataTruncationException();
             }
         } else if ( o instanceof CharSequence ) {
-            return Long.parseLong( o.toString().trim() );
+            return toLong( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to Long." );
     }
 
     /**
-     * Cast object to long.
+     * Cast string to integer.
      */
-    public static Long toLong( String o ) {
-        if ( o == null ) return null;
-        return Long.parseLong( o.trim() );
-    }
-
-    /**
-     * Cast object to String (null-safe).
-     */
-    public static String toString( Object o ) {
-        return o != null ? o.toString() : null;
-    }
-
-    /**
-     * Cast object to Boolean.
-     */
-    public static Boolean toBoolean( Object o ) {
-        if ( o == null ) return null;
-        if ( o instanceof Boolean ) return (Boolean) o;
-        if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
-            return ( (Number) o ).longValue() != 0;
-        } else if ( o instanceof BigDecimal ) {
-            return !o.equals( BigDecimal.ZERO );
-        } else if ( o instanceof BigInteger ) {
-            return !o.equals( BigInteger.ZERO );
-        } else if ( o instanceof CharSequence ) {
-            return Boolean.parseBoolean( o.toString().trim() );
+    public static Integer toInteger( String o ) {
+        if ( Strings.isBlank( o ) ) {
+            return null;
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Boolean." );
-    }
-
-    /**
-     * Cast object to byte.
-     */
-    public static Byte toByte( Object o ) {
-        if ( o == null ) return null;
-        if ( o instanceof Byte ) return (Byte) o;
-        if ( o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
-            long longValue = ( (Number) o ).longValue();
-            if ( longValue >= Byte.MIN_VALUE && longValue <= Byte.MAX_VALUE ) {
-                return (byte) longValue;
-            } else {
-                throw new DataTruncationException();
-            }
-        } else if ( o instanceof Float || o instanceof Double ) {
-            double doubleValue = ( (Number) o ).doubleValue();
-            if ( doubleValue >= Byte.MIN_VALUE && doubleValue <= Byte.MAX_VALUE ) {
-                return (byte) doubleValue;
-            } else {
-                throw new DataTruncationException();
-            }
-        } else if ( o instanceof BigDecimal ) {
-            BigDecimal bigDecimal = (BigDecimal) o;
-            if ( bigDecimal.compareTo( BD_BYTE_MIN ) >= 0 && bigDecimal.compareTo( BD_BYTE_MAX ) <= 0 ) {
-                return bigDecimal.byteValue();
-            } else {
-                throw new DataTruncationException();
-            }
-        } else if ( o instanceof BigInteger ) {
-            BigInteger bigInteger = (BigInteger) o;
-            if ( bigInteger.compareTo( BI_BYTE_MIN ) >= 0 && bigInteger.compareTo( BI_BYTE_MAX ) <= 0 ) {
-                return bigInteger.byteValue();
-            } else {
-                throw new DataTruncationException();
-            }
-        } else if ( o instanceof CharSequence ) {
-            return Byte.parseByte( o.toString().trim() );
-        }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Byte." );
+        return Integer.parseInt( o.trim() );
     }
 
     /**
@@ -274,9 +234,19 @@ public class Casts {
                 throw new DataTruncationException();
             }
         } else if ( o instanceof CharSequence ) {
-            return Integer.parseInt( o.toString().trim() );
+            return toInteger( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to Integer." );
+    }
+
+    /**
+     * cast string to short.
+     */
+    public static Short toShort( String o ) {
+        if ( Strings.isBlank( o ) ) {
+            return null;
+        }
+        return Short.parseShort( o.trim() );
     }
 
     /**
@@ -316,9 +286,95 @@ public class Casts {
                 throw new DataTruncationException();
             }
         } else if ( o instanceof CharSequence ) {
-            return Short.parseShort( o.toString().trim() );
+            return toShort( o.toString() );
         }
         throw new IllegalArgumentException( "Cannot cast " + o + " to Short." );
+    }
+
+    /**
+     * Cast string to byte.
+     */
+    public static Byte toByte( String o ) {
+        if ( Strings.isBlank( o ) ) {
+            return null;
+        }
+        return Byte.parseByte( o.trim() );
+    }
+
+    /**
+     * Cast object to byte.
+     */
+    public static Byte toByte( Object o ) {
+        if ( o == null ) return null;
+        if ( o instanceof Byte ) return (Byte) o;
+        if ( o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
+            long longValue = ( (Number) o ).longValue();
+            if ( longValue >= Byte.MIN_VALUE && longValue <= Byte.MAX_VALUE ) {
+                return (byte) longValue;
+            } else {
+                throw new DataTruncationException();
+            }
+        } else if ( o instanceof Float || o instanceof Double ) {
+            double doubleValue = ( (Number) o ).doubleValue();
+            if ( doubleValue >= Byte.MIN_VALUE && doubleValue <= Byte.MAX_VALUE ) {
+                return (byte) doubleValue;
+            } else {
+                throw new DataTruncationException();
+            }
+        } else if ( o instanceof BigDecimal ) {
+            BigDecimal bigDecimal = (BigDecimal) o;
+            if ( bigDecimal.compareTo( BD_BYTE_MIN ) >= 0 && bigDecimal.compareTo( BD_BYTE_MAX ) <= 0 ) {
+                return bigDecimal.byteValue();
+            } else {
+                throw new DataTruncationException();
+            }
+        } else if ( o instanceof BigInteger ) {
+            BigInteger bigInteger = (BigInteger) o;
+            if ( bigInteger.compareTo( BI_BYTE_MIN ) >= 0 && bigInteger.compareTo( BI_BYTE_MAX ) <= 0 ) {
+                return bigInteger.byteValue();
+            } else {
+                throw new DataTruncationException();
+            }
+        } else if ( o instanceof CharSequence ) {
+            return toByte( o.toString() );
+        }
+        throw new IllegalArgumentException( "Cannot cast " + o + " to Byte." );
+    }
+
+    /**
+     * Cast object to String (null-safe).
+     */
+    public static String toString( Object o ) {
+        return o != null ? o.toString() : null;
+    }
+
+    /**
+     * Cast string to boolean.
+     */
+    public static Boolean toBoolean( String o ) {
+        if ( Strings.isBlank( o ) ) {
+            return null;
+        }
+        return Boolean.parseBoolean( o.trim() );
+    }
+
+
+    /**
+     * Cast object to Boolean.
+     */
+    public static Boolean toBoolean( Object o ) {
+        if ( o == null ) return null;
+        if ( o instanceof Boolean ) return (Boolean) o;
+        if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
+            return ( (Number) o ).longValue() != 0;
+        } else if ( o instanceof BigDecimal ) {
+            return !o.equals( BigDecimal.ZERO );
+        } else if ( o instanceof BigInteger ) {
+            return !o.equals( BigInteger.ZERO );
+        } else if ( o instanceof CharSequence ) {
+            return toBoolean( o.toString() );
+        }
+        throw new IllegalArgumentException( "Cannot cast " + o + " to Boolean." );
     }
 
     /**
