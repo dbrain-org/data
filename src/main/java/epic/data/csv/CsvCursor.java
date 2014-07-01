@@ -76,8 +76,8 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readSpace() {
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.getCurrent(); isSpace( cur ); cur = cursor.getNext() ) {
-            sb.append( (char) cur );
+        for ( int cur = cursor.getCurrent(); isSpace( cur ); cur = cursor.read() ) {
+            sb.appendCodePoint( cur );
         }
         return sb.toString();
     }
@@ -97,14 +97,14 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
         // Read string content
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.getCurrent(); !isEOL( cur ); cur = cursor.getNext() ) {
+        for ( int cur = cursor.getCurrent(); !isEOL( cur ); cur = cursor.read() ) {
             if ( cur == quote ) {
-                cur = cursor.getNext();
+                cur = cursor.read();
                 if ( cur != quote ) {
                     break;
                 }
             }
-            sb.append( (char) cur );
+            sb.appendCodePoint( cur );
         }
 
         return sb.toString();
@@ -118,7 +118,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private String readUnquotedString() {
         StringBuilder sb = new StringBuilder();
 
-        for ( int cur = cursor.getCurrent(); !isEOC( cur ); cur = cursor.getNext() ) {
+        for ( int cur = cursor.getCurrent(); !isEOC( cur ); cur = cursor.read() ) {
             sb.append( (char) cur );
         }
 
@@ -151,7 +151,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
         }
 
         // Skip all EOL characters
-        for ( int cur = cursor.getCurrent(); isEOL( cur ) && !isEOF( cur ); cur = cursor.getNext() ) ;
+        for ( int cur = cursor.getCurrent(); isEOL( cur ) && !isEOF( cur ); cur = cursor.read() ) ;
 
         return result;
     }

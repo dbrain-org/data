@@ -30,15 +30,15 @@ public class LineCursor {
                 StringBuilder sb = new StringBuilder();
                 while ( current >= 0 && current != 13 && current != 10 ) {
                     sb.append( (char) current );
-                    current = cursor.getNext();
+                    current = cursor.read();
                 }
                 if ( current == 13 ) {
-                    if ( cursor.getNext() == 10 ) {
+                    if ( cursor.read() == 10 ) {
                         cursor.consume();
                     }
                 }
                 if ( current == 10 ) {
-                    if ( cursor.getNext() == 13 ) {
+                    if ( cursor.read() == 13 ) {
                         cursor.consume();
                     }
                 }

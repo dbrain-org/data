@@ -6,6 +6,7 @@ import java.util.function.Function;
  * Denote a container of fields accessible by names.
  */
 public interface NamedFields {
+
     /**
      * Read the field having the specified name.
      *

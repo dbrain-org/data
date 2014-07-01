@@ -76,7 +76,7 @@ public class ParseCursor implements AutoCloseable {
                             throw error( ERR_SURROGATE_ENCODING, null );
                         }
                     }
-                    if ( current == 13 ) {
+                    if ( current == 10 ) {
                         line ++;
                         column = 1;
                     } else if ( current == 9 ) {
@@ -96,8 +96,16 @@ public class ParseCursor implements AutoCloseable {
      * An exception with the specified message.
      * @param message The message.
      */
-    private ParseException error( String message, Throwable e ) {
+    public ParseException error( String message, Throwable e ) {
         return new ParseException( String.format( "%s at %s.", message, position() ), e );
+    }
+
+    /**
+     * An exception with the specified message.
+     * @param message The message.
+     */
+    public ParseException error( String message ) {
+        return error( message, null );
     }
 
     /**
@@ -123,9 +131,27 @@ public class ParseCursor implements AutoCloseable {
      *
      * @return The next available character or -1 if none.
      */
-    public int getNext() {
+    public int read() {
         consume();
         return getCurrent();
+    }
+
+    /**
+     * @param count
+     * @return A string of characters. This method can return more characters than asked since it counts codepoints.
+     */
+    public String read( int count ) {
+        if ( count <= 0 ) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder( count );
+        int c = read();
+        for ( int i = 0; i < count && c >= 0; i++ ) {
+            sb.appendCodePoint( c );
+            c = read();
+
+        }
+        return sb.toString();
     }
 
     /**
@@ -133,13 +159,6 @@ public class ParseCursor implements AutoCloseable {
      */
     public void consume() {
         consumed = true;
-    }
-
-    /**
-     * @return the next current character available or -1 if eof.
-     */
-    public boolean isConsumed() {
-        return consumed;
     }
 
     /**
