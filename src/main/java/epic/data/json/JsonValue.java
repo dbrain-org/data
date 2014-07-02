@@ -2,6 +2,7 @@ package epic.data.json;
 
 import epic.data.Casts;
 
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,10 @@ public abstract class JsonValue {
 
     public static JsonValue ofJson( String jsonString ) {
         return ofJson( new JsonParser( new StringReader( jsonString ) ), true );
+    }
+
+    public static JsonValue ofJson( Reader json ) {
+        return ofJson( new JsonParser( json ) );
     }
 
     public static JsonValue ofJson( JsonParser parser ) {
@@ -173,6 +178,7 @@ public abstract class JsonValue {
         private JsonDouble( Double value ) {
             this.value = value;
         }
+
         @Override
         public String asString() {
             return value.toString();

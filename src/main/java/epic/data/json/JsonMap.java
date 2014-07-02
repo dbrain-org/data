@@ -1,5 +1,7 @@
 package epic.data.json;
 
+import epic.data.NamedFields;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +55,7 @@ public class JsonMap extends JsonValue implements Map<String, JsonValue> {
         return value != null ? value.asString() : null;
     }
 
-    public <T> T getStringAs( String name, Function<String, T> f ) {
+    public <T> T getStringAs( String name, Function<? super String, T> f ) {
         return f.apply( getString( name ));
     }
 
@@ -62,7 +64,7 @@ public class JsonMap extends JsonValue implements Map<String, JsonValue> {
         return value != null ? value.asDouble() : null;
     }
 
-    public <T> T getDoubleAs( String name, Function<Double, T> f ) {
+    public <T> T getDoubleAs( String name, Function<? super Double, T> f ) {
         return f.apply( getDouble( name ) );
     }
 
@@ -71,7 +73,7 @@ public class JsonMap extends JsonValue implements Map<String, JsonValue> {
         return value != null ? value.asBoolean() : null;
     }
 
-    public <T> T getBoolean( String name, Function<Boolean, T> f ) {
+    public <T> T getBoolean( String name, Function<? super Boolean, T> f ) {
         return f.apply( getBoolean( name ) );
     }
 

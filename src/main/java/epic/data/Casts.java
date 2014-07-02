@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 
 /**
  * Static methods around Objects.
@@ -349,6 +350,20 @@ public class Casts {
     }
 
     /**
+     * Cast an enum to enum name, null safe.
+     */
+    public static String toEnumName( Enum e ) {
+        return e != null ? e.name() : null;
+    }
+
+    /**
+     * Cast a name to an enum. Null-safe.
+     */
+    public static <T extends Enum<T>> T toEnum( Class<T> enumClass, String name ) {
+        return name != null ? Enum.valueOf( enumClass, name.trim() ) : null;
+    }
+
+    /**
      * Cast string to boolean.
      */
     public static Boolean toBoolean( String o ) {
@@ -357,7 +372,6 @@ public class Casts {
         }
         return Boolean.parseBoolean( o.trim() );
     }
-
 
     /**
      * Cast object to Boolean.
