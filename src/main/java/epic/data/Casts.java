@@ -4,10 +4,10 @@ import epic.data.util.Strings;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
 
 /**
  * Static methods around Objects.
@@ -391,6 +391,18 @@ public class Casts {
         throw new IllegalArgumentException( "Cannot cast " + o + " to Boolean." );
     }
 
+    public static java.util.Date toDate( DateFormat format, String value ) {
+        if ( !Strings.isBlank( value ) ) {
+            try {
+                return format.parse( value.trim() );
+            } catch ( java.text.ParseException e ) {
+                throw new ParseException( e );
+            }
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Cast date to sql date.
      */
@@ -405,11 +417,19 @@ public class Casts {
         return date != null ? java.sql.Date.valueOf( date ) : null;
     }
 
+
     /**
      * Cast date to sql time.
      */
     public static java.sql.Time toSqlTime( java.util.Date date ) {
         return date != null ? new java.sql.Time( date.getTime() ) : null;
+    }
+
+    /**
+     * Cast string to sql time.
+     */
+    public static java.sql.Time toSqlTime( DateFormat format, String time ) {
+        return toSqlTime( toDate( format, time ) );
     }
 
     /**
