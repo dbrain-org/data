@@ -403,6 +403,10 @@ public class Casts {
         }
     }
 
+    public static java.sql.Date toSqlDate( DateFormat format, String value ) {
+        return toSqlDate( toDate( format, value ) );
+    }
+
     /**
      * Cast date to sql date.
      */
