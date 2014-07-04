@@ -38,7 +38,7 @@ public class Functions {
             if ( function2 == null ) {
                 return function1;
             } else {
-                return function1.compose( function2 );
+                return function2.compose( function1 );
             }
         }
     }
