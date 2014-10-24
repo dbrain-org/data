@@ -14,15 +14,23 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.type;
+package org.dbrain.data.fqn;
 
-import java.util.Date;
+import org.dbrain.data.Fqns;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * Date datatype.
+ * Created by epoitras on 03/10/14.
  */
-public interface DateType<T> extends DataType<T> {
+public class Fqn_encodeSegment_Test {
 
-    Date toDate();
-
+    @Test
+    public void testSegmentEncoding() throws Exception {
+        Assert.assertEquals( "''", Fqns.encodeSegment( "" ) );
+        Assert.assertEquals( "test", Fqns.encodeSegment( "test" ) );
+        Assert.assertEquals( "'test*'", Fqns.encodeSegment( "test*" ) );
+        Assert.assertEquals( "'test'''", Fqns.encodeSegment( "test'" ) );
+        Assert.assertEquals( "'test.'", Fqns.encodeSegment( "test." ) );
+    }
 }
