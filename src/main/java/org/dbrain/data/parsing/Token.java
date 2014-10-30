@@ -18,10 +18,10 @@ package org.dbrain.data.parsing;
 
 /**
  * Token class.
- * <p/>
+ *
  * Tokens represent elements of a text stream. The only special token is EOF that means there is no more
  * characters available to read from the stream.
- * <p/>
+ *
  *
  * @author Eric Poitras
  * @version 1.0
@@ -40,15 +40,15 @@ public enum Token {
 
     /**
      * Identifier getValue.
-     * <p/>
-     * <p/>
+     *
+     *
      * 'StringInSingleQuote';
      */
     IDENTIFIER,
 
     /**
      * String getValue.
-     * <p/>
+     *
      * <ul>
      * <li>"string in double quote";</li>
      * <li>\long multi and possibly multi-line string\</li>
@@ -58,16 +58,16 @@ public enum Token {
 
     /**
      * NumericOps values.
-     * <p/>
+     *
      * Examples :
-     * <p/>
-     * <lu>
+     *
+     * <ul>
      * <li>123.23 - Real number</li>
      * <li>123 - Integral number</li>
      * <li>0x123 - Hexadecimal number</li>
      * <li>0b10100011 - Binary number</li>
      * <li>123.23E-123 - Scientific notation number</li>
-     * </lu>
+     * </ul>
      */
     NUMERIC,
 
@@ -172,12 +172,12 @@ public enum Token {
     MODULUS_EQUAL,
 
     /**
-     * Character : ">"
+     * Character : "&gt;"
      */
     GREATER,
 
     /**
-     * Character : "<"
+     * Character : "&lt;"
      */
     LESSER,
 
@@ -187,22 +187,22 @@ public enum Token {
     EQUAL,
 
     /**
-     * Character : ">="
+     * Character : "&gt;="
      */
     GREATER_EQUAL,
 
     /**
-     * Character : "<="
+     * Character : "&lt;="
      */
     LESSER_EQUAL,
 
     /**
-     * Character : "<>"
+     * Character : "&lt;&gt;"
      */
     NOT_EQUAL,
 
     /**
-     * Character : "&"
+     * Character : "&amp;"
      */
     BW_AND,
 
@@ -222,22 +222,22 @@ public enum Token {
     BW_NOT,
 
     /**
-     * Character : "&&" <p>
+     * Character : "&amp;&amp;"
      */
     AND,
 
     /**
-     * Character : "||" <p>
+     * Character : "||"
      */
     OR,
 
     /**
-     * Character : "^^" <p>
+     * Character : "^^"
      */
     XOR,
 
     /**
-     * Character : "!" <p>
+     * Character : "!"
      */
     NOT,
 

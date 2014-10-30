@@ -119,7 +119,7 @@ public class ParseCursor implements AutoCloseable {
 
     /**
      * @return The current character in the cursor.
-     * <p/>
+     *
      * Note: If the current character is consumed. The next one is loaded from
      * the underlying reader.
      */

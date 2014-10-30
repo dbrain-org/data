@@ -64,7 +64,7 @@ public class Functions {
      * @param <FROM>
      * @param <TO>      combineAlike
      * @param <MIDDLE>
-     * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> TO
+     * @return A combined adapter doing: FROM - Adapter1 - Adapter2 - TO
      */
     public static <FROM, TO, MIDDLE> Function<FROM, TO> compose( final Function<FROM, ? extends MIDDLE> function1,
                                                                  final Function<MIDDLE, TO> function2 ) {
@@ -86,7 +86,7 @@ public class Functions {
      * @param <TO>
      * @param <MIDDLE1>
      * @param <MIDDLE2>
-     * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> Adapter3 --> TO
+     * @return A combined adapter doing: FROM - Adapter1 - Adapter2 - Adapter3 - TO
      */
     public static <FROM, TO, MIDDLE1, MIDDLE2> Function<FROM, TO> compose( Function<FROM, ? extends MIDDLE1> function1,
                                                                            Function<MIDDLE1, ? extends MIDDLE2> function2,
@@ -105,7 +105,7 @@ public class Functions {
      * @param <TO>
      * @param <MIDDLE1>
      * @param <MIDDLE2>
-     * @return A combined adapter doing: FROM --> Adapter1 --> Adapter2 --> Adapter3 --> Adapter4 --> TO
+     * @return A combined adapter doing: FROM - Adapter1 - Adapter2 - Adapter3 - Adapter4 - TO
      */
     public static <FROM, TO, MIDDLE1, MIDDLE2, MIDDLE3> Function<FROM, TO> compose( Function<FROM, ? extends MIDDLE1> function1,
                                                                                     Function<MIDDLE1, ? extends MIDDLE2> function2,

@@ -96,7 +96,7 @@ public class Strings {
 
     /**
      * Verify that the string contains all blank characters or is null.
-     * <p/>
+     *
      * <code>
      * Examples of blank strings :
      * "", "     ", null

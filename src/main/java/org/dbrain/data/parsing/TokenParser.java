@@ -24,11 +24,11 @@ import java.io.StringReader;
 
 /**
  * This class allow sequential parsing of text stream to extract tokens.
- * <p/>
+ *
  *
  * @author Eric Poitras
  * @version 1.0
- *          <p/>
+ *
  * @see Token for more informations on availables tokens.
  */
 public class TokenParser implements AutoCloseable {
@@ -58,7 +58,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Create a new Parser.
-     * <p/>
+     *
      *
      * @param aReader The source of the text stream.
      * @since 1.0
@@ -71,7 +71,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Create a new Parser having a string as it's source.
-     * <p/>
+     *
      *
      * @param s The source of the text stream.
      */
@@ -81,7 +81,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Throw a ParseException.
-     * <p/>
+     *
      *
      * @param msg The message to include in the error.
      * @since 1.0
@@ -102,7 +102,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Get the binary getValue of a single digit.<p>
-     * <p/>
+     *
      *
      * @param c The digit to evaluate.
      * @return The getValue of the digit from 0 to 9 or -1 if this is not a valid digit.
@@ -114,7 +114,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Get the decimal getValue of a single digit.<p>
-     * <p/>
+     *
      *
      * @param c The digit to evaluate.
      * @return The getValue of the digit from 0 to 9 or -1 if this is not a valid digit.
@@ -126,7 +126,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Verify if a character is a digit.
-     * <p/>
+     *
      *
      * @param c The character to verify.
      * @return True if c is a digit.
@@ -138,7 +138,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Get the hexadecimal getValue of a single digit. Both upper and lower case are accepted.<p>
-     * <p/>
+     *
      *
      * @param c The digit to evaluate.
      * @return The getValue of the digit from 0 to 15 or -1 if this is not a valid digit.
@@ -159,7 +159,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Verify if a character is a valid starting character for an unquoted string.
-     * <p/>
+     *
      *
      * @param c The character to verify.
      * @return True if c is a starting identifier character.
@@ -180,7 +180,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Verify if a character is a valid character for an unquoted string.
-     * <p/>
+     *
      *
      * @param c The character to verify.
      * @return True if c is a valid identifier character.
@@ -192,7 +192,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Read the next character on the stream. Set mEof to true if no character is fetched.
-     * <p/>
+     *
      *
      * @since 1.0
      */
@@ -210,7 +210,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * Read the next character on the stream. Throw an exception if no character is fetched.
-     * <p/>
+     *
      *
      * @since 1.0
      */
@@ -221,7 +221,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * @return A long containing the decoded binary getValue
-     * <p/>
+     *
      * @since 1.0
      */
     private long parseBinary() {
@@ -241,7 +241,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * @return A long containing the decoded decimal getValue. Does not handle signs.
-     * <p/>
+     *
      * @since 1.0
      */
     private long parseDecimal() {
@@ -378,7 +378,7 @@ public class TokenParser implements AutoCloseable {
      * Parse a string delimited by quoting character. The function must be called
      * with cur pointing to the current quote to use. Two sequantial instance of the quote
      * result in including the quote in the string.
-     * <p/>
+     *
      *
      * @param forbidControlCharacter If true, control characters inside the string will throw
      *                               an error.
