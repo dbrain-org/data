@@ -29,11 +29,11 @@ public class LineCursor {
 
     private long         lineNumber = 0;
     private CursorStatus status     = CursorStatus.BOF;
-    private ParseCursor cursor;
-    private String      currentLine;
+    private ReaderCursor cursor;
+    private String       currentLine;
 
     public LineCursor( Reader r ) {
-        cursor = new ParseCursor( r );
+        cursor = new ReaderCursor( r );
     }
 
     /**
@@ -41,20 +41,20 @@ public class LineCursor {
      */
     private void load() {
         if ( currentLine == null && status == null ) {
-            int current = cursor.getCurrent();
+            int current = cursor.current();
             if ( current >= 0 ) {
                 StringBuilder sb = new StringBuilder();
                 while ( current >= 0 && current != 13 && current != 10 ) {
                     sb.append( (char) current );
-                    current = cursor.read();
+                    current = cursor.next();
                 }
                 if ( current == 13 ) {
-                    if ( cursor.read() == 10 ) {
+                    if ( cursor.next() == 10 ) {
                         cursor.consume();
                     }
                 }
                 if ( current == 10 ) {
-                    if ( cursor.read() == 13 ) {
+                    if ( cursor.next() == 13 ) {
                         cursor.consume();
                     }
                 }
@@ -71,7 +71,7 @@ public class LineCursor {
      * Unload the current line.
      */
     private void unload() {
-        if ( status != CursorStatus.EOF ) {
+        if (status != CursorStatus.EOF ) {
             status = null;
             currentLine = null;
         }

@@ -16,8 +16,9 @@
 
 package org.dbrain.data.json;
 
+
+import org.dbrain.data.parsing.ReaderCursor;
 import org.dbrain.data.text.ParseException;
-import org.dbrain.data.parsing.ParseCursor;
 
 import java.io.Reader;
 
@@ -26,13 +27,13 @@ import java.io.Reader;
  */
 public class JsonParser {
 
-    private ParseCursor cursor;
+    private ReaderCursor cursor;
     private boolean parsed = false;
     private Token  token;
     private Object value;
 
     public JsonParser( Reader r ) {
-        cursor = new ParseCursor( r );
+        cursor = new ReaderCursor( r );
     }
 
     public ParseException error( String message ) {
@@ -40,9 +41,9 @@ public class JsonParser {
     }
 
     private void skipWhiteSpace() {
-        int current = cursor.getCurrent();
+        int current = cursor.current();
         while ( current >= 0 && current <= ' ' || Character.isWhitespace( current ) ) {
-            current = cursor.read();
+            current = cursor.next();
         }
     }
 
@@ -57,13 +58,13 @@ public class JsonParser {
     }
 
     private String parseString() {
-        int quote = cursor.getCurrent();
+        int quote = cursor.current();
         StringBuilder sb = new StringBuilder();
-        for ( int codePoint = cursor.read(); codePoint != quote; codePoint = cursor.read() ) {
+        for ( int codePoint = cursor.next(); codePoint != quote; codePoint = cursor.next() ) {
             if ( codePoint < 0 || codePoint == '\r' || codePoint == '\n' ) {
                 throw cursor.error( "Unterminated string" );
             } else if ( codePoint == '\\' ) {
-                codePoint = cursor.read();
+                codePoint = cursor.next();
                 switch ( codePoint ) {
                     case 'b':
                         sb.append( '\b' );
@@ -81,7 +82,7 @@ public class JsonParser {
                         sb.append( '\r' );
                         break;
                     case 'u':
-                        sb.append( (char) Integer.parseInt( cursor.read( 4 ), 16 ) );
+                        sb.append( (char) Integer.parseInt( cursor.next( 4 ), 16 ) );
                         break;
                     case '"':
                     case '\'':
@@ -104,34 +105,34 @@ public class JsonParser {
 
     private Double parseNumber() {
         StringBuilder sb = new StringBuilder();
-        int current = cursor.getCurrent();
+        int current = cursor.current();
         if ( current == '-' ) {
             sb.appendCodePoint( current );
-            current = cursor.read();
+            current = cursor.next();
         }
 
         while ( current >= '0' && current <= '9' ) {
             sb.appendCodePoint( current );
-            current = cursor.read();
+            current = cursor.next();
         }
         if ( current == '.' ) {
             sb.append( '.' );
-            current = cursor.read();
+            current = cursor.next();
             while ( current >= '0' && current <= '9' ) {
                 sb.appendCodePoint( current );
-                current = cursor.read();
+                current = cursor.next();
             }
         }
         if ( current == 'e' || current == 'E' ) {
             sb.appendCodePoint( current );
-            current = cursor.read();
+            current = cursor.next();
             if ( current == '+' || current == '-' ) {
                 sb.appendCodePoint( current );
-                current = cursor.read();
+                current = cursor.next();
             }
             while ( current >= '0' && current <= '9' ) {
                 sb.appendCodePoint( current );
-                current = cursor.read();
+                current = cursor.next();
             }
         }
         if ( Character.isJavaIdentifierStart( current ) ) {
@@ -144,8 +145,8 @@ public class JsonParser {
 
     private String parseIdentifier() {
         StringBuilder sb = new StringBuilder();
-        sb.appendCodePoint( cursor.getCurrent() );
-        for ( int codePoint = cursor.read(); Character.isJavaIdentifierPart( codePoint ); codePoint = cursor.read() ) {
+        sb.appendCodePoint( cursor.current() );
+        for ( int codePoint = cursor.next(); Character.isJavaIdentifierPart( codePoint ); codePoint = cursor.next() ) {
             sb.appendCodePoint( codePoint );
         }
         return sb.toString();
@@ -154,7 +155,7 @@ public class JsonParser {
     public Token getToken() {
         if ( !parsed ) {
             skipWhiteSpace();
-            int current = cursor.getCurrent();
+            int current = cursor.current();
             if ( current < 0 ) {
                 setToken( null );
             } else if ( current == '{' ) {
@@ -207,7 +208,7 @@ public class JsonParser {
             skip();
             return token;
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException(  );
         }
     }
 

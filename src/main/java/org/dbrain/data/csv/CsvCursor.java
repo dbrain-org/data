@@ -16,9 +16,10 @@
 
 package org.dbrain.data.csv;
 
+
 import org.dbrain.data.ForwardCursor;
+import org.dbrain.data.parsing.ReaderCursor;
 import org.dbrain.data.text.ParseException;
-import org.dbrain.data.parsing.ParseCursor;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     private int                  separator;
     private int                  quote;
-    private ParseCursor          cursor;
+    private ReaderCursor         cursor;
     private Map<String, Integer> fieldsMap;
     private List<String>         fieldValues;
     private boolean bof = true;
@@ -76,7 +77,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readSpace() {
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.getCurrent(); isSpace( cur ); cur = cursor.read() ) {
+        for ( int cur = cursor.current(); isSpace( cur ); cur = cursor.next() ) {
             sb.appendCodePoint( cur );
         }
         return sb.toString();
@@ -90,16 +91,16 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private String readQuotedString() {
 
         // Read initial quote
-        if ( cursor.getCurrent() != quote ) {
+        if ( cursor.current() != quote ) {
             throw new ParseException( "Invalid quoted string." );
         }
         cursor.consume();
 
         // Read string content
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.getCurrent(); !isEOL( cur ); cur = cursor.read() ) {
+        for ( int cur = cursor.current(); !isEOL( cur ); cur = cursor.next() ) {
             if ( cur == quote ) {
-                cur = cursor.read();
+                cur = cursor.next();
                 if ( cur != quote ) {
                     break;
                 }
@@ -118,7 +119,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private String readUnquotedString() {
         StringBuilder sb = new StringBuilder();
 
-        for ( int cur = cursor.getCurrent(); !isEOC( cur ); cur = cursor.read() ) {
+        for ( int cur = cursor.current(); !isEOC( cur ); cur = cursor.next() ) {
             sb.append( (char) cur );
         }
 
@@ -132,7 +133,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readString() {
         String spaces = readSpace();
-        return ( cursor.getCurrent() == quote ) ? readQuotedString() : spaces + readUnquotedString();
+        return ( cursor.current() == quote ) ? readQuotedString() : spaces + readUnquotedString();
     }
 
     /**
@@ -143,15 +144,15 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private List<String> readLine() {
         List<String> result = new ArrayList<String>();
 
-        while ( !isEOL( cursor.getCurrent() ) ) {
+        while ( !isEOL( cursor.current() ) ) {
             result.add( readString() );
-            if ( isEOC( cursor.getCurrent() ) && !isEOL( cursor.getCurrent() ) ) {
+            if ( isEOC( cursor.current() ) && !isEOL( cursor.current() ) ) {
                 cursor.consume();
             }
         }
 
         // Skip all EOL characters
-        for ( int cur = cursor.getCurrent(); isEOL( cur ) && !isEOF( cur ); cur = cursor.read() ) ;
+        for ( int cur = cursor.current(); isEOL( cur ) && !isEOF( cur ); cur = cursor.next() ) ;
 
         return result;
     }
@@ -178,7 +179,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * @param stringQuote
      */
     public CsvCursor( Reader reader, int separator, int stringQuote, String[] fieldNames ) {
-        this.cursor = new ParseCursor( reader );
+        this.cursor = new ReaderCursor( reader );
         this.separator = separator;
         this.quote = stringQuote;
         setFieldNames( fieldNames );
@@ -192,7 +193,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * @param stringQuote
      */
     public CsvCursor( Reader reader, int separator, int stringQuote ) {
-        this.cursor = new ParseCursor( reader );
+        this.cursor = new ReaderCursor( reader );
         this.separator = separator;
         this.quote = stringQuote;
         List<String> fieldNames = readLine();
@@ -227,7 +228,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
         if ( bof ) {
             bof = false;
         }
-        if ( isEOF( cursor.getCurrent() ) ) {
+        if ( isEOF( cursor.current() ) ) {
             fieldValues = null;
         } else {
             fieldValues = readLine();

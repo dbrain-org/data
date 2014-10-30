@@ -25,9 +25,9 @@ import java.io.Reader;
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
  * can be read multiple times without affecting the underlying reader.
  */
-public class ParseCursor implements AutoCloseable {
+public class ReaderCursor implements AutoCloseable {
 
-    private static final String ERR_IO_ERROR           = "IO exception";
+    private static final String ERR_IO_ERROR = "IO exception";
     private static final String ERR_SURROGATE_ENCODING = "Surrogate encoding error";
 
     // Linked reader
@@ -37,8 +37,8 @@ public class ParseCursor implements AutoCloseable {
     private int current = -1;
 
     // Position in the stream.
-    private int index  = 1;
-    private int line   = 1;
+    private int index = 1;
+    private int line = 1;
     private int column = 1;
 
     // Tell if current is valid or not
@@ -48,7 +48,7 @@ public class ParseCursor implements AutoCloseable {
      * Creates a new instance of ReaderCursor using the underlying Reader as it's
      * datasource.
      */
-    public ParseCursor( Reader r ) {
+    public ReaderCursor( Reader r ) {
         this.reader = r;
     }
 
@@ -66,8 +66,8 @@ public class ParseCursor implements AutoCloseable {
                         int next = reader.read();
                         index++;
                         if ( next >= 0 ) {
-                            char lowSurrogate = (char) next;
-                            if ( Character.isSurrogatePair( highSurrogate, lowSurrogate ) ) {
+                            char lowSurrogate = (char)next;
+                            if (Character.isSurrogatePair( highSurrogate, lowSurrogate )) {
                                 current = Character.toCodePoint( highSurrogate, lowSurrogate );
                             } else {
                                 throw error( ERR_SURROGATE_ENCODING, null );
@@ -77,12 +77,12 @@ public class ParseCursor implements AutoCloseable {
                         }
                     }
                     if ( current == 10 ) {
-                        line++;
+                        line ++;
                         column = 1;
                     } else if ( current == 9 ) {
                         column += 4;
-                    } else if ( current >= ' ' ) {
-                        column++;
+                    } else if ( current >= ' ') {
+                        column ++;
                     }
                 }
                 consumed = false;
@@ -94,7 +94,6 @@ public class ParseCursor implements AutoCloseable {
 
     /**
      * An exception with the specified message.
-     *
      * @param message The message.
      */
     public ParseException error( String message, Throwable e ) {
@@ -103,7 +102,6 @@ public class ParseCursor implements AutoCloseable {
 
     /**
      * An exception with the specified message.
-     *
      * @param message The message.
      */
     public ParseException error( String message ) {
@@ -119,11 +117,11 @@ public class ParseCursor implements AutoCloseable {
 
     /**
      * @return The current character in the cursor.
-     *
+     * <p>
      * Note: If the current character is consumed. The next one is loaded from
      * the underlying reader.
      */
-    public int getCurrent() {
+    public int current() {
         load();
         return current;
     }
@@ -133,24 +131,24 @@ public class ParseCursor implements AutoCloseable {
      *
      * @return The next available character or -1 if none.
      */
-    public int read() {
+    public int next() {
         consume();
-        return getCurrent();
+        return current();
     }
 
     /**
      * @param count
      * @return A string of characters. This method can return more characters than asked since it counts codepoints.
      */
-    public String read( int count ) {
+    public String next( int count ) {
         if ( count <= 0 ) {
             return "";
         }
         StringBuilder sb = new StringBuilder( count );
-        int c = read();
+        int c = next();
         for ( int i = 0; i < count && c >= 0; i++ ) {
             sb.appendCodePoint( c );
-            c = read();
+            c = next();
 
         }
         return sb.toString();
