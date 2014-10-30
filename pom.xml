@@ -22,6 +22,7 @@
 	<version>0.1</version>
 	<name>Data - Core classes</name>
 	<description>Defines concepts and classes that are at the core of data manipulation and definition.</description>
+	<url>http://www.dbrain.org</url>
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
