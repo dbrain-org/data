@@ -14,7 +14,14 @@
  *     limitations under the License.
  */
 
+package org.dbrain.data.text;
+
 /**
- * This package contains Format, Parser and Formatter implementations.
+ * A format can produce a textual representation of an entity and also, create an entity from a textual representation.
+ *
+ * It is required that the value produces by the method format can be parsed by the parse method.
  */
-package org.dbrain.data.formats;
+public interface Format<T> extends Formatter<T>, Parser<T> {
+
+
+}

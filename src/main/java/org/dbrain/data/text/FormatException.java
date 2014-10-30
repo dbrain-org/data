@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.text;
 
 public class FormatException extends IllegalArgumentException {
 

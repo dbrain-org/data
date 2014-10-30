@@ -16,7 +16,7 @@
 
 package org.dbrain.data.parsing;
 
-import org.dbrain.data.ParseException;
+import org.dbrain.data.text.ParseException;
 
 import java.io.IOException;
 import java.io.Reader;

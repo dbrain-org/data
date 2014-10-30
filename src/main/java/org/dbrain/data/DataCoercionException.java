@@ -16,21 +16,30 @@
 
 package org.dbrain.data;
 
-public class ParseException extends IllegalArgumentException {
+/**
+ * Created by epoitras on 30/10/14.
+ */
+public class DataCoercionException extends RuntimeException {
 
-    public ParseException() {
+    public DataCoercionException() {
     }
 
-    public ParseException( String message ) {
+    public DataCoercionException( String message ) {
         super( message );
     }
 
-    public ParseException( String message, Throwable cause ) {
+    public DataCoercionException( String message, Throwable cause ) {
         super( message, cause );
     }
 
-    public ParseException( Throwable cause ) {
+    public DataCoercionException( Throwable cause ) {
         super( cause );
     }
 
+    public DataCoercionException( String message,
+                                  Throwable cause,
+                                  boolean enableSuppression,
+                                  boolean writableStackTrace ) {
+        super( message, cause, enableSuppression, writableStackTrace );
+    }
 }

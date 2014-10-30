@@ -14,45 +14,40 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.formats;
+package org.dbrain.data.text;
 
-import org.dbrain.data.Format;
-import org.dbrain.data.FormatException;
-import org.dbrain.data.ParseException;
+import org.dbrain.data.Casts;
+import org.dbrain.data.text.Format;
+import org.dbrain.data.text.FormatException;
+import org.dbrain.data.text.ParseException;
 import org.dbrain.data.util.Strings;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created with IntelliJ IDEA.
- * User: epoitras
- * Date: 16/04/13
- * Time: 8:09 AM
- * To change this template use File | Settings | File Templates.
+ * Formatter for LocalDate.
  */
-public class DateFormat implements Format<Date> {
+public class LocalDateFormat implements Format<LocalDate> {
 
     private final SimpleDateFormat dateFormat;
 
-    public DateFormat( String pattern, Locale locale ) {
+    public LocalDateFormat( String pattern, Locale locale ) {
         dateFormat = new SimpleDateFormat( pattern, locale );
         dateFormat.setLenient( false );
     }
 
     @Override
-    public synchronized String format( Date value ) throws FormatException {
-        if ( value == null ) {
-            return null;
-        } else {
-            return dateFormat.format( value );
-        }
+    public synchronized String format( LocalDate value ) throws FormatException {
+        return value != null ? dateFormat.format( Date.from( value.atStartOfDay( ZoneId.systemDefault() ).toInstant() ) ) : null;
     }
 
     @Override
-    public synchronized Date parse( String value ) throws ParseException {
+    public synchronized LocalDate parse( String value ) throws ParseException {
         if ( Strings.isBlank( value ) ) {
             return null;
         } else {
@@ -64,7 +59,7 @@ public class DateFormat implements Format<Date> {
                 int index = pos.getErrorIndex() >= 0 ? pos.getErrorIndex() : pos.getIndex();
                 throw new ParseException( "Error parsing date [" + trimmedValue + "] at position " + index + "." );
             }
-            return result;
+            return Casts.toLocalDate( result );
         }
     }
 

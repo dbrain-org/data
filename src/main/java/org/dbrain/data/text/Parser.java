@@ -14,20 +14,21 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.text;
 
 /**
- * Simple contract that provide a String representation from a T value.
+ * Simple contract that allows to convert a string representation to a T value.
  *
- * Implementation should nicely handle null values and should prefer to return a non-null representation
- * if possible.
+ * It is correct for an implementation to return a null value for a representation that makes sense.
  */
-public interface Formatter<T> {
+public interface Parser<T> {
 
     /**
-     * @return A string representation for the value T.
-     * @throws FormatException In case there is a problem with formatting.
+     * Parse a string value and return an instance of value T.
+     *
+     * @return T or null.
+     * @throws ParseException If a problem occurs parsing the string value.
      */
-    String format( T value ) throws FormatException;
+    T parse( String value ) throws ParseException;
 
 }

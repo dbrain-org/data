@@ -17,7 +17,7 @@
 package org.dbrain.data.csv;
 
 import org.dbrain.data.ForwardCursor;
-import org.dbrain.data.ParseException;
+import org.dbrain.data.text.ParseException;
 import org.dbrain.data.parsing.ParseCursor;
 
 import java.io.Reader;

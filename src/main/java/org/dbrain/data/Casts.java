@@ -16,17 +16,20 @@
 
 package org.dbrain.data;
 
+import org.dbrain.data.text.ParseException;
 import org.dbrain.data.util.Strings;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Static methods around Objects.
+ * Methods used to coerce values to specific types.
  */
 public class Casts {
 
@@ -79,7 +82,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toBigDecimal( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to BigDecimal." );
+        throw new DataCoercionException( "Cannot cast " + o + " to BigDecimal." );
     }
 
 
@@ -109,7 +112,7 @@ public class Casts {
         if ( o instanceof CharSequence ) {
             return toBigInteger( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to BigInteger." );
+        throw new DataCoercionException( "Cannot cast " + o + " to BigInteger." );
     }
 
     /**
@@ -133,7 +136,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toDouble( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Double." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Double." );
     }
 
     /**
@@ -158,7 +161,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toFloat( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Float." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Float." );
     }
 
     /**
@@ -201,7 +204,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toLong( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Long." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Long." );
     }
 
     /**
@@ -253,7 +256,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toInteger( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Integer." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Integer." );
     }
 
     /**
@@ -305,7 +308,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toShort( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Short." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Short." );
     }
 
     /**
@@ -355,7 +358,7 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toByte( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Byte." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Byte." );
     }
 
     /**
@@ -404,7 +407,21 @@ public class Casts {
         } else if ( o instanceof CharSequence ) {
             return toBoolean( o.toString() );
         }
-        throw new IllegalArgumentException( "Cannot cast " + o + " to Boolean." );
+        throw new DataCoercionException( "Cannot cast " + o + " to Boolean." );
+    }
+
+    /**
+     * Convert a date to LocalDate.
+     **/
+    public static LocalDate toLocalDate( Date date, ZoneId zoneId ) {
+        return date != null ? date.toInstant().atZone( zoneId ).toLocalDate() : null;
+    }
+
+    /**
+     * Convert a date to local date using system's timezone.
+     */
+    public static LocalDate toLocalDate( Date date ) {
+        return toLocalDate( date, ZoneId.systemDefault() );
     }
 
     public static java.util.Date toDate( DateFormat format, String value ) {

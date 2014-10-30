@@ -14,14 +14,20 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.text;
 
 /**
- * A format can produce a textual representation of an entity and also, create an entity from a textual representation.
+ * Simple contract that provide a String representation from a T value.
  *
- * It is required that the value produces by the method format can be parsed by the parse method.
+ * Implementation should nicely handle null values and should prefer to return a non-null representation
+ * if possible.
  */
-public interface Format<T> extends Formatter<T>, Parser<T> {
+public interface Formatter<T> {
 
+    /**
+     * @return A string representation for the value T.
+     * @throws FormatException In case there is a problem with formatting.
+     */
+    String format( T value ) throws FormatException;
 
 }

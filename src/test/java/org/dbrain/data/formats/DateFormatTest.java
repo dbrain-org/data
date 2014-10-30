@@ -17,11 +17,11 @@
 package org.dbrain.data.formats;
 
 import junit.framework.Assert;
-import org.dbrain.data.ParseException;
+import org.dbrain.data.text.LocalDateFormat;
+import org.dbrain.data.text.ParseException;
 import org.junit.Test;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Locale;
 
 /**
@@ -38,15 +38,12 @@ public class DateFormatTest {
      */
     @Test
     public void testParse() throws Exception {
-        DateFormat df = new DateFormat( "yyyy-MM-DD", Locale.ENGLISH );
+        LocalDateFormat df = new LocalDateFormat( "yyyy-MM-DD", Locale.ENGLISH );
 
-        Date testDate = df.parse( "2012-01-01" );
+        LocalDate testDate = df.parse( "2012-01-01" );
+        LocalDate expectedDate = LocalDate.of( 2012, 1, 1 );
 
-        Calendar testCalendar = Calendar.getInstance( Locale.ENGLISH );
-        testCalendar.set( 2012, Calendar.JANUARY, 01, 0, 0, 0 );
-        testCalendar.clear( Calendar.MILLISECOND );
-
-        Assert.assertEquals( testDate, testCalendar.getTime() );
+        Assert.assertEquals( expectedDate, testDate );
 
     }
 
@@ -55,14 +52,14 @@ public class DateFormatTest {
      */
     @Test(expected = ParseException.class )
     public void testParseNonLenient() throws Exception {
-        DateFormat df = new DateFormat( "yyyy-MM-DD", Locale.ENGLISH );
-        Date testDate = df.parse( "2012-01-32" );
+        LocalDateFormat df = new LocalDateFormat( "yyyy-MM-DD", Locale.ENGLISH );
+        LocalDate testDate = df.parse( "2012-01-32" );
     }
 
     @Test
     public void testFormatParse() throws Exception {
-        DateFormat df = new DateFormat( "yyyy-MM-DD", Locale.ENGLISH );
-        Date testDate = df.parse( "2012-01-01" );
+        LocalDateFormat df = new LocalDateFormat( "yyyy-MM-DD", Locale.ENGLISH );
+        LocalDate testDate = df.parse( "2012-01-01" );
         String testDateString = df.format( testDate );
 
         Assert.assertEquals( testDateString, "2012-01-01" );
