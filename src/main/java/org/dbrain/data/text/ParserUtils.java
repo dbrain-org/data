@@ -28,7 +28,6 @@ public class ParserUtils {
         return c < 0;
     }
 
-
     /**
      * Return true if the specified character is an end of line character.
      */

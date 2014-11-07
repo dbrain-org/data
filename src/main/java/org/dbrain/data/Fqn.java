@@ -35,7 +35,7 @@ import java.util.List;
  * test.123.'**'
  * test.123.'test*'
  */
-public class Fqn {
+public final class Fqn {
 
     /**
      * Create a fully qualified name from a ReaderCursor.
@@ -178,6 +178,9 @@ public class Fqn {
 
     private final List<String> segments;
 
+    /**
+     * Use the of(xxx) factory.
+     */
     private Fqn( List<String> segments ) {
         this.segments = segments != null && segments.size() > 0 ? new ArrayList<>( segments ) : null;
     }
@@ -201,6 +204,23 @@ public class Fqn {
         } else {
             throw new IndexOutOfBoundsException();
         }
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
+
+        Fqn fqn = (Fqn) o;
+
+        if ( !segments.equals( fqn.segments ) ) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return segments.hashCode();
     }
 
     /**
