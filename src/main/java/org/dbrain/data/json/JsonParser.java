@@ -17,7 +17,7 @@
 package org.dbrain.data.json;
 
 
-import org.dbrain.data.parsing.ReaderCursor;
+import org.dbrain.data.text.ReaderCursor;
 import org.dbrain.data.text.ParseException;
 
 import java.io.Reader;
@@ -99,7 +99,7 @@ public class JsonParser {
                 sb.appendCodePoint( codePoint );
             }
         }
-        cursor.consume();
+        cursor.discard();
         return sb.toString();
     }
 
@@ -159,22 +159,22 @@ public class JsonParser {
             if ( current < 0 ) {
                 setToken( null );
             } else if ( current == '{' ) {
-                cursor.consume();
+                cursor.discard();
                 setToken( Token.OPEN_OBJECT );
             } else if ( current == '}' ) {
-                cursor.consume();
+                cursor.discard();
                 setToken( Token.CLOSE_OBJECT );
             } else if ( current == '[' ) {
-                cursor.consume();
+                cursor.discard();
                 setToken( Token.OPEN_ARRAY );
             } else if ( current == ']' ) {
-                cursor.consume();
+                cursor.discard();
                 setToken( Token.CLOSE_ARRAY );
             } else if ( current == ',' ) {
-                cursor.consume();
+                cursor.discard();
                 setToken( Token.COMMA );
             } else if ( current == ':' ) {
-                cursor.consume();
+                cursor.discard();
                 setToken( Token.COLON );
             } else if ( current == '"' || current == '\'' ) {
                 setToken( Token.STRING, parseString() );

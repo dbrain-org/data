@@ -17,6 +17,7 @@
 package org.dbrain.data.parsing;
 
 import junit.framework.Assert;
+import org.dbrain.data.text.LineCursor;
 import org.junit.Test;
 
 import java.io.InputStreamReader;

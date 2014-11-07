@@ -18,8 +18,8 @@ package org.dbrain.data.csv;
 
 
 import org.dbrain.data.ForwardCursor;
-import org.dbrain.data.parsing.ReaderCursor;
-import org.dbrain.data.text.ParseException;
+import org.dbrain.data.text.ParserUtils;
+import org.dbrain.data.text.ReaderCursor;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -29,8 +29,6 @@ import java.util.Map;
 
 /**
  * Tabular reader class to read CSV datasources.
- *
- * @author poitrae
  */
 public class CsvCursor implements ForwardCursor, AutoCloseable {
 
@@ -42,34 +40,13 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private boolean bof = true;
 
     /**
-     * Return true if the specified character is an end of file character.
-     */
-    private boolean isEOF( int c ) {
-        return c < 0;
-    }
-
-    /**
-     * Return true if the specified character is an end of line character.
-     */
-    private boolean isEOL( int c ) {
-        return c == 13 || c == 10 || isEOF( c );
-    }
-
-    /**
      * Return true if the specified character is an end of column character.
      *
      * @param c
      * @return
      */
     private boolean isEOC( int c ) {
-        return c == separator || isEOL( c );
-    }
-
-    /**
-     * Return true if the specified character is a space character.
-     */
-    private boolean isSpace( int c ) {
-        return c <= ' ' && !isEOL( c );
+        return c == separator || ParserUtils.isEOL( c );
     }
 
     /**
@@ -77,7 +54,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readSpace() {
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.current(); isSpace( cur ); cur = cursor.next() ) {
+        for ( int cur = cursor.current(); ParserUtils.isSpace( cur ); cur = cursor.next() ) {
             sb.appendCodePoint( cur );
         }
         return sb.toString();
@@ -92,13 +69,13 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
         // Read initial quote
         if ( cursor.current() != quote ) {
-            throw new ParseException( "Invalid quoted string." );
+            throw cursor.error( "Invalid quoted string." );
         }
-        cursor.consume();
+        cursor.discard();
 
         // Read string content
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.current(); !isEOL( cur ); cur = cursor.next() ) {
+        for ( int cur = cursor.current(); !ParserUtils.isEOL( cur ); cur = cursor.next() ) {
             if ( cur == quote ) {
                 cur = cursor.next();
                 if ( cur != quote ) {
@@ -144,15 +121,15 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private List<String> readLine() {
         List<String> result = new ArrayList<String>();
 
-        while ( !isEOL( cursor.current() ) ) {
+        while ( !ParserUtils.isEOL( cursor.current() ) ) {
             result.add( readString() );
-            if ( isEOC( cursor.current() ) && !isEOL( cursor.current() ) ) {
-                cursor.consume();
+            if ( isEOC( cursor.current() ) && !ParserUtils.isEOL( cursor.current() ) ) {
+                cursor.discard();
             }
         }
 
         // Skip all EOL characters
-        for ( int cur = cursor.current(); isEOL( cur ) && !isEOF( cur ); cur = cursor.next() ) ;
+        for ( int cur = cursor.current(); ParserUtils.isEOL( cur ) && !ParserUtils.isEOF( cur ); cur = cursor.next() ) ;
 
         return result;
     }
@@ -228,7 +205,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
         if ( bof ) {
             bof = false;
         }
-        if ( isEOF( cursor.current() ) ) {
+        if ( ParserUtils.isEOF( cursor.current() ) ) {
             fieldValues = null;
         } else {
             fieldValues = readLine();

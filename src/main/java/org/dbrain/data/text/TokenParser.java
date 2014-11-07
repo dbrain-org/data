@@ -14,9 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.parsing;
-
-import org.dbrain.data.text.ParseException;
+package org.dbrain.data.text;
 
 import java.io.IOException;
 import java.io.Reader;

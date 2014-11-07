@@ -14,23 +14,31 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.fqn;
+package org.dbrain.data;
 
-import org.dbrain.data.Fqns;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Created by epoitras on 03/10/14.
  */
-public class Fqn_encodeSegment_Test {
+public class Fqn_toString_Test {
 
     @Test
-    public void testSegmentEncoding() throws Exception {
-        Assert.assertEquals( "''", Fqns.encodeSegment( "" ) );
-        Assert.assertEquals( "test", Fqns.encodeSegment( "test" ) );
-        Assert.assertEquals( "'test*'", Fqns.encodeSegment( "test*" ) );
-        Assert.assertEquals( "'test'''", Fqns.encodeSegment( "test'" ) );
-        Assert.assertEquals( "'test.'", Fqns.encodeSegment( "test." ) );
+    public void testToString() throws Exception {
+        Fqn d;
+
+        d = Fqn.of( "test" );
+        Assert.assertEquals( "test", d.toString() );
+
+        d = Fqn.of( "test.''");
+        Assert.assertEquals( "test.''", d.toString() );
+
+        d = Fqn.of( "''" );
+        Assert.assertEquals( "''", d.toString() );
+
+        d = Fqn.of( "''.test.'test*'.'test'''.test.''" );
+        Assert.assertEquals( "''.test.'test*'.'test'''.test.''", d.toString() );
+
     }
 }

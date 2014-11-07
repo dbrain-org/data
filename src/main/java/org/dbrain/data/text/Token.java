@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.parsing;
+package org.dbrain.data.text;
 
 /**
  * Token class.

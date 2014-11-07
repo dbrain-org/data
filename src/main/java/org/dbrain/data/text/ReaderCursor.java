@@ -14,12 +14,11 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.parsing;
-
-import org.dbrain.data.text.ParseException;
+package org.dbrain.data.text;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.function.IntPredicate;
 
 /**
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
@@ -127,12 +126,19 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
+     * return true if the current cursor's position is matching the predicated.
+     */
+    public boolean is( IntPredicate test ) {
+        return test.test( current() );
+    }
+
+    /**
      * Consume the current character and return the next available.
      *
      * @return The next available character or -1 if none.
      */
     public int next() {
-        consume();
+        discard();
         return current();
     }
 
@@ -157,7 +163,7 @@ public class ReaderCursor implements AutoCloseable {
     /**
      * Invalidate current character without reading the next one.
      */
-    public void consume() {
+    public void discard() {
         consumed = true;
     }
 

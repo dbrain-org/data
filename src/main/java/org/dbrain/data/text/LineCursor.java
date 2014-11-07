@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.parsing;
+package org.dbrain.data.text;
 
 import java.io.Reader;
 
@@ -50,12 +50,12 @@ public class LineCursor {
                 }
                 if ( current == 13 ) {
                     if ( cursor.next() == 10 ) {
-                        cursor.consume();
+                        cursor.discard();
                     }
                 }
                 if ( current == 10 ) {
                     if ( cursor.next() == 13 ) {
-                        cursor.consume();
+                        cursor.discard();
                     }
                 }
                 currentLine = sb.toString();
