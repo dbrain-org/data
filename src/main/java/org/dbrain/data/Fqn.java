@@ -25,9 +25,9 @@ import java.util.List;
 
 /**
  * Describe a fully qualified name.
- * <p/>
+ *
  * Syntax allows for wildcards as well as ways of escaping them.
- * <p/>
+ *
  * ''
  * test
  * test.''
