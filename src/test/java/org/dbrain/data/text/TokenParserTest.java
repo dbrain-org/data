@@ -14,10 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.parsing;
+package org.dbrain.data.text;
 
 import junit.framework.Assert;
-import org.dbrain.data.text.TokenParser;
 import org.junit.Test;
 
 import java.io.Reader;

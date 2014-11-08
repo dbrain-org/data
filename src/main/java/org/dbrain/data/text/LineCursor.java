@@ -41,21 +41,21 @@ public class LineCursor {
      */
     private void load() {
         if ( currentLine == null && status == null ) {
-            int current = cursor.current();
+            int current = cursor.peek();
             if ( current >= 0 ) {
                 StringBuilder sb = new StringBuilder();
                 while ( current >= 0 && current != 13 && current != 10 ) {
                     sb.append( (char) current );
-                    current = cursor.next();
+                    current = cursor.peekNext();
                 }
                 if ( current == 13 ) {
-                    if ( cursor.next() == 10 ) {
-                        cursor.discard();
+                    if ( cursor.peekNext() == 10 ) {
+                        cursor.read();
                     }
                 }
                 if ( current == 10 ) {
-                    if ( cursor.next() == 13 ) {
-                        cursor.discard();
+                    if ( cursor.peekNext() == 13 ) {
+                        cursor.read();
                     }
                 }
                 currentLine = sb.toString();

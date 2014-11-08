@@ -41,11 +41,11 @@ public final class Fqn {
      * Create a fully qualified name from a ReaderCursor.
      */
     public static Fqn of( ReaderCursor c ) {
-        if ( c.is( Fqn::isFqnStart ) ) {
+        if ( isFqnStart( c.peek() ) ) {
             List<String> segments = new ArrayList<>();
             segments.add( readSegment( c ) );
-            while ( c.current() == '.' ) {
-                c.discard();
+            while ( c.peek() == '.' ) {
+                c.read();
                 segments.add( readSegment( c ) );
             }
             return new Fqn( segments );
@@ -54,22 +54,22 @@ public final class Fqn {
     }
 
     /**
-     * Create a new Fully Qualified Name from a String. Works with toString output.
+     * Create a new Fully Qualified Name from a String. Compatible with toString.
      */
     public static Fqn of( String fqn ) {
         if ( fqn == null ) {
             return null;
         }
         ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
-        while ( c.is( ParserUtils::isSpace ) ) {
-            c.discard();
+        while ( ParserUtils.isSpace( c.peek() ) ) {
+            c.read();
         }
         Fqn result = of( c );
-        while ( c.is( ParserUtils::isSpace ) ) {
-            c.discard();
+        while ( ParserUtils.isSpace( c.peek() ) ) {
+            c.read();
         }
-        if ( !c.is( ParserUtils::isEOF ) ) {
-            throw c.error( "Expecting end of string." );
+        if ( c.peek() >= 0 ) {
+            throw c.error( "Expecting end of string" );
         }
 
         return result;
@@ -99,19 +99,18 @@ public final class Fqn {
 
     // Read a quoted segment.
     private static String readQuotedSegment( ReaderCursor c ) {
-        int quote = c.current();
+        int quote = c.read();
         StringBuilder sb = new StringBuilder();
         do {
-            int current = c.next();
+            int current = c.read();
             if ( current == quote ) {
-                current = c.next();
-                if ( current == quote ) {
-                    sb.appendCodePoint( quote );
+                if ( c.peek() == quote ) {
+                    sb.appendCodePoint( c.read() );
                 } else {
                     break;
                 }
             } else if ( current < 0 ) {
-                throw c.error( "Unexpected end of stream." );
+                throw c.error( "Unexpected eof" );
             } else {
                 sb.appendCodePoint( current );
             }
@@ -122,16 +121,15 @@ public final class Fqn {
     // Read an unquoted segment.
     private static String readUnquotedSegment( ReaderCursor cursor ) {
         StringBuilder sb = new StringBuilder();
-        while ( cursor.is( Fqn::isUnquotedSegment ) ) {
-            sb.appendCodePoint( cursor.current() );
-            cursor.discard();
+        while ( isUnquotedSegment( cursor.peek() ) ) {
+            sb.appendCodePoint( cursor.read() );
         }
         return sb.toString();
     }
 
     // Read a segment.
     private static String readSegment( ReaderCursor c ) {
-        if ( c.is( Fqn::isQuote ) ) {
+        if ( isQuote( c.peek() ) ) {
             return readQuotedSegment( c );
         } else {
             return readUnquotedSegment( c );
@@ -188,7 +186,7 @@ public final class Fqn {
     /**
      * @return The number of segments in this FQN.
      */
-    public int getSize() {
+    public int size() {
         return segments != null ? segments.size() : 0;
     }
 
@@ -198,7 +196,7 @@ public final class Fqn {
      * @param i Index of the segment to retrieve.
      * @return A segment.
      */
-    public String getSegment( int i ) {
+    public String segment( int i ) {
         if ( segments != null ) {
             return segments.get( i );
         } else {

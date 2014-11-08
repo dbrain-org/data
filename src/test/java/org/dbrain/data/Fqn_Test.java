@@ -23,13 +23,13 @@ import org.junit.Test;
 /**
  * Created by epoitras on 03/10/14.
  */
-public class Fqn_of_Test {
+public class Fqn_Test {
 
     /**
-     * Validate that the encoding.
+     * Test the parsing method of and toString at the same time.
      */
     @Test
-    public void testSegmentEncoding() throws Exception {
+    public void testOfString() throws Exception {
         Assert.assertNull( Fqn.of( "" ) );
         Assert.assertNull( Fqn.of( " " ) );
         Assert.assertEquals( "test", Fqn.of( "test" ).toString() );
@@ -37,13 +37,14 @@ public class Fqn_of_Test {
         Assert.assertEquals( "'test*'", Fqn.of( "'test*'" ).toString() );
         Assert.assertEquals( "'test'''", Fqn.of( "'test'''" ).toString() );
         Assert.assertEquals( "'test.'", Fqn.of( "'test.'" ).toString() );
+        Assert.assertEquals( "'test.'.''.'''123'.'123'''", Fqn.of( "'test.'.''.'''123'.'123'''" ).toString() );
     }
 
     /**
      * Test invalid encoding.
      */
     @Test
-    public void invalidEncoding() throws Exception {
+    public void testOfString_invalid() throws Exception {
         String[] invalidFqn = { ".", "*", "[", "]", "*", ",", "test. toto" };
 
         for ( String s : invalidFqn ) {
@@ -54,5 +55,28 @@ public class Fqn_of_Test {
                 // expected.
             }
         }
+    }
+
+
+    /**
+     * Test the size method.
+     */
+    @Test
+    public void testSize() throws Exception {
+        Assert.assertEquals( 1, Fqn.of( "''" ).size() );
+        Assert.assertEquals( 2, Fqn.of( "'test*'.''" ).size() );
+        Assert.assertEquals( 3, Fqn.of( "'test'''.'*'.'**'" ).size() );
+        Assert.assertEquals( 4, Fqn.of( "1.2.3.4" ).size() );
+    }
+
+    /**
+     * Test the segment method.
+     */
+    @Test
+    public void testSegment() throws Exception {
+        Assert.assertEquals( "test", Fqn.of( "test" ).segment( 0 ) );
+        Assert.assertEquals( "", Fqn.of( "''" ).segment( 0 ) );
+        Assert.assertEquals( "*", Fqn.of( "test.'*'" ).segment( 1 ) );
+        Assert.assertEquals( "", Fqn.of( "test.''" ).segment( 1 ) );
     }
 }

@@ -41,9 +41,9 @@ public class JsonParser {
     }
 
     private void skipWhiteSpace() {
-        int current = cursor.current();
+        int current = cursor.peek();
         while ( current >= 0 && current <= ' ' || Character.isWhitespace( current ) ) {
-            current = cursor.next();
+            current = cursor.peekNext();
         }
     }
 
@@ -58,13 +58,13 @@ public class JsonParser {
     }
 
     private String parseString() {
-        int quote = cursor.current();
+        int quote = cursor.peek();
         StringBuilder sb = new StringBuilder();
-        for ( int codePoint = cursor.next(); codePoint != quote; codePoint = cursor.next() ) {
+        for ( int codePoint = cursor.peekNext(); codePoint != quote; codePoint = cursor.peekNext() ) {
             if ( codePoint < 0 || codePoint == '\r' || codePoint == '\n' ) {
                 throw cursor.error( "Unterminated string" );
             } else if ( codePoint == '\\' ) {
-                codePoint = cursor.next();
+                codePoint = cursor.peekNext();
                 switch ( codePoint ) {
                     case 'b':
                         sb.append( '\b' );
@@ -82,7 +82,8 @@ public class JsonParser {
                         sb.append( '\r' );
                         break;
                     case 'u':
-                        sb.append( (char) Integer.parseInt( cursor.next( 4 ), 16 ) );
+                        cursor.read();
+                        sb.append( (char) Integer.parseInt( cursor.read( 4 ), 16 ) );
                         break;
                     case '"':
                     case '\'':
@@ -99,40 +100,40 @@ public class JsonParser {
                 sb.appendCodePoint( codePoint );
             }
         }
-        cursor.discard();
+        cursor.read();
         return sb.toString();
     }
 
     private Double parseNumber() {
         StringBuilder sb = new StringBuilder();
-        int current = cursor.current();
+        int current = cursor.peek();
         if ( current == '-' ) {
             sb.appendCodePoint( current );
-            current = cursor.next();
+            current = cursor.peekNext();
         }
 
         while ( current >= '0' && current <= '9' ) {
             sb.appendCodePoint( current );
-            current = cursor.next();
+            current = cursor.peekNext();
         }
         if ( current == '.' ) {
             sb.append( '.' );
-            current = cursor.next();
+            current = cursor.peekNext();
             while ( current >= '0' && current <= '9' ) {
                 sb.appendCodePoint( current );
-                current = cursor.next();
+                current = cursor.peekNext();
             }
         }
         if ( current == 'e' || current == 'E' ) {
             sb.appendCodePoint( current );
-            current = cursor.next();
+            current = cursor.peekNext();
             if ( current == '+' || current == '-' ) {
                 sb.appendCodePoint( current );
-                current = cursor.next();
+                current = cursor.peekNext();
             }
             while ( current >= '0' && current <= '9' ) {
                 sb.appendCodePoint( current );
-                current = cursor.next();
+                current = cursor.peekNext();
             }
         }
         if ( Character.isJavaIdentifierStart( current ) ) {
@@ -145,8 +146,8 @@ public class JsonParser {
 
     private String parseIdentifier() {
         StringBuilder sb = new StringBuilder();
-        sb.appendCodePoint( cursor.current() );
-        for ( int codePoint = cursor.next(); Character.isJavaIdentifierPart( codePoint ); codePoint = cursor.next() ) {
+        sb.appendCodePoint( cursor.peek() );
+        for ( int codePoint = cursor.peekNext(); Character.isJavaIdentifierPart( codePoint ); codePoint = cursor.peekNext() ) {
             sb.appendCodePoint( codePoint );
         }
         return sb.toString();
@@ -155,26 +156,26 @@ public class JsonParser {
     public Token getToken() {
         if ( !parsed ) {
             skipWhiteSpace();
-            int current = cursor.current();
+            int current = cursor.peek();
             if ( current < 0 ) {
                 setToken( null );
             } else if ( current == '{' ) {
-                cursor.discard();
+                cursor.read();
                 setToken( Token.OPEN_OBJECT );
             } else if ( current == '}' ) {
-                cursor.discard();
+                cursor.read();
                 setToken( Token.CLOSE_OBJECT );
             } else if ( current == '[' ) {
-                cursor.discard();
+                cursor.read();
                 setToken( Token.OPEN_ARRAY );
             } else if ( current == ']' ) {
-                cursor.discard();
+                cursor.read();
                 setToken( Token.CLOSE_ARRAY );
             } else if ( current == ',' ) {
-                cursor.discard();
+                cursor.read();
                 setToken( Token.COMMA );
             } else if ( current == ':' ) {
-                cursor.discard();
+                cursor.read();
                 setToken( Token.COLON );
             } else if ( current == '"' || current == '\'' ) {
                 setToken( Token.STRING, parseString() );

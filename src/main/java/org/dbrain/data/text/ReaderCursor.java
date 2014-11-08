@@ -16,9 +16,9 @@
 
 package org.dbrain.data.text;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.function.IntPredicate;
 
 /**
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
@@ -26,66 +26,49 @@ import java.util.function.IntPredicate;
  */
 public class ReaderCursor implements AutoCloseable {
 
-    private static final String ERR_IO_ERROR = "IO exception";
+    private static final String ERR_IO_ERROR           = "IO exception";
     private static final String ERR_SURROGATE_ENCODING = "Surrogate encoding error";
 
     // Linked reader
     private Reader reader;
 
-    // Current byte in buffer if consumed = false
-    private int current = -1;
+    private Integer peeked;
 
     // Position in the stream.
-    private int index = 1;
-    private int line = 1;
+    private int index  = 1;
+    private int line   = 1;
     private int column = 1;
-
-    // Tell if current is valid or not
-    private boolean consumed = true;
 
     /**
      * Creates a new instance of ReaderCursor using the underlying Reader as it's
      * datasource.
      */
     public ReaderCursor( Reader r ) {
+        // Add a buffer as needed.
+        if ( !r.markSupported() ) {
+            r = new BufferedReader( r );
+        }
         this.reader = r;
     }
 
-    /**
-     * load Current character if needed.
-     */
-    private void load() {
+    private int readCodePoint() {
         try {
-            if ( consumed ) {
-                current = reader.read();
-                index++;
-                if ( current >= 0 ) {
-                    char highSurrogate = (char) current;
-                    if ( Character.isHighSurrogate( highSurrogate ) ) {
-                        int next = reader.read();
-                        index++;
-                        if ( next >= 0 ) {
-                            char lowSurrogate = (char)next;
-                            if (Character.isSurrogatePair( highSurrogate, lowSurrogate )) {
-                                current = Character.toCodePoint( highSurrogate, lowSurrogate );
-                            } else {
-                                throw error( ERR_SURROGATE_ENCODING, null );
-                            }
+            int firstChar = reader.read();
+            if ( firstChar >= 0 ) {
+                if ( Character.isHighSurrogate( (char) firstChar ) ) {
+                    int secondChar = reader.read();
+                    if ( secondChar >= 0 ) {
+                        if ( Character.isSurrogatePair( (char) firstChar, (char) secondChar ) ) {
+                            return Character.toCodePoint( (char) firstChar, (char) secondChar );
                         } else {
                             throw error( ERR_SURROGATE_ENCODING, null );
                         }
-                    }
-                    if ( current == 10 ) {
-                        line ++;
-                        column = 1;
-                    } else if ( current == 9 ) {
-                        column += 4;
-                    } else if ( current >= ' ') {
-                        column ++;
+                    } else {
+                        throw error( ERR_SURROGATE_ENCODING, null );
                     }
                 }
-                consumed = false;
             }
+            return firstChar;
         } catch ( IOException ie ) {
             throw error( ERR_IO_ERROR, ie );
         }
@@ -93,6 +76,7 @@ public class ReaderCursor implements AutoCloseable {
 
     /**
      * An exception with the specified message.
+     *
      * @param message The message.
      */
     public ParseException error( String message, Throwable e ) {
@@ -101,6 +85,7 @@ public class ReaderCursor implements AutoCloseable {
 
     /**
      * An exception with the specified message.
+     *
      * @param message The message.
      */
     public ParseException error( String message ) {
@@ -115,21 +100,40 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @return The current character in the cursor.
-     * <p>
+     * @return Peek at the current character in the cursor.
+     * <p/>
      * Note: If the current character is consumed. The next one is loaded from
      * the underlying reader.
      */
-    public int current() {
-        load();
-        return current;
+    public int peek() {
+        if ( peeked == null ) {
+            try {
+                reader.mark( 2 );
+                peeked = readCodePoint();
+                reader.reset();
+            } catch ( IOException e ) {
+                throw error( ERR_IO_ERROR, e );
+            }
+        }
+        return peeked;
     }
 
     /**
-     * return true if the current cursor's position is matching the predicated.
+     * @return Read a character from the stream and move to the next.
      */
-    public boolean is( IntPredicate test ) {
-        return test.test( current() );
+    public int read() {
+        peeked = null;
+        int result = readCodePoint();
+        index += result <= 0xFFFF ? 1 : 2;
+        if ( result == 10 ) {
+            line++;
+            column = 1;
+        } else if ( result == 9 ) {
+            column += 4;
+        } else if ( result >= ' ' ) {
+            column++;
+        }
+        return result;
     }
 
     /**
@@ -137,34 +141,27 @@ public class ReaderCursor implements AutoCloseable {
      *
      * @return The next available character or -1 if none.
      */
-    public int next() {
-        discard();
-        return current();
+    public int peekNext() {
+        read();
+        return peek();
     }
 
     /**
      * @param count
      * @return A string of characters. This method can return more characters than asked since it counts codepoints.
      */
-    public String next( int count ) {
+    public String read( int count ) {
         if ( count <= 0 ) {
             return "";
         }
         StringBuilder sb = new StringBuilder( count );
-        int c = next();
+        int c = read();
         for ( int i = 0; i < count && c >= 0; i++ ) {
             sb.appendCodePoint( c );
-            c = next();
+            c = read();
 
         }
         return sb.toString();
-    }
-
-    /**
-     * Invalidate current character without reading the next one.
-     */
-    public void discard() {
-        consumed = true;
     }
 
     /**
@@ -175,4 +172,20 @@ public class ReaderCursor implements AutoCloseable {
         reader.close();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(  );
+        sb.append( "ReaderCursor index=" );
+        sb.append( Integer.toString( index ) );
+        sb.append( " char=[" );
+        int peeked = peek();
+        if ( peeked >= 0 ) {
+            sb.appendCodePoint( peek() );
+        } else {
+            sb.append( "eof" );
+        }
+        sb.append( "]" );
+
+        return sb.toString();
+    }
 }
