@@ -19,7 +19,7 @@
 	<artifactId>data</artifactId>
 	<packaging>jar</packaging>
 	<version>0.3-SNAPSHOT</version>
-	<name>Data - Core classes</name>
+	<name>dbrain-data</name>
 	<description>Defines concepts and classes that are at the core of data manipulation and definition.</description>
 	<url>dbrain.org</url>
 	<licenses>

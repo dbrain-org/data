@@ -44,10 +44,6 @@ public class ReaderCursor implements AutoCloseable {
      * datasource.
      */
     public ReaderCursor( Reader r ) {
-        // Add a buffer as needed.
-        if ( !r.markSupported() ) {
-            r = new BufferedReader( r );
-        }
         this.reader = r;
     }
 
@@ -100,50 +96,46 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @return Peek at the current character in the cursor.
+     * @return Get at the character at the current cursor position.
      *
      * Note: If the current character is consumed. The next one is loaded from
      * the underlying reader.
      */
-    public int peek() {
+    public int get() {
         if ( peeked == null ) {
-            try {
-                reader.mark( 2 );
-                peeked = readCodePoint();
-                reader.reset();
-            } catch ( IOException e ) {
-                throw error( ERR_IO_ERROR, e );
-            }
+            peeked = readCodePoint();
         }
         return peeked;
     }
 
     /**
-     * @return Read a character from the stream and move to the next.
-     */
-    public int read() {
-        peeked = null;
-        int result = readCodePoint();
-        index += result <= 0xFFFF ? 1 : 2;
-        if ( result == 10 ) {
-            line++;
-            column = 1;
-        } else if ( result == 9 ) {
-            column += 4;
-        } else if ( result >= ' ' ) {
-            column++;
-        }
-        return result;
-    }
-
-    /**
-     * Consume the current character and return the next available.
+     * Move cursor forward one position and get the character.
      *
      * @return The next available character or -1 if none.
      */
-    public int peekNext() {
+    public int getNext() {
         read();
-        return peek();
+        return get();
+    }
+
+    /**
+     * @return The current character and move the cursor forward.
+     */
+    public int read() {
+        int result = get();
+        if ( result >= 0 ) {
+            peeked = null;
+            index += result <= 0xFFFF ? 1 : 2;
+            if ( result == 10 ) {
+                line++;
+                column = 1;
+            } else if ( result == 9 ) {
+                column += 4;
+            } else if ( result >= ' ' ) {
+                column++;
+            }
+        }
+        return result;
     }
 
     /**
@@ -178,9 +170,9 @@ public class ReaderCursor implements AutoCloseable {
         sb.append( "ReaderCursor index=" );
         sb.append( Integer.toString( index ) );
         sb.append( " char=[" );
-        int peeked = peek();
+        int peeked = get();
         if ( peeked >= 0 ) {
-            sb.appendCodePoint( peek() );
+            sb.appendCodePoint( get() );
         } else {
             sb.append( "eof" );
         }

@@ -54,7 +54,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readSpace() {
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.peek(); ParserUtils.isSpace( cur ); cur = cursor.peekNext() ) {
+        for ( int cur = cursor.get(); ParserUtils.isSpace( cur ); cur = cursor.getNext() ) {
             sb.appendCodePoint( cur );
         }
         return sb.toString();
@@ -74,9 +74,9 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
         // Read string content
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.peek(); !ParserUtils.isEOL( cur ); cur = cursor.peekNext() ) {
+        for ( int cur = cursor.get(); !ParserUtils.isEOL( cur ); cur = cursor.getNext() ) {
             if ( cur == quote ) {
-                cur = cursor.peekNext();
+                cur = cursor.getNext();
                 if ( cur != quote ) {
                     break;
                 }
@@ -95,7 +95,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private String readUnquotedString() {
         StringBuilder sb = new StringBuilder();
 
-        for ( int cur = cursor.peek(); !isEOC( cur ); cur = cursor.peekNext() ) {
+        for ( int cur = cursor.get(); !isEOC( cur ); cur = cursor.getNext() ) {
             sb.append( (char) cur );
         }
 
@@ -109,7 +109,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readString() {
         String spaces = readSpace();
-        return ( cursor.peek() == quote ) ? readQuotedString() : spaces + readUnquotedString();
+        return ( cursor.get() == quote ) ? readQuotedString() : spaces + readUnquotedString();
     }
 
     /**
@@ -120,15 +120,15 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private List<String> readLine() {
         List<String> result = new ArrayList<>();
 
-        while ( !ParserUtils.isEOL( cursor.peek() ) ) {
+        while ( !ParserUtils.isEOL( cursor.get() ) ) {
             result.add( readString() );
-            if ( isEOC( cursor.peek() ) && !ParserUtils.isEOL( cursor.peek() ) ) {
+            if ( isEOC( cursor.get() ) && !ParserUtils.isEOL( cursor.get() ) ) {
                 cursor.read();
             }
         }
 
         // Skip all EOL characters
-        for ( int cur = cursor.peek(); ParserUtils.isEOL( cur ) && !ParserUtils.isEOF( cur ); cur = cursor.peekNext() ) ;
+        for ( int cur = cursor.get(); ParserUtils.isEOL( cur ) && !ParserUtils.isEOF( cur ); cur = cursor.getNext() ) ;
 
         return result;
     }
@@ -204,7 +204,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
         if ( bof ) {
             bof = false;
         }
-        if ( ParserUtils.isEOF( cursor.peek() ) ) {
+        if ( ParserUtils.isEOF( cursor.get() ) ) {
             fieldValues = null;
         } else {
             fieldValues = readLine();

@@ -37,10 +37,10 @@ public class LineCursorTest {
 
         LineCursor lineCursor = new LineCursor( r );
 
-        String line1 = lineCursor.getNext();
-        String line2 = lineCursor.getNext();
-        String line3 = lineCursor.getNext();
-        String eof = lineCursor.getNext();
+        String line1 = lineCursor.read();
+        String line2 = lineCursor.read();
+        String line3 = lineCursor.read();
+        String eof = lineCursor.read();
 
         Assert.assertEquals( line1, "Line1");
         Assert.assertEquals( line2, "Line2");

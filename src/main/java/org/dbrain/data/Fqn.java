@@ -41,10 +41,10 @@ public final class Fqn {
      * Create a fully qualified name from a ReaderCursor.
      */
     public static Fqn of( ReaderCursor c ) {
-        if ( isFqnStart( c.peek() ) ) {
+        if ( isFqnStart( c.get() ) ) {
             List<String> segments = new ArrayList<>();
             segments.add( readSegment( c ) );
-            while ( c.peek() == '.' ) {
+            while ( c.get() == '.' ) {
                 c.read();
                 segments.add( readSegment( c ) );
             }
@@ -61,14 +61,14 @@ public final class Fqn {
             return null;
         }
         ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
-        while ( ParserUtils.isSpace( c.peek() ) ) {
+        while ( ParserUtils.isSpace( c.get() ) ) {
             c.read();
         }
         Fqn result = of( c );
-        while ( ParserUtils.isSpace( c.peek() ) ) {
+        while ( ParserUtils.isSpace( c.get() ) ) {
             c.read();
         }
-        if ( c.peek() >= 0 ) {
+        if ( c.get() >= 0 ) {
             throw c.error( "Expecting end of string" );
         }
 
@@ -104,7 +104,7 @@ public final class Fqn {
         do {
             int current = c.read();
             if ( current == quote ) {
-                if ( c.peek() == quote ) {
+                if ( c.get() == quote ) {
                     sb.appendCodePoint( c.read() );
                 } else {
                     break;
@@ -121,7 +121,7 @@ public final class Fqn {
     // Read an unquoted segment.
     private static String readUnquotedSegment( ReaderCursor cursor ) {
         StringBuilder sb = new StringBuilder();
-        while ( isUnquotedSegment( cursor.peek() ) ) {
+        while ( isUnquotedSegment( cursor.get() ) ) {
             sb.appendCodePoint( cursor.read() );
         }
         return sb.toString();
@@ -129,7 +129,7 @@ public final class Fqn {
 
     // Read a segment.
     private static String readSegment( ReaderCursor c ) {
-        if ( isQuote( c.peek() ) ) {
+        if ( isQuote( c.get() ) ) {
             return readQuotedSegment( c );
         } else {
             return readUnquotedSegment( c );

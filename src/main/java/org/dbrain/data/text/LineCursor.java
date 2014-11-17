@@ -27,8 +27,7 @@ import java.io.Reader;
  */
 public class LineCursor {
 
-    private long         lineNumber = 0;
-    private CursorStatus status     = CursorStatus.BOF;
+    private boolean eof = false;
     private ReaderCursor cursor;
     private String       currentLine;
 
@@ -40,48 +39,30 @@ public class LineCursor {
      * Load a line into the internal buffer.
      */
     private void load() {
-        if ( currentLine == null && status == null ) {
-            int current = cursor.peek();
+        if ( currentLine == null && !eof ) {
+            int current = cursor.get();
             if ( current >= 0 ) {
                 StringBuilder sb = new StringBuilder();
                 while ( current >= 0 && current != 13 && current != 10 ) {
                     sb.append( (char) current );
-                    current = cursor.peekNext();
+                    current = cursor.getNext();
                 }
                 if ( current == 13 ) {
-                    if ( cursor.peekNext() == 10 ) {
+                    if ( cursor.getNext() == 10 ) {
                         cursor.read();
                     }
                 }
                 if ( current == 10 ) {
-                    if ( cursor.peekNext() == 13 ) {
+                    if ( cursor.getNext() == 13 ) {
                         cursor.read();
                     }
                 }
                 currentLine = sb.toString();
-                status = CursorStatus.LOADED;
-                lineNumber++;
             } else {
-                status = CursorStatus.EOF;
+                eof = true;
+                currentLine = null;
             }
         }
-    }
-
-    /**
-     * Unload the current line.
-     */
-    private void unload() {
-        if (status != CursorStatus.EOF ) {
-            status = null;
-            currentLine = null;
-        }
-
-
-    }
-
-    public CursorStatus getStatus() {
-        load();
-        return status;
     }
 
     /**
@@ -89,25 +70,26 @@ public class LineCursor {
      *
      * @return The the line currently loaded in the cursor.
      */
-    public String getCurrent() {
+    public String get() {
         load();
         return currentLine;
-    }
-
-    /**
-     * Move to the next line and return true if cursor is not at eof.
-     */
-    public boolean next() {
-        unload();
-        return getStatus() == CursorStatus.LOADED;
     }
 
     /**
      * @return The next line in the file, or null if at end of file.
      */
     public String getNext() {
-        next();
-        return getCurrent();
+        read();
+        return get();
+    }
+
+    /**
+     * Read the current line and move to the next.
+     */
+    public String read() {
+        String result = get();
+        currentLine = null;
+        return result;
     }
 
 
