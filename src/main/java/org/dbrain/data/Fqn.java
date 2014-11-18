@@ -22,12 +22,13 @@ import org.dbrain.data.text.ReaderCursor;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Describe a fully qualified name.
- *
+ * <p/>
  * Syntax allows for wildcards as well as ways of escaping them.
- *
+ * <p/>
  * ''
  * test
  * test.''
@@ -50,7 +51,7 @@ public final class Fqn {
             }
             return new Fqn( segments );
         }
-        return null;
+        return NULL_VALUE;
     }
 
     /**
@@ -58,7 +59,7 @@ public final class Fqn {
      */
     public static Fqn of( String fqn ) {
         if ( fqn == null ) {
-            return null;
+            return NULL_VALUE;
         }
         ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
         while ( ParserUtils.isSpace( c.get() ) ) {
@@ -174,6 +175,8 @@ public final class Fqn {
         }
     }
 
+    private static final Fqn NULL_VALUE = new Fqn( null );
+
     private final List<String> segments;
 
     /**
@@ -191,7 +194,7 @@ public final class Fqn {
     }
 
     /**
-     * Retrieve the unencoded segment.
+     * Retrieve the decoded segment.
      *
      * @param i Index of the segment to retrieve.
      * @return A segment.
@@ -204,15 +207,39 @@ public final class Fqn {
         }
     }
 
+    /**
+     * Validate that the current Fqn starts with the other Fqn.
+     */
+    public boolean startsWith( Fqn other ) {
+        if ( other == null || other == this ) {
+            return true;
+        }
+        int otherSize = other.size();
+        if ( size() < otherSize ) {
+            return false;
+        }
+        for ( int i = 0; i < otherSize; i++ ) {
+            if ( !segment( i ).equals( other.segment( i ) ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
 
         Fqn fqn = (Fqn) o;
-
-        if ( !segments.equals( fqn.segments ) ) return false;
-
+        if ( size() != fqn.size()) {
+            return false;
+        }
+        for ( int i = 0; i < size(); i++ ) {
+            if ( !segment( i ).equals( fqn.segment( i ) ) ) {
+                return false;
+            }
+        }
         return true;
     }
 

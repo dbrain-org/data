@@ -30,8 +30,8 @@ public class Fqn_Test {
      */
     @Test
     public void testOfString() throws Exception {
-        Assert.assertNull( Fqn.of( "" ) );
-        Assert.assertNull( Fqn.of( " " ) );
+        Assert.assertEquals( "", Fqn.of( "" ).toString() );
+        Assert.assertEquals( "", Fqn.of( " " ).toString() );
         Assert.assertEquals( "test", Fqn.of( "test" ).toString() );
         Assert.assertEquals( "test", Fqn.of( " test " ).toString() );
         Assert.assertEquals( "'test*'", Fqn.of( "'test*'" ).toString() );
@@ -78,5 +78,27 @@ public class Fqn_Test {
         Assert.assertEquals( "", Fqn.of( "''" ).segment( 0 ) );
         Assert.assertEquals( "*", Fqn.of( "test.'*'" ).segment( 1 ) );
         Assert.assertEquals( "", Fqn.of( "test.''" ).segment( 1 ) );
+    }
+
+    @Test
+    public void testStartsWith() throws Exception {
+
+        // Those are true
+        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( Fqn.of( "test" ) ) );
+        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( Fqn.of( "test.123" ) ) );
+        Assert.assertTrue( Fqn.of( "test.123.456" ).startsWith( Fqn.of( "test" ) ) );
+        Assert.assertTrue( Fqn.of( "test.123.456" ).startsWith( Fqn.of( "test.123" ) ) );
+        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( Fqn.of( "" ) ) );
+        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( null ) );
+        Assert.assertTrue( Fqn.of( "" ).startsWith( Fqn.of( "" ) ) );
+
+        // Those are false
+        Assert.assertFalse( Fqn.of( "test.123" ).startsWith( Fqn.of( "other" ) ) );
+        Assert.assertFalse( Fqn.of( "test" ).startsWith( Fqn.of( "test.123" ) ) );
+        Assert.assertFalse( Fqn.of( "test.123" ).startsWith( Fqn.of( "test.123.456" ) ) );
+        Assert.assertFalse( Fqn.of( "" ).startsWith( Fqn.of( "test" ) ) );
+
+
+
     }
 }
