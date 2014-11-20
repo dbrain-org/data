@@ -412,9 +412,19 @@ public class Casts {
 
     /**
      * Convert a date to LocalDate.
-     **/
+     */
     public static LocalDate toLocalDate( Date date, ZoneId zoneId ) {
-        return date != null ? date.toInstant().atZone( zoneId ).toLocalDate() : null;
+        if ( date != null ) {
+            if ( date instanceof java.sql.Date ) {
+                return ( (java.sql.Date) date ).toLocalDate();
+            } else if ( date instanceof java.sql.Time ) {
+                throw new DataCoercionException( "Cannot case " + date + " to LocalDate." );
+            } else {
+                return date.toInstant().atZone( zoneId ).toLocalDate();
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
