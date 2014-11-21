@@ -41,15 +41,13 @@ public class Serializables {
      */
     public static byte[] hashSerializable( Serializable o, String hashType ) {
         try ( ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                ObjectOutputStream out = new ObjectOutputStream( buffer ); ) {
+                ObjectOutputStream out = new ObjectOutputStream( buffer ) ) {
 
             out.writeObject( o );
             out.close();
             buffer.close();
 
-            byte[] digest = MessageDigest.getInstance( hashType ).digest( buffer.toByteArray() );
-
-            return digest;
+            return MessageDigest.getInstance( hashType ).digest( buffer.toByteArray() );
 
         } catch ( IOException e ) {
             throw new IllegalStateException( e );

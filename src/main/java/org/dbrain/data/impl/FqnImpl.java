@@ -70,8 +70,8 @@ public final class FqnImpl implements Fqn {
     private static final String RESERVED_CHARS = "*\'\"?!@#%&()[]{}.,;+-/\\^ ";
 
     // True if the character is a reserved one and therefore cannot be in a unquoted segment.
-    private static boolean isReserved( int cur ) {
-        return RESERVED_CHARS.indexOf( cur ) >= 0;
+    private static boolean isNotReserved( int cur ) {
+        return RESERVED_CHARS.indexOf( cur ) < 0;
     }
 
     // True if the characted is a quote.
@@ -81,12 +81,12 @@ public final class FqnImpl implements Fqn {
 
     // True if the character is a possible fully qualified name start.
     private static boolean isFqnStart( int cur ) {
-        return cur >= 0 && ( isQuote( cur ) || !isReserved( cur ) );
+        return cur >= 0 && ( isQuote( cur ) || isNotReserved( cur ) );
     }
 
     // True if the character is a unquoted segment character.
     private static boolean isUnquotedSegment( int cur ) {
-        return cur >= 0 && !isReserved( cur );
+        return cur >= 0 && isNotReserved( cur );
     }
 
     // Read a quoted segment.
@@ -135,7 +135,6 @@ public final class FqnImpl implements Fqn {
         if ( segment.length() == 0 ) {
             return "''";
         }
-        ;
         StringBuilder sb = null;
         for ( int i = 0; i < segment.length(); i++ ) {
             Character c = segment.charAt( i );

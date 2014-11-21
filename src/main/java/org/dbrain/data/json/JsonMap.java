@@ -228,9 +228,8 @@ public class JsonMap extends JsonValue implements Map<String, JsonValue> {
 
         org.dbrain.data.json.JsonMap jsonMap = (org.dbrain.data.json.JsonMap) o;
 
-        if ( !delegate.equals( jsonMap.delegate ) ) return false;
+        return delegate.equals( jsonMap.delegate );
 
-        return true;
     }
 
     @Override
