@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 /**
- * Created by epoitras on 20/11/14.
+ * Test coercions of dates.
  */
 public class Casts_toDate_Test {
 

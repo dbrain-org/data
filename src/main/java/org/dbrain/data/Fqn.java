@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.impl.FqnImpl;
+import org.dbrain.data.impl.FqnUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 /**
@@ -37,20 +37,50 @@ public interface Fqn {
      * Create a fully qualified name from a ReaderCursor.
      */
     static Fqn of( ReaderCursor c ) {
-        return FqnImpl.of( c );
+        return FqnUtils.of( c );
     }
 
     /**
-     * Create a new Fully Qualified Name from a String. Compatible with toString.
+     * Create a new Fully Qualified Name from a String.
+     * Expect to works with the output of toString.
      */
     static Fqn of( String fqn ) {
-        return FqnImpl.of( fqn );
+        return FqnUtils.of( fqn );
     }
 
+    /**
+     * @return The number of segments in the name.
+     */
     int size();
 
+    /**
+     * @return A single segment within the name.
+     */
     String segment( int i );
 
+    /**
+     * @return Test if a name starts with another.
+     */
     boolean startsWith( Fqn other );
 
+    /**
+     * Pattern to match a Fqn.
+     */
+    interface Pattern {
+
+        /**
+         * Match a pattern agains a name.
+         *
+         * @return The match result.
+         */
+        MatchResult match( Fqn fqn );
+
+    }
+
+    /**
+     * Match result of a pattern matching.
+     */
+    interface MatchResult {
+
+    }
 }
