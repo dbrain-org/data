@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl;
+package org.dbrain.data.impl.fqn;
 
 import org.dbrain.data.Fqn;
 

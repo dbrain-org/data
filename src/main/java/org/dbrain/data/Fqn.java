@@ -16,14 +16,15 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.impl.FqnUtils;
+import org.dbrain.data.impl.fqn.FqnBuilderImpl;
+import org.dbrain.data.impl.fqn.FqnUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 /**
  * Describe a fully qualified name.
- *
+ * <p/>
  * Syntax allows for wildcards as well as ways of escaping them.
- *
+ * <p/>
  * ''
  * test
  * test.''
@@ -37,7 +38,7 @@ public interface Fqn {
      * Create a fully qualified name from a ReaderCursor.
      */
     static Fqn of( ReaderCursor c ) {
-        return FqnUtils.of( c );
+        return FqnUtils.parseFqn( c );
     }
 
     /**
@@ -45,7 +46,30 @@ public interface Fqn {
      * Expect to works with the output of toString.
      */
     static Fqn of( String fqn ) {
-        return FqnUtils.of( fqn );
+        return FqnUtils.parseFqn( fqn );
+    }
+
+    /**
+     * Start building a Fqn from an initial segment.
+     *
+     * @return A builder.
+     */
+    static Builder fromSegment( String segment ) {
+        return newBuilder().segment( segment );
+    }
+
+    /**
+     * Start building a Fqn from another name.
+     */
+    static Builder from( Fqn fqn ) {
+        return newBuilder().append( fqn );
+    }
+
+    /**
+     * @return A new builder instance.
+     */
+    static Builder newBuilder() {
+        return new FqnBuilderImpl();
     }
 
     /**
@@ -64,23 +88,25 @@ public interface Fqn {
     boolean startsWith( Fqn other );
 
     /**
-     * Pattern to match a Fqn.
+     * Builder interface for the Fqn.
      */
-    interface Pattern {
+    interface Builder {
 
         /**
-         * Match a pattern agains a name.
-         *
-         * @return The match result.
+         * Add a segment to the fqn.
          */
-        MatchResult match( Fqn fqn );
+        Builder segment( String segment );
 
+        /**
+         * Append all segments of another fqn.
+         */
+        Builder append( Fqn fqn );
+
+        /**
+         * @return The built Fqn.
+         * Fqn.of( "test" )
+         */
+        Fqn build();
     }
 
-    /**
-     * Match result of a pattern matching.
-     */
-    interface MatchResult {
-
-    }
 }

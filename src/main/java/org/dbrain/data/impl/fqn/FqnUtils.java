@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl;
+package org.dbrain.data.impl.fqn;
 
 import org.dbrain.data.Fqn;
 import org.dbrain.data.text.ParserUtils;
@@ -34,7 +34,12 @@ public class FqnUtils {
     /**
      * Create a fully qualified name from a ReaderCursor.
      */
-    public static Fqn of( ReaderCursor c ) {
+    public static Fqn parseFqn( ReaderCursor c ) {
+
+        // Skip whitespace
+        skipWhitespace( c );
+
+        // Parse the name
         if ( isFqnStart( c.get() ) ) {
             List<String> segments = new ArrayList<>();
             segments.add( readSegment( c ) );
@@ -50,23 +55,31 @@ public class FqnUtils {
     /**
      * Create a new Fully Qualified Name from a String. Compatible with toString.
      */
-    public static Fqn of( String fqn ) {
+    public static Fqn parseFqn( String fqn ) {
         if ( fqn == null ) {
             return NULL_VALUE;
         }
         ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
-        while ( ParserUtils.isSpace( c.get() ) ) {
-            c.read();
-        }
+
+        // Parse the name
         Fqn result = Fqn.of( c );
-        while ( ParserUtils.isSpace( c.get() ) ) {
-            c.read();
-        }
+
+        // Skip trailing whitespace
+        skipWhitespace( c );
+
+        // Expect EOF
         if ( c.get() >= 0 ) {
             throw c.error( "Expecting end of string" );
         }
 
         return result;
+    }
+
+    // Skip consecutive white spaces
+    private static void skipWhitespace( ReaderCursor c ) {
+        while ( ParserUtils.isSpace( c.get() )) {
+            c.read();
+        }
     }
 
     // True if the character is a reserved one and therefore cannot be in a unquoted segment.
