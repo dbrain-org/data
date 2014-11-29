@@ -14,7 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.access;
+
+import org.dbrain.data.Casts;
 
 import java.util.function.Function;
 

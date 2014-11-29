@@ -17,7 +17,7 @@
 package org.dbrain.data.csv;
 
 
-import org.dbrain.data.ForwardCursor;
+import org.dbrain.data.access.ForwardCursor;
 import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 

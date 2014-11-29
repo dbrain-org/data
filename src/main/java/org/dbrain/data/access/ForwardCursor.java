@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.access;
 
 /**
  * Allows to read tabular data in a Forward-only manner.
