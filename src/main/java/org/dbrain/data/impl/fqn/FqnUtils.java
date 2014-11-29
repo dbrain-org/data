@@ -28,8 +28,10 @@ import java.util.List;
  * Created by epoitras on 25/11/14.
  */
 public class FqnUtils {
-    private static final String RESERVED_CHARS = "*\'\"?!@#%&()[]{}.,;+-/\\^ ";
-    static final         Fqn    NULL_VALUE     = new FqnImpl( null );
+
+    // Singleton for no name value
+    static final String RESERVED_CHARS = "*\'\"?!@#%&()[]{}.,;+-/\\^ ";
+    static final Fqn    NO_NAME        = new FqnImpl( null );
 
     /**
      * Create a fully qualified name from a ReaderCursor.
@@ -49,7 +51,7 @@ public class FqnUtils {
             }
             return new FqnImpl( segments );
         }
-        return NULL_VALUE;
+        return NO_NAME;
     }
 
     /**
@@ -57,7 +59,7 @@ public class FqnUtils {
      */
     public static Fqn parseFqn( String fqn ) {
         if ( fqn == null ) {
-            return NULL_VALUE;
+            return NO_NAME;
         }
         ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
 
@@ -77,7 +79,7 @@ public class FqnUtils {
 
     // Skip consecutive white spaces
     private static void skipWhitespace( ReaderCursor c ) {
-        while ( ParserUtils.isSpace( c.get() )) {
+        while ( ParserUtils.isSpace( c.get() ) ) {
             c.read();
         }
     }

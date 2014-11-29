@@ -31,7 +31,7 @@ public final class FqnImpl implements Fqn {
     /**
      * Use the of(xxx) factory.
      */
-    FqnImpl( List<String> segments ) {
+    public FqnImpl( List<String> segments ) {
         this.segments = segments != null && segments.size() > 0 ? new ArrayList<>( segments ) : null;
     }
 

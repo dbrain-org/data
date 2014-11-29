@@ -17,8 +17,11 @@
 package org.dbrain.data;
 
 import org.dbrain.data.impl.fqn.FqnBuilderImpl;
+import org.dbrain.data.impl.fqn.FqnImpl;
 import org.dbrain.data.impl.fqn.FqnUtils;
 import org.dbrain.data.text.ReaderCursor;
+
+import java.util.Arrays;
 
 /**
  * Describe a fully qualified name.
@@ -47,6 +50,14 @@ public interface Fqn {
      */
     static Fqn of( String fqn ) {
         return FqnUtils.parseFqn( fqn );
+    }
+
+    static Fqn ofSegment( String segment ) {
+        if ( segment != null ) {
+            return new FqnImpl( Arrays.asList( segment ));
+        } else {
+            return Fqn.of( (String) null );
+        }
     }
 
     /**

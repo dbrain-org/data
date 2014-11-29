@@ -19,71 +19,223 @@ package org.dbrain.data.impl.fqn;
 import org.dbrain.data.Fqn;
 import org.dbrain.data.FqnPattern;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by epoitras on 26/11/14.
+ * Implementation of the Fqn Pattern.
  */
 public class FqnPatternImpl implements FqnPattern {
 
-    private List<Node> nodes;
+    private Node root;
+    private int  partCount;
+
+    public FqnPatternImpl( Node root, int partCount ) {
+        this.root = root;
+        this.partCount = partCount;
+    }
 
     @Override
     public MatchResult match( Fqn fqn ) {
-        if ( fqn == null && nodes == null ) {
-            // TODO
-            return null;
+        if ( root == null ) {
+            if ( fqn == null || fqn.size() == 0 ) {
+                return new MatchResultImpl( true, partCount );
+            } else {
+                return new MatchResultImpl( false, partCount );
+            }
         }
-        //TODO
-        return null;
+        MatchResultImpl result = new MatchResultImpl( false, partCount );
+        root.match( fqn, 0, result );
+        return result;
     }
 
+    @Override
+    public String toString() {
+        Node node = root;
+        StringBuilder sb = new StringBuilder(  );
+        while ( node != null ) {
+            sb.append( node.toString() );
+            if ( node.getNext() != null ) {
+                sb.append( "." );
+            }
+            node = node.getNext();
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Default implementation of the matchresult.
+     */
     static class MatchResultImpl implements MatchResult {
+
+        private boolean   matched;
+        private int       partCount;
+        private List<Fqn> parts;
+
+        public MatchResultImpl( boolean matched, int partCount ) {
+            this.matched = matched;
+            this.partCount = partCount;
+        }
 
         @Override
         public boolean matched() {
-            return false;
+            return matched;
         }
 
         @Override
         public int partCount() {
-            return 0;
+            return partCount;
         }
 
         @Override
         public Fqn getPart( int idx ) {
-            return null;
+            if ( parts != null ) {
+                return parts.get( idx );
+            } else {
+                if ( idx >= 0 && idx < partCount ) {
+                    return null;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+        }
+
+        boolean answer( boolean value ) {
+            matched = value;
+            return value;
+        }
+
+        void setPart( int idx, Fqn part ) {
+            if ( parts == null ) {
+                parts = new ArrayList<>( partCount );
+            }
+            parts.set( idx, part );
         }
 
     }
 
     public static abstract class Node {
 
-        private Node next;
+        protected Node next;
 
-        boolean matchNext( Fqn fqn, int i ) {
-            if ( next != null && i < fqn.size() ) {
-                return next.match( fqn, i + 1 );
-            } else {
-                return true;
-            }
+        abstract boolean match( Fqn fqn, int i, MatchResultImpl mr );
 
+        Node getNext() {
+            return next;
         }
-        abstract boolean match( Fqn fqn, int i );
-        abstract void match( Fqn fqn, int i, MatchResultImpl matchResult );
 
-        public void setNext( Node next ) {
+        void setNext( Node next ) {
             this.next = next;
         }
     }
 
-//    public static class SpecificNode extends Node {
-//
-//        @Override
-//        void match( Fqn fqn, int i, MatchResultImpl matchResult ) {
-//            if ( match( fqn, i ) && matchNext( fqn, i ))
-//
-//            return false;
-//        }
-//    }
+    /**
+     * Denote a node that returns a part in the match result.
+     */
+    public interface PartMatchingNode {
+
+        void setPartIdx( int partIdx );
+
+    }
+
+    public static class SpecificNode extends Node {
+
+        private String segment;
+
+        public SpecificNode( String segment ) {
+            this.segment = segment;
+        }
+
+        @Override
+        boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
+            if ( i >= fqn.size() || !fqn.segment( i ).equals( segment ) ) {
+                return mr.answer( false );
+            }
+            if ( next != null ) {
+                return next.match( fqn, i + 1, mr );
+            } else {
+                return mr.answer( true );
+            }
+        }
+
+        @Override
+        public String toString() {
+            return FqnUtils.encodeSegment( segment );
+        }
+    }
+
+    public static class OneNode extends Node implements PartMatchingNode{
+
+        int partIdx;
+
+        @Override
+        boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
+            if ( i >= fqn.size() ) {
+                return mr.answer( false );
+            }
+            if ( next != null ) {
+                boolean nextMatch = next.match( fqn, i + 1, mr );
+                if ( nextMatch ) {
+                    mr.setPart( partIdx, Fqn.fromSegment( fqn.segment( i ) ).build() );
+                }
+                return nextMatch;
+            } else {
+                return mr.answer( true );
+            }
+        }
+
+        @Override
+        public void setPartIdx( int partIdx ) {
+            this.partIdx = partIdx;
+        }
+
+        @Override
+        public String toString() {
+            return "*";
+        }
+    }
+
+    public static class ManyNode extends Node implements PartMatchingNode {
+
+        private int partIdx;
+
+        @Override
+        boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
+            if ( i >= fqn.size() ) {
+                return mr.answer( false );
+            }
+            int j = fqn.size();
+            if ( next != null ) {
+                for (; j >= i; j-- ) {
+                    if ( next.match( fqn, j, mr ) ) {
+                        break;
+                    }
+                }
+            } else {
+                mr.answer( true );
+            }
+            if ( j >= i ) {
+                Fqn.Builder part = Fqn.newBuilder();
+                for ( int x = i; x < j; x++ ) {
+                    part.segment( fqn.segment( x ) );
+                }
+                mr.setPart( partIdx, part.build() );
+            }
+
+            return mr.matched();
+        }
+
+        @Override
+        public void setPartIdx( int partIdx ) {
+            this.partIdx = partIdx;
+        }
+
+        @Override
+        public String toString() {
+            return "**";
+        }
+
+    }
+
+
 }

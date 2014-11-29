@@ -16,12 +16,19 @@
 
 package org.dbrain.data;
 
+import org.dbrain.data.impl.fqn.FqnPatternBuilderImpl;
+
 /**
  * Pattern to match a Fqn.
  */
 public interface FqnPattern {
 
-
+    /**
+     * @return A new builder instance.
+     */
+    public static Builder newBuilder() {
+        return new FqnPatternBuilderImpl();
+    }
 
     /**
      * Match a pattern against a name.
@@ -43,6 +50,24 @@ public interface FqnPattern {
         int partCount();
 
         Fqn getPart( int idx );
+
+    }
+
+
+    /**
+     * Allows to build Fqn Patterns.
+     */
+    interface Builder {
+
+
+
+        Builder segment( String segment );
+
+        Builder one();
+
+        Builder many();
+
+        FqnPattern build();
 
     }
 }

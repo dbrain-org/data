@@ -41,6 +41,17 @@ public class Fqn_Test {
     }
 
     /**
+     * Test the ofSegment factory method.
+     */
+    @Test
+    public void testOfSegment() throws Exception {
+        Assert.assertEquals( "", Fqn.ofSegment( null ).toString() );
+        Assert.assertEquals( "''", Fqn.ofSegment( "" ).toString() );
+        Assert.assertEquals( "test", Fqn.ofSegment( "test" ).toString() );
+        Assert.assertEquals( "'test.toto'", Fqn.ofSegment( "test.toto" ).toString() );
+    }
+
+    /**
      * Test builder scenarios.
      *
      * @throws Exception
