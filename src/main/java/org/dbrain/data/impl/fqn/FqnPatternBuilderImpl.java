@@ -53,7 +53,7 @@ public class FqnPatternBuilderImpl implements FqnPattern.Builder {
     }
 
     @Override
-    public FqnPattern.Builder many() {
+    public FqnPattern.Builder any() {
         addNode( new FqnPatternImpl.ManyNode() );
         return this;
     }

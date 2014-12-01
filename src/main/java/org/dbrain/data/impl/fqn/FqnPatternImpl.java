@@ -70,7 +70,7 @@ public class FqnPatternImpl implements FqnPattern {
 
         private boolean   matched;
         private int       partCount;
-        private List<Fqn> parts;
+        private Fqn[]     parts;
 
         public MatchResultImpl( boolean matched, int partCount ) {
             this.matched = matched;
@@ -90,7 +90,7 @@ public class FqnPatternImpl implements FqnPattern {
         @Override
         public Fqn getPart( int idx ) {
             if ( parts != null ) {
-                return parts.get( idx );
+                return parts[ idx ];
             } else {
                 if ( idx >= 0 && idx < partCount ) {
                     return null;
@@ -107,9 +107,9 @@ public class FqnPatternImpl implements FqnPattern {
 
         void setPart( int idx, Fqn part ) {
             if ( parts == null ) {
-                parts = new ArrayList<>( partCount );
+                parts = new Fqn[ partCount ];
             }
-            parts.set( idx, part );
+            parts[ idx ] = part;
         }
 
     }
@@ -151,11 +151,13 @@ public class FqnPatternImpl implements FqnPattern {
             if ( i >= fqn.size() || !fqn.segment( i ).equals( segment ) ) {
                 return mr.answer( false );
             }
+            boolean result;
             if ( next != null ) {
-                return next.match( fqn, i + 1, mr );
+                result = next.match( fqn, i + 1, mr );
             } else {
-                return mr.answer( true );
+                result = i == fqn.size() - 1;
             }
+            return mr.answer( result );
         }
 
         @Override
@@ -173,15 +175,16 @@ public class FqnPatternImpl implements FqnPattern {
             if ( i >= fqn.size() ) {
                 return mr.answer( false );
             }
+            boolean result;
             if ( next != null ) {
-                boolean nextMatch = next.match( fqn, i + 1, mr );
-                if ( nextMatch ) {
-                    mr.setPart( partIdx, Fqn.fromSegment( fqn.segment( i ) ).build() );
-                }
-                return nextMatch;
+                result = next.match( fqn, i + 1, mr );
             } else {
-                return mr.answer( true );
+                result = i == fqn.size() - 1;
             }
+            if ( result ) {
+                mr.setPart( partIdx, Fqn.fromSegment( fqn.segment( i ) ).build() );
+            }
+            return mr.answer( result );
         }
 
         @Override
@@ -201,7 +204,7 @@ public class FqnPatternImpl implements FqnPattern {
 
         @Override
         boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
-            if ( i >= fqn.size() ) {
+            if ( i > fqn.size() ) {
                 return mr.answer( false );
             }
             int j = fqn.size();
@@ -211,18 +214,16 @@ public class FqnPatternImpl implements FqnPattern {
                         break;
                     }
                 }
-            } else {
-                mr.answer( true );
             }
-            if ( j >= i ) {
+            boolean result = j >= i;
+            if ( result ) {
                 Fqn.Builder part = Fqn.newBuilder();
                 for ( int x = i; x < j; x++ ) {
                     part.segment( fqn.segment( x ) );
                 }
                 mr.setPart( partIdx, part.build() );
             }
-
-            return mr.matched();
+            return mr.answer( result );
         }
 
         @Override

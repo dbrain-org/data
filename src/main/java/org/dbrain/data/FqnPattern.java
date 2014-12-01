@@ -65,7 +65,7 @@ public interface FqnPattern {
 
         Builder one();
 
-        Builder many();
+        Builder any();
 
         FqnPattern build();
 
