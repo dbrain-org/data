@@ -52,7 +52,7 @@ public class FqnBuilderImpl implements Fqn.Builder {
         if ( segments != null ) {
             return new FqnImpl( segments );
         } else {
-            return FqnUtils.NO_NAME;
+            return FqnImpl.EMPTY_NAME;
         }
     }
 

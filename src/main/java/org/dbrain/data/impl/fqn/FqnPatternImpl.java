@@ -27,8 +27,11 @@ import java.util.List;
  */
 public class FqnPatternImpl implements FqnPattern {
 
+    // Empty pattern singleton.
+    public static final FqnPattern EMPTY_PATTERN = new FqnPatternImpl( null, 0 );
+
     private Node root;
-    private int  partCount;
+    private int partCount;
 
     public FqnPatternImpl( Node root, int partCount ) {
         this.root = root;
@@ -52,7 +55,7 @@ public class FqnPatternImpl implements FqnPattern {
     @Override
     public String toString() {
         Node node = root;
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder();
         while ( node != null ) {
             sb.append( node.toString() );
             if ( node.getNext() != null ) {

@@ -17,6 +17,7 @@
 package org.dbrain.data;
 
 import org.dbrain.data.impl.fqn.FqnPatternBuilderImpl;
+import org.dbrain.data.impl.fqn.FqnUtils;
 
 /**
  * Pattern to match a Fqn.
@@ -28,6 +29,14 @@ public interface FqnPattern {
      */
     public static Builder newBuilder() {
         return new FqnPatternBuilderImpl();
+    }
+
+    /**
+     * Create a new Fully Qualified Name Pattern from a String.
+     * Expect to works with the output of toString.
+     */
+    static FqnPattern of( String fqn ) {
+        return FqnUtils.parseFqnPattern( fqn );
     }
 
     /**
@@ -59,14 +68,24 @@ public interface FqnPattern {
      */
     interface Builder {
 
-
-
+        /**
+         * Match a specific segment.
+         */
         Builder segment( String segment );
 
+        /**
+         * Match exactly one segment, capture a part.
+         */
         Builder one();
 
+        /**
+         * Match 0 to n segments, caturing a part.
+         */
         Builder any();
 
+        /**
+         * Build the pattern.
+         */
         FqnPattern build();
 
     }

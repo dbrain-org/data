@@ -61,7 +61,7 @@ public class FqnPatternBuilderImpl implements FqnPattern.Builder {
     @Override
     public FqnPattern build() {
         try {
-            return new FqnPatternImpl( root, partCount );
+            return root != null ? new FqnPatternImpl( root, partCount ) : FqnPatternImpl.EMPTY_PATTERN;
         } finally {
             root = null;
             tail = null;

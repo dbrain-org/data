@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 /**
  * Test the FqnPattern.
  */
-public class FqnPatternTest extends TestCase {
+public class FqnPattern_Test extends TestCase {
 
     public void testNewBuilder() throws Exception {
 
@@ -212,4 +212,21 @@ public class FqnPatternTest extends TestCase {
 
     }
 
+    public void testOfString() throws Exception {
+        Assert.assertEquals( "", FqnPattern.of( "" ).toString() );
+        Assert.assertEquals( "", FqnPattern.of( " " ).toString() );
+        Assert.assertEquals( "test", FqnPattern.of( "test" ).toString() );
+        Assert.assertEquals( "test", FqnPattern.of( " test " ).toString() );
+        Assert.assertEquals( "'test*'", FqnPattern.of( "'test*'" ).toString() );
+        Assert.assertEquals( "'test'''", FqnPattern.of( "'test'''" ).toString() );
+        Assert.assertEquals( "'test.'", FqnPattern.of( "'test.'" ).toString() );
+        Assert.assertEquals( "'test.'.''.'''123'.'123'''", FqnPattern.of( "'test.'.''.'''123'.'123'''" ).toString() );
+        Assert.assertEquals( "test.*", FqnPattern.of( "test.*" ).toString() );
+        Assert.assertEquals( "test.**", FqnPattern.of( "test.**" ).toString() );
+        Assert.assertEquals( "test.*", FqnPattern.of( " test.* " ).toString() );
+        Assert.assertEquals( "test.**", FqnPattern.of( " test.** " ).toString() );
+        Assert.assertEquals( "test.*.test2", FqnPattern.of( "test.*.test2" ).toString() );
+        Assert.assertEquals( "test.**.test2", FqnPattern.of( "test.**.test2" ).toString() );
+
+    }
 }

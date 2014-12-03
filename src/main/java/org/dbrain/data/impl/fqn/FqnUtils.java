@@ -17,6 +17,7 @@
 package org.dbrain.data.impl.fqn;
 
 import org.dbrain.data.Fqn;
+import org.dbrain.data.FqnPattern;
 import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 
@@ -25,13 +26,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by epoitras on 25/11/14.
+ * Implements parsing of Fully Qualified Name and Patterns.
  */
 public class FqnUtils {
 
-    // Singleton for no name value
-    static final String RESERVED_CHARS = "*\'\"?!@#%&()[]{}.,;+-/\\^ ";
-    static final Fqn    NO_NAME        = new FqnImpl( null );
+    // Fqn reserved characters
+    public static final String FQN_PATTERN_RESERVED_CHARS = "\'\"?!@#%&()[]{}.,;+-/\\^ ";
+
+    // Fqn reserved characters
+    public static final String FQN_RESERVED_CHARS = "*" + FQN_PATTERN_RESERVED_CHARS;
 
     /**
      * Create a fully qualified name from a ReaderCursor.
@@ -51,7 +54,7 @@ public class FqnUtils {
             }
             return new FqnImpl( segments );
         }
-        return NO_NAME;
+        return FqnImpl.EMPTY_NAME;
     }
 
     /**
@@ -59,12 +62,12 @@ public class FqnUtils {
      */
     public static Fqn parseFqn( String fqn ) {
         if ( fqn == null ) {
-            return NO_NAME;
+            return FqnImpl.EMPTY_NAME;
         }
         ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
 
         // Parse the name
-        Fqn result = Fqn.of( c );
+        Fqn result = parseFqn( c );
 
         // Skip trailing whitespace
         skipWhitespace( c );
@@ -77,6 +80,52 @@ public class FqnUtils {
         return result;
     }
 
+    /**
+     * Create a fully qualified name pattern from a ReaderCursor.
+     */
+    public static FqnPattern parseFqnPattern( ReaderCursor c ) {
+
+        // Skip whitespace
+        skipWhitespace( c );
+
+        // Parse the name
+        if ( isFqnPatternStart( c.get() ) ) {
+            FqnPatternBuilderImpl builder = new FqnPatternBuilderImpl();
+            readPatternSegment( c, builder );
+            while ( c.get() == '.' ) {
+                c.read();
+                readPatternSegment( c, builder );
+            }
+            return builder.build();
+        }
+        return new FqnPatternBuilderImpl().build();
+
+    }
+
+    /**
+     * Create a new Fully Qualified Name from a String. Compatible with toString.
+     */
+    public static FqnPattern parseFqnPattern( String fqn ) {
+        if ( fqn == null ) {
+            return FqnPatternImpl.EMPTY_PATTERN;
+        }
+        ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
+
+        // Parse the name
+        FqnPattern result = parseFqnPattern( c );
+
+        // Skip trailing whitespace
+        skipWhitespace( c );
+
+        // Expect EOF
+        if ( c.get() >= 0 ) {
+            throw c.error( "Expecting end of string" );
+        }
+
+        return result;
+    }
+
+
     // Skip consecutive white spaces
     private static void skipWhitespace( ReaderCursor c ) {
         while ( ParserUtils.isSpace( c.get() ) ) {
@@ -85,23 +134,39 @@ public class FqnUtils {
     }
 
     // True if the character is a reserved one and therefore cannot be in a unquoted segment.
-    private static boolean isNotReserved( int cur ) {
-        return RESERVED_CHARS.indexOf( cur ) < 0;
+    private static boolean isNotFqnReserved( int cur ) {
+        return FQN_RESERVED_CHARS.indexOf( cur ) < 0;
     }
 
-    // True if the characted is a quote.
+    // True if the character is a reserved one and therefore cannot be in a unquoted segment.
+    private static boolean isNotFqnPatternReserved( int cur ) {
+        return FQN_PATTERN_RESERVED_CHARS.indexOf( cur ) < 0;
+    }
+
+    // True if the character is a quote.
     private static boolean isQuote( int cur ) {
         return cur == '\'';
     }
 
+    // True if the current character is a wildcard
+    private static boolean isWildcard( int cur ) {
+        return cur == '*';
+    }
+
     // True if the character is a possible fully qualified name start.
     private static boolean isFqnStart( int cur ) {
-        return cur >= 0 && ( isQuote( cur ) || isNotReserved( cur ) );
+        return cur >= 0 && ( isQuote( cur ) || isNotFqnReserved( cur ) );
     }
+
+    // True if the character is a possible fully qualified name start.
+    private static boolean isFqnPatternStart( int cur ) {
+        return cur >= 0 && ( isQuote( cur ) || isNotFqnPatternReserved( cur ) );
+    }
+
 
     // True if the character is a unquoted segment character.
     private static boolean isUnquotedSegment( int cur ) {
-        return cur >= 0 && isNotReserved( cur );
+        return cur >= 0 && isNotFqnReserved( cur );
     }
 
     // Read a quoted segment.
@@ -143,6 +208,28 @@ public class FqnUtils {
         }
     }
 
+    // Read a wildcard segment
+    private static void readWildcardSegment( ReaderCursor c, FqnPattern.Builder to ) {
+        if ( isWildcard( c.getNext() ) ) {
+            to.any();
+            c.read();
+        } else {
+            to.one();
+        }
+    }
+
+    // Read a segment.
+    private static void readPatternSegment( ReaderCursor c, FqnPattern.Builder to ) {
+        int cur = c.get();
+        if ( isQuote( cur ) ) {
+            to.segment( readQuotedSegment( c ) );
+        } else if ( isWildcard( cur ) ) {
+            readWildcardSegment( c, to );
+        } else {
+            to.segment( readUnquotedSegment( c ) );
+        }
+    }
+
     /**
      * Encode a segment of a Fully Qualified Name.
      */
@@ -153,7 +240,7 @@ public class FqnUtils {
         StringBuilder sb = null;
         for ( int i = 0; i < segment.length(); i++ ) {
             Character c = segment.charAt( i );
-            if ( RESERVED_CHARS.indexOf( c ) >= 0 ) {
+            if ( FQN_RESERVED_CHARS.indexOf( c ) >= 0 ) {
                 if ( sb == null ) {
                     sb = new StringBuilder( segment.length() + 12 );
                     sb.append( "'" );

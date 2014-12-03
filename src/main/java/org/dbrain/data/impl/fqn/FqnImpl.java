@@ -26,6 +26,10 @@ import java.util.List;
  */
 public final class FqnImpl implements Fqn {
 
+    // Singleton for no name value
+    public static final Fqn EMPTY_NAME = new FqnImpl( null );
+
+
     private final List<String> segments;
 
     /**
