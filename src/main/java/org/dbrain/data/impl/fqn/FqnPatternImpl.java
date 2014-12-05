@@ -19,9 +19,6 @@ package org.dbrain.data.impl.fqn;
 import org.dbrain.data.Fqn;
 import org.dbrain.data.FqnPattern;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Implementation of the Fqn Pattern.
  */
@@ -32,6 +29,7 @@ public class FqnPatternImpl implements FqnPattern {
 
     private Node root;
     private int partCount;
+    private Specs specs;
 
     public FqnPatternImpl( Node root, int partCount ) {
         this.root = root;
@@ -50,6 +48,23 @@ public class FqnPatternImpl implements FqnPattern {
         MatchResultImpl result = new MatchResultImpl( false, partCount );
         root.match( fqn, 0, result );
         return result;
+    }
+
+    @Override
+    public Specs getSpecs() {
+        if ( specs == null ) {
+            if ( root == null ) {
+               specs = new SpecsImpl( Type.EXACT_MATCH, FqnImpl.EMPTY_NAME );
+            }
+            Fqn.Builder scope = Fqn.newBuilder();
+            Node node = root;
+            while ( node != null && node instanceof SpecificNode ) {
+                scope.segment( ( (SpecificNode) node ).getSegment() );
+                node = node.getNext();
+            }
+            specs = new SpecsImpl( node != null ? Type.PARTIAL : Type.EXACT_MATCH, scope.build() );
+        }
+        return specs;
     }
 
     @Override
@@ -117,6 +132,27 @@ public class FqnPatternImpl implements FqnPattern {
 
     }
 
+    static class SpecsImpl implements Specs {
+
+        private final Type type;
+        private final Fqn scope;
+
+        public SpecsImpl( Type type, Fqn scope ) {
+            this.type = type;
+            this.scope = scope;
+        }
+
+        @Override
+        public Type getType() {
+            return type;
+        }
+
+        @Override
+        public Fqn scope() {
+            return scope;
+        }
+    }
+
     public static abstract class Node {
 
         protected Node next;
@@ -147,6 +183,10 @@ public class FqnPatternImpl implements FqnPattern {
 
         public SpecificNode( String segment ) {
             this.segment = segment;
+        }
+
+        public String getSegment() {
+            return segment;
         }
 
         @Override

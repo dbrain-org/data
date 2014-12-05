@@ -227,6 +227,48 @@ public class FqnPattern_Test extends TestCase {
         Assert.assertEquals( "test.**", FqnPattern.of( " test.** " ).toString() );
         Assert.assertEquals( "test.*.test2", FqnPattern.of( "test.*.test2" ).toString() );
         Assert.assertEquals( "test.**.test2", FqnPattern.of( "test.**.test2" ).toString() );
+    }
+
+    public void testSpecs() throws Exception {
+        FqnPattern.Specs specs;
+
+        specs = FqnPattern.of( "" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.EXACT_MATCH );
+        Assert.assertEquals( specs.scope(), Fqn.of( "" ) );
+
+        specs = FqnPattern.of( "*" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
+        Assert.assertEquals( specs.scope(), Fqn.of( "" ) );
+
+        specs = FqnPattern.of( "**" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
+        Assert.assertEquals( specs.scope(), Fqn.of( "" ) );
+
+        specs = FqnPattern.of( "test" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.EXACT_MATCH );
+        Assert.assertEquals( specs.scope(), Fqn.of( "test" ) );
+
+        specs = FqnPattern.of( "test.*" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
+        Assert.assertEquals( specs.scope(), Fqn.of( "test" ) );
+
+        specs = FqnPattern.of( "test.**" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
+        Assert.assertEquals( specs.scope(), Fqn.of( "test" ) );
+
+        specs = FqnPattern.of( "test.test2" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.EXACT_MATCH );
+        Assert.assertEquals( specs.scope(), Fqn.of( "test.test2" ) );
+
+        specs = FqnPattern.of( "test.test2.*" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
+        Assert.assertEquals( specs.scope(), Fqn.of( "test.test2" ) );
+
+        specs = FqnPattern.of( "test.test2.**" ).getSpecs();
+        Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
+        Assert.assertEquals( specs.scope(), Fqn.of( "test.test2" ) );
+
 
     }
+
 }

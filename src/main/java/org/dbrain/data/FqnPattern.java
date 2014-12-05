@@ -47,6 +47,11 @@ public interface FqnPattern {
     MatchResult match( Fqn fqn );
 
     /**
+     * @return The specifications of this pattern.
+     */
+    Specs getSpecs();
+
+    /**
      * Match result of a pattern matching.
      */
     interface MatchResult {
@@ -62,6 +67,42 @@ public interface FqnPattern {
 
     }
 
+    /**
+     * Define the type of pattern.
+     */
+    public enum Type {
+
+        /**
+         * The pattern define an exact match.
+         */
+        EXACT_MATCH,
+
+        /**
+         *
+         */
+        PARTIAL
+
+    }
+
+    /**
+     * Specifications of this pattern.
+     **/
+    interface Specs {
+
+        /**
+         * @return The type of pattern.
+         */
+        Type getType();
+
+        /**
+         * Return the contextual name of this pattern. This value is the leading static nodes
+         * of this pattern, if any.
+         * @return
+         */
+        Fqn scope();
+
+
+    }
 
     /**
      * Allows to build Fqn Patterns.
