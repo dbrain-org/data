@@ -17,29 +17,12 @@
 package org.dbrain.data;
 
 /**
- * Created by epoitras on 30/10/14.
+ * Occurs when a value cannot be coersed to another value.
  */
 public class DataCoercionException extends RuntimeException {
-
-    public DataCoercionException() {
-    }
 
     public DataCoercionException( String message ) {
         super( message );
     }
 
-    public DataCoercionException( String message, Throwable cause ) {
-        super( message, cause );
-    }
-
-    public DataCoercionException( Throwable cause ) {
-        super( cause );
-    }
-
-    public DataCoercionException( String message,
-                                  Throwable cause,
-                                  boolean enableSuppression,
-                                  boolean writableStackTrace ) {
-        super( message, cause, enableSuppression, writableStackTrace );
-    }
 }

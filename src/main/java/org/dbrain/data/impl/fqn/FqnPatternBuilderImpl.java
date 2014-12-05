@@ -19,7 +19,7 @@ package org.dbrain.data.impl.fqn;
 import org.dbrain.data.FqnPattern;
 
 /**
- * Created by epoitras on 28/11/14.
+ * Implementation of the Pattern Builder.
  */
 public class FqnPatternBuilderImpl implements FqnPattern.Builder {
 

@@ -17,13 +17,15 @@
 package org.dbrain.data;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.dbrain.data.text.ParseException;
+import org.junit.Test;
 
 /**
  * Test the FqnPattern.
  */
-public class FqnPattern_Test extends TestCase {
+public class FqnPattern_Test {
 
+    @Test
     public void testNewBuilder() throws Exception {
 
         Assert.assertEquals( "test.*.**", FqnPattern.newBuilder().segment( "test" ).one().any().build().toString() );
@@ -32,6 +34,24 @@ public class FqnPattern_Test extends TestCase {
 
     }
 
+    @Test
+    public void testEmptyMatch() throws Exception {
+        FqnPattern pattern;
+        FqnPattern.MatchResult matchResult;
+
+        // Test simple pattern
+        pattern = FqnPattern.newBuilder().build();
+
+        matchResult = pattern.match( Fqn.of( "" ) );
+        Assert.assertTrue( matchResult.matched() );
+        Assert.assertEquals( 0, matchResult.partCount() );
+
+        matchResult = pattern.match( Fqn.of( "test" ) );
+        Assert.assertFalse( matchResult.matched() );
+        Assert.assertEquals( 0, matchResult.partCount() );
+    }
+
+    @Test
     public void testSimpleMatch() throws Exception {
         FqnPattern pattern;
         FqnPattern.MatchResult matchResult;
@@ -57,6 +77,7 @@ public class FqnPattern_Test extends TestCase {
 
     }
 
+    @Test
     public void testOneMatch() throws Exception {
         FqnPattern pattern;
         FqnPattern.MatchResult matchResult;
@@ -149,6 +170,7 @@ public class FqnPattern_Test extends TestCase {
         Assert.assertNull( matchResult.getPart( 1 ) );
     }
 
+    @Test
     public void testAnyMatch() throws Exception {
         FqnPattern pattern;
         FqnPattern.MatchResult matchResult;
@@ -212,7 +234,9 @@ public class FqnPattern_Test extends TestCase {
 
     }
 
+    @Test
     public void testOfString() throws Exception {
+        Assert.assertEquals( "", FqnPattern.of( null ).toString() );
         Assert.assertEquals( "", FqnPattern.of( "" ).toString() );
         Assert.assertEquals( "", FqnPattern.of( " " ).toString() );
         Assert.assertEquals( "test", FqnPattern.of( "test" ).toString() );
@@ -229,6 +253,23 @@ public class FqnPattern_Test extends TestCase {
         Assert.assertEquals( "test.**.test2", FqnPattern.of( "test.**.test2" ).toString() );
     }
 
+    @Test( expected = ParseException.class )
+    public void testOfStringFail1() throws Exception {
+        FqnPattern.of( "test.* t" );
+    }
+
+    @Test( expected = ParseException.class )
+    public void testOfStringFail2() throws Exception {
+        FqnPattern.of( "test.*t" );
+    }
+
+    @Test( expected = ParseException.class )
+    public void testOfStringFail3() throws Exception {
+        FqnPattern.of( "test.'test" );
+    }
+
+
+    @Test
     public void testSpecs() throws Exception {
         FqnPattern.Specs specs;
 
@@ -267,7 +308,6 @@ public class FqnPattern_Test extends TestCase {
         specs = FqnPattern.of( "test.test2.**" ).getSpecs();
         Assert.assertEquals( specs.getType(), FqnPattern.Type.PARTIAL );
         Assert.assertEquals( specs.scope(), Fqn.of( "test.test2" ) );
-
 
     }
 

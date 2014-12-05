@@ -21,9 +21,25 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by epoitras on 03/10/14.
+ * Test Fully Qualified Names.
  */
 public class Fqn_Test {
+
+    @Test
+    public void testEquals() throws Exception {
+        Assert.assertTrue( Fqn.of( "" ).equals( Fqn.of( "" ) ) );
+        Assert.assertTrue( Fqn.of( "test" ).equals( Fqn.of( "test" ) ) );
+        Assert.assertTrue( Fqn.of( "test.test2" ).equals( Fqn.of( "test.test2" ) ) );
+        Assert.assertFalse( Fqn.of( "" ).equals( Fqn.of( "test" ) ) );
+        Assert.assertFalse( Fqn.of( "test2" ).equals( Fqn.of( "test" ) ) );
+        Assert.assertFalse( Fqn.of( "test" ).equals( Fqn.of( "" ) ) );
+        Assert.assertFalse( Fqn.of( "test" ).equals( Fqn.of( "test.test2" ) ) );
+        Assert.assertFalse( Fqn.of( "test.test2" ).equals( Fqn.of( "test" ) ) );
+
+        Assert.assertEquals( Fqn.of( "" ).hashCode(), Fqn.of( "" ).hashCode() );
+        Assert.assertEquals( Fqn.of( "test" ).hashCode(), Fqn.of( "test" ).hashCode() );
+        Assert.assertEquals( Fqn.of( "test.test2" ).hashCode(), Fqn.of( "test.test2" ).hashCode() );
+    }
 
     /**
      * Test the parsing method of and toString at the same time.
@@ -41,7 +57,7 @@ public class Fqn_Test {
     }
 
     /**
-     * Test the ofSegment factory method.
+     * Test the ofSegment factory method
      */
     @Test
     public void testOfSegment() throws Exception {
@@ -110,6 +126,17 @@ public class Fqn_Test {
         Assert.assertEquals( "*", Fqn.of( "test.'*'" ).segment( 1 ) );
         Assert.assertEquals( "", Fqn.of( "test.''" ).segment( 1 ) );
     }
+
+    @Test(expected = IndexOutOfBoundsException.class )
+    public void testOutOfBoundSegment1() throws Exception {
+        Fqn.of( "test").segment( 1 );
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class )
+    public void testOutOfBoundSegment2() throws Exception {
+        Fqn.of( "" ).segment( 0 );
+    }
+
 
     @Test
     public void testStartsWith() throws Exception {

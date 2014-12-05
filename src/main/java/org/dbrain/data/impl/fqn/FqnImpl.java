@@ -101,7 +101,7 @@ public final class FqnImpl implements Fqn {
 
     @Override
     public int hashCode() {
-        return segments.hashCode();
+        return segments != null ? segments.hashCode() : 0;
     }
 
     /**

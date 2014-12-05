@@ -166,12 +166,7 @@ public class TokenParser implements AutoCloseable {
     private static boolean isUnquotedStringStart( char c ) {
 
         // Fast lane for latin standard
-        if ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c == '_' ) ) {
-            return true;
-        } else {
-            // Slow lane
-            return Character.isLetter( c );
-        }
+        return ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c == '_' ) || Character.isLetter( c );
 
     }
 
@@ -355,9 +350,9 @@ public class TokenParser implements AutoCloseable {
         }
 
         if ( isDouble ) {
-            return new Double( scale * ( integralPart + doublePart ) * java.lang.Math.pow( 10, exponent ) );
+            return scale * ( integralPart + doublePart ) * Math.pow( 10, exponent );
         } else {
-            return new Long( scale * integralPart );
+            return scale * integralPart;
         }
     }
 

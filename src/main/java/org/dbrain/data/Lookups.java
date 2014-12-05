@@ -26,6 +26,7 @@ import java.util.Set;
  * Created by epoitras on 03/06/14.
  */
 public class Lookups {
+
     /**
      * Build a lookup table, providing initial values.
      *
