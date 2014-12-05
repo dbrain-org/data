@@ -18,7 +18,7 @@
 	<groupId>org.dbrain</groupId>
 	<artifactId>data</artifactId>
 	<packaging>jar</packaging>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.4</version>
 	<name>dbrain-data</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
