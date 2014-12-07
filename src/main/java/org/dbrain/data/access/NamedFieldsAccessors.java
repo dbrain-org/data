@@ -23,7 +23,7 @@ import java.util.function.Function;
 /**
  * Denote a container of fields accessible by names.
  */
-public interface NamedFields {
+public interface NamedFieldsAccessors {
 
     /**
      * Read the field having the specified name.
@@ -32,10 +32,10 @@ public interface NamedFields {
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
-    Object get( String fieldName );
+    Object getObject( String fieldName );
 
     default <T> T getAs( String fieldName, Function<Object, T> function ) {
-        return function.apply( get( fieldName ) );
+        return function.apply( getObject( fieldName ) );
     }
 
     /**
@@ -46,7 +46,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Byte getByte( String fieldName ) {
-        return Casts.toByte( get( fieldName ) );
+        return Casts.toByte( getObject( fieldName ) );
     }
 
     default <T> T getByteAs( String fieldName, Function<? super Byte, T> function ) {
@@ -61,7 +61,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Short getShort( String fieldName ) {
-        return Casts.toShort( get( fieldName ) );
+        return Casts.toShort( getObject( fieldName ) );
     }
 
     default <T> T getShortAs( String fieldName, Function<? super Short, T> function ) {
@@ -76,7 +76,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Integer getInt( String fieldName ) {
-        return Casts.toInteger( get( fieldName ) );
+        return Casts.toInteger( getObject( fieldName ) );
     }
 
     default <T> T getIntAs( String fieldName, Function<? super Integer, T> function ) {
@@ -91,7 +91,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Long getLong( String fieldName ) {
-        return Casts.toLong( get( fieldName ) );
+        return Casts.toLong( getObject( fieldName ) );
     }
 
     /**
@@ -113,7 +113,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Float getFloat( String fieldName ) {
-        return Casts.toFloat( get( fieldName ) );
+        return Casts.toFloat( getObject( fieldName ) );
     }
 
     /**
@@ -135,7 +135,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Double getDouble( String fieldName ) {
-        return Casts.toDouble( get( fieldName ) );
+        return Casts.toDouble( getObject( fieldName ) );
     }
 
     /**
@@ -157,7 +157,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Boolean getBoolean( String fieldName ) {
-        return Casts.toBoolean( get( fieldName ) );
+        return Casts.toBoolean( getObject( fieldName ) );
     }
 
     /**
@@ -179,7 +179,7 @@ public interface NamedFields {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default String getString( String fieldName ) {
-        return Casts.toString( get( fieldName ) );
+        return Casts.toString( getObject( fieldName ) );
     }
 
     /**

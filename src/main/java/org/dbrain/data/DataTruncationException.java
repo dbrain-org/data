@@ -23,7 +23,6 @@ package org.dbrain.data;
  * Time: 11:47 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DataTruncationException extends IllegalArgumentException {
-
+public class DataTruncationException extends ArithmeticException {
 
 }

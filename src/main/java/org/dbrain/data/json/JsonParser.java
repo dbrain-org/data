@@ -23,7 +23,7 @@ import org.dbrain.data.text.ReaderCursor;
 import java.io.Reader;
 
 /**
- * Created by epoitras on 27/06/14.
+ * Allows reading and writing of values in json.
  */
 public class JsonParser {
 

@@ -23,16 +23,16 @@ import java.util.function.Function;
 /**
  * Denote a container of fields accessible by indexes.
  */
-public interface IndexedFields {
+public interface IndexedFieldsAccessors {
 
     /**
-     * Read the field at the specified index.
+     * Read the raw field value at the specified index.
      *
      * @param fieldIndex 0-based field index.
      * @return The field value.
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
-    Object get( int fieldIndex );
+    Object getObject( int fieldIndex );
 
     /**
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
@@ -42,7 +42,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getAs( int fieldIndex, Function<Object, T> function ) {
-        return function.apply( get( fieldIndex ) );
+        return function.apply( getObject( fieldIndex ) );
     }
 
     /**
@@ -53,7 +53,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Byte getByte( int fieldIndex ) {
-        return Casts.toByte( get( fieldIndex ) );
+        return Casts.toByte( getObject( fieldIndex ) );
     }
 
     /**
@@ -75,7 +75,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Short getShort( int fieldIndex ) {
-        return Casts.toShort( get( fieldIndex ) );
+        return Casts.toShort( getObject( fieldIndex ) );
     }
 
     /**
@@ -97,7 +97,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Integer getInt( int fieldIndex ) {
-        return Casts.toInteger( get( fieldIndex ) );
+        return Casts.toInteger( getObject( fieldIndex ) );
     }
 
     /**
@@ -119,7 +119,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Long getLong( int fieldIndex ) {
-        return Casts.toLong( get( fieldIndex ) );
+        return Casts.toLong( getObject( fieldIndex ) );
     }
 
     /**
@@ -141,7 +141,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Float getFloat( int fieldIndex ) {
-        return Casts.toFloat( get( fieldIndex ) );
+        return Casts.toFloat( getObject( fieldIndex ) );
     }
 
     /**
@@ -163,7 +163,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Double getDouble( int fieldIndex ) {
-        return Casts.toDouble( get( fieldIndex ) );
+        return Casts.toDouble( getObject( fieldIndex ) );
     }
 
     /**
@@ -185,7 +185,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Boolean getBoolean( int fieldIndex ) {
-        return Casts.toBoolean( get( fieldIndex ) );
+        return Casts.toBoolean( getObject( fieldIndex ) );
     }
 
     /**
@@ -207,7 +207,7 @@ public interface IndexedFields {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default String getString( int fieldIndex ) {
-        return Casts.toString( get( fieldIndex ) );
+        return Casts.toString( getObject( fieldIndex ) );
     }
 
     /**

@@ -218,7 +218,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * @param index Index of the field to read.
      * @return The field value, as string.
      */
-    public Object get( int index ) {
+    public Object getObject( int index ) {
         if ( fieldValues == null ) {
             throw new IllegalStateException();
         }
@@ -235,7 +235,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * @param name Field name
      * @return The getValue or null if getValue out of bound for this row.
      */
-    public Object get( String name ) {
+    public Object getObject( String name ) {
         if ( fieldValues == null ) {
             throw new IllegalStateException();
         }

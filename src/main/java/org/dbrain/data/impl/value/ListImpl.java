@@ -14,83 +14,54 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.json;
+package org.dbrain.data.impl.value;
+
+import org.dbrain.data.Value;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
- * Created by epoitras on 26/06/14.
+ * A list of simple values.
  */
-public class JsonList extends JsonValue implements List<JsonValue> {
+public class ListImpl implements Value.List {
 
-    private final List<JsonValue> delegate;
+    private final java.util.List<Value> delegate;
 
-    JsonList( List<JsonValue> delegate ) {
+    private ListImpl( java.util.List<Value> delegate ) {
         this.delegate = delegate;
     }
 
-    JsonList() {
+    public ListImpl() {
         this( new ArrayList<>() );
     }
 
     @Override
-    public String asString() {
+    public Object getObject() {
+        return stream().map( a -> a.getObject() ).collect( Collectors.toList() );
+    }
+
+    @Override
+    public Object getObject( int fieldIndex ) {
+        return get( fieldIndex ).getObject();
+    }
+
+    @Override
+    public String getString() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Double asDouble() {
+    public MapImpl asMap() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Boolean asBoolean() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public JsonMap asMap() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public org.dbrain.data.json.JsonList asList() {
+    public ListImpl asList() {
         return this;
-    }
-
-    public String getString( int index ) {
-        return get( index ).asString();
-    }
-
-    public <T> T getStringAs( int index, Function<String, T> f ) {
-        return f.apply( getString( index ) );
-    }
-
-    public Double getDouble( int index ) {
-        return get( index ).asDouble();
-    }
-
-    public <T> T getDoubleAs( int index, Function<Double, T> f ) {
-        return f.apply( getDouble( index ) );
-    }
-
-    public Boolean getBoolean( int index ) {
-        return get( index ).asBoolean();
-    }
-
-    public <T> T getBooleanAs( int index, Function<Boolean, T> f ) {
-        return f.apply( getBoolean( index ) );
     }
 
     @Override
@@ -109,7 +80,7 @@ public class JsonList extends JsonValue implements List<JsonValue> {
     }
 
     @Override
-    public Iterator<JsonValue> iterator() {
+    public Iterator<Value> iterator() {
         return delegate.iterator();
     }
 
@@ -124,7 +95,7 @@ public class JsonList extends JsonValue implements List<JsonValue> {
     }
 
     @Override
-    public boolean add( JsonValue jsonValue ) {
+    public boolean add( Value jsonValue ) {
         return delegate.add( jsonValue );
     }
 
@@ -139,12 +110,12 @@ public class JsonList extends JsonValue implements List<JsonValue> {
     }
 
     @Override
-    public boolean addAll( Collection<? extends JsonValue> c ) {
+    public boolean addAll( Collection<? extends Value> c ) {
         return delegate.addAll( c );
     }
 
     @Override
-    public boolean addAll( int index, Collection<? extends JsonValue> c ) {
+    public boolean addAll( int index, Collection<? extends Value> c ) {
         return delegate.addAll( index, c );
     }
 
@@ -156,16 +127,6 @@ public class JsonList extends JsonValue implements List<JsonValue> {
     @Override
     public boolean retainAll( Collection<?> c ) {
         return delegate.retainAll( c );
-    }
-
-    @Override
-    public void replaceAll( UnaryOperator<JsonValue> operator ) {
-        delegate.replaceAll( operator );
-    }
-
-    @Override
-    public void sort( Comparator<? super JsonValue> c ) {
-        delegate.sort( c );
     }
 
     @Override
@@ -184,22 +145,22 @@ public class JsonList extends JsonValue implements List<JsonValue> {
     }
 
     @Override
-    public JsonValue get( int index ) {
+    public Value get( int index ) {
         return delegate.get( index );
     }
 
     @Override
-    public JsonValue set( int index, JsonValue element ) {
+    public Value set( int index, Value element ) {
         return delegate.set( index, element );
     }
 
     @Override
-    public void add( int index, JsonValue element ) {
+    public void add( int index, Value element ) {
         delegate.add( index, element );
     }
 
     @Override
-    public JsonValue remove( int index ) {
+    public Value remove( int index ) {
         return delegate.remove( index );
     }
 
@@ -214,42 +175,18 @@ public class JsonList extends JsonValue implements List<JsonValue> {
     }
 
     @Override
-    public ListIterator<JsonValue> listIterator() {
+    public ListIterator<Value> listIterator() {
         return delegate.listIterator();
     }
 
     @Override
-    public ListIterator<JsonValue> listIterator( int index ) {
+    public ListIterator<Value> listIterator( int index ) {
         return delegate.listIterator( index );
     }
 
     @Override
-    public List<JsonValue> subList( int fromIndex, int toIndex ) {
+    public java.util.List<Value> subList( int fromIndex, int toIndex ) {
         return delegate.subList( fromIndex, toIndex );
     }
 
-    @Override
-    public Spliterator<JsonValue> spliterator() {
-        return delegate.spliterator();
-    }
-
-    @Override
-    public boolean removeIf( Predicate<? super JsonValue> filter ) {
-        return delegate.removeIf( filter );
-    }
-
-    @Override
-    public Stream<JsonValue> stream() {
-        return delegate.stream();
-    }
-
-    @Override
-    public Stream<JsonValue> parallelStream() {
-        return delegate.parallelStream();
-    }
-
-    @Override
-    public void forEach( Consumer<? super JsonValue> action ) {
-        delegate.forEach( action );
-    }
 }

@@ -36,10 +36,10 @@ public class CsvCursorTest {
 
         Assert.assertTrue( csvCursor.next() );
 
-        Assert.assertEquals( "Eric1", csvCursor.get( 0 ) );
-        Assert.assertEquals( "Eric1", csvCursor.get( "Col1" ) );
+        Assert.assertEquals( "Eric1", csvCursor.getObject( 0 ) );
+        Assert.assertEquals( "Eric1", csvCursor.getObject( "Col1" ) );
 
-        Assert.assertEquals( "1", csvCursor.get( 1 ) );
+        Assert.assertEquals( "1", csvCursor.getObject( 1 ) );
         Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByte( 1 ) );
         Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShort( 1 ) );
         Assert.assertEquals( (Integer) ( (int) 1 ), csvCursor.getInt( 1 ) );
@@ -57,7 +57,7 @@ public class CsvCursorTest {
         Assert.assertEquals( 1d, csvCursor.getDoubleAs( 1, Casts::identity ) );
         Assert.assertEquals( "1", csvCursor.getStringAs( 1 , Casts::identity ) );
 
-        Assert.assertEquals( "1", csvCursor.get( "Col2" ) );
+        Assert.assertEquals( "1", csvCursor.getObject( "Col2" ) );
         Assert.assertEquals( (Byte) ( (byte) 1 ), csvCursor.getByte( "Col2" ) );
         Assert.assertEquals( (Short) ( (short) 1 ), csvCursor.getShort( "Col2" ) );
         Assert.assertEquals( (Integer) ( (int) 1 ), csvCursor.getInt( "Col2" ) );
@@ -75,13 +75,13 @@ public class CsvCursorTest {
         Assert.assertEquals( 1d, csvCursor.getDoubleAs( "Col2", Casts::identity ) );
         Assert.assertEquals( "1", csvCursor.getStringAs( "Col2", Casts::identity ) );
 
-        Assert.assertEquals( "2012-01-01", csvCursor.get( 2 ) );
-        Assert.assertEquals( "2012-01-01", csvCursor.get( "Col3" ) );
+        Assert.assertEquals( "2012-01-01", csvCursor.getObject( 2 ) );
+        Assert.assertEquals( "2012-01-01", csvCursor.getObject( "Col3" ) );
 
         Assert.assertTrue( csvCursor.next() );
-        Assert.assertEquals( "Eric2", csvCursor.get( 0 ) );
-        Assert.assertEquals( "2", csvCursor.get( 1 ) );
-        Assert.assertEquals( "2012-01-02", csvCursor.get( 2 ) );
+        Assert.assertEquals( "Eric2", csvCursor.getObject( 0 ) );
+        Assert.assertEquals( "2", csvCursor.getObject( 1 ) );
+        Assert.assertEquals( "2012-01-02", csvCursor.getObject( 2 ) );
 
         Assert.assertFalse( csvCursor.next() );
 

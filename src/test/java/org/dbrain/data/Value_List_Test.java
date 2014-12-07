@@ -14,24 +14,24 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.access;
+package org.dbrain.data;
 
-/**
- * Allows to read tabular data in a Forward-only manner.
- */
-public interface ForwardCursor extends IndexedFieldsAccessors, NamedFieldsAccessors {
+import junit.framework.Assert;
+import org.junit.Test;
 
-    /**
-     * @return true if the cursor is at end-of-file.
-     */
-    boolean eof();
+public class Value_List_Test {
 
-    /**
-     * Move the cursor to the next row in the resultset.
-     *
-     * @return true if the cursor is not at end of file.
-     */
-    boolean next();
+    @Test
+    public void testConstruction() throws Exception {
+        Value.List list;
 
+        // Simple constructor
+        list = Value.newList();
+        Assert.assertEquals( list.size(), 0 );
+    }
 
+    @Test( expected = UnsupportedOperationException.class )
+    public void testAsString() throws Exception {
+        Value.newList().getString();
+    }
 }
