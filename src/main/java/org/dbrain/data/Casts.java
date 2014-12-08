@@ -34,23 +34,6 @@ import java.util.regex.Pattern;
  */
 public class Casts {
 
-    private static final BigDecimal BD_LONG_MIN  = new BigDecimal( Long.MIN_VALUE );
-    private static final BigDecimal BD_LONG_MAX  = new BigDecimal( Long.MAX_VALUE );
-    private static final BigInteger BI_LONG_MIN  = new BigInteger( Long.toString( Long.MIN_VALUE ) );
-    private static final BigInteger BI_LONG_MAX  = new BigInteger( Long.toString( Long.MAX_VALUE ) );
-    private static final BigDecimal BD_INT_MIN   = new BigDecimal( Integer.MIN_VALUE );
-    private static final BigDecimal BD_INT_MAX   = new BigDecimal( Integer.MAX_VALUE );
-    private static final BigInteger BI_INT_MIN   = new BigInteger( Integer.toString( Integer.MIN_VALUE ) );
-    private static final BigInteger BI_INT_MAX   = new BigInteger( Integer.toString( Integer.MAX_VALUE ) );
-    private static final BigDecimal BD_SHORT_MIN = new BigDecimal( Short.MIN_VALUE );
-    private static final BigDecimal BD_SHORT_MAX = new BigDecimal( Short.MAX_VALUE );
-    private static final BigInteger BI_SHORT_MIN = new BigInteger( Short.toString( Short.MIN_VALUE ) );
-    private static final BigInteger BI_SHORT_MAX = new BigInteger( Short.toString( Short.MAX_VALUE ) );
-    private static final BigDecimal BD_BYTE_MIN  = new BigDecimal( Byte.MIN_VALUE );
-    private static final BigDecimal BD_BYTE_MAX  = new BigDecimal( Byte.MAX_VALUE );
-    private static final BigInteger BI_BYTE_MIN  = new BigInteger( Byte.toString( Byte.MIN_VALUE ) );
-    private static final BigInteger BI_BYTE_MAX  = new BigInteger( Byte.toString( Byte.MAX_VALUE ) );
-
     private static Pattern NUMBER_PATTERN = Pattern.compile( "\\d+\\.?\\d+" );
 
     /**
@@ -107,10 +90,10 @@ public class Casts {
             return new BigInteger( o.toString() );
         }
         if ( o instanceof Float || o instanceof Double ) {
-            return new BigDecimal( ( (Number) o ).doubleValue() ).toBigInteger();
+            return new BigDecimal( ( (Number) o ).doubleValue() ).toBigIntegerExact();
         }
         if ( o instanceof BigDecimal ) {
-            return ( (BigDecimal) o ).toBigInteger();
+            return ( (BigDecimal) o ).toBigIntegerExact();
         }
         if ( o instanceof CharSequence ) {
             return toBigInteger( o.toString() );
@@ -174,11 +157,7 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        if ( bigDecimal.compareTo( BD_LONG_MIN ) >= 0 && bigDecimal.compareTo( BD_LONG_MAX ) <= 0 ) {
-            return bigDecimal.longValueExact();
-        } else {
-            throw new DataTruncationException();
-        }
+        return bigDecimal.longValueExact();
     }
 
 
@@ -199,21 +178,12 @@ public class Casts {
         if ( o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof AtomicInteger || o instanceof AtomicLong ) {
             return ( (Number) o ).longValue();
         } else if ( o instanceof Float || o instanceof Double ) {
-            double doubleValue = ( (Number) o ).doubleValue();
-            if ( doubleValue >= Long.MIN_VALUE && doubleValue <= Long.MAX_VALUE ) {
-                return (long) doubleValue;
-            } else {
-                throw new DataTruncationException();
-            }
+            return new BigDecimal( ( (Number) o ).doubleValue() ).longValueExact();
         } else if ( o instanceof BigDecimal ) {
             return toLong( (BigDecimal) o );
         } else if ( o instanceof BigInteger ) {
             BigInteger bigInteger = (BigInteger) o;
-            if ( bigInteger.compareTo( BI_LONG_MIN ) >= 0 && bigInteger.compareTo( BI_LONG_MAX ) <= 0 ) {
-                return bigInteger.longValue();
-            } else {
-                throw new DataTruncationException();
-            }
+            return bigInteger.longValueExact();
         } else if ( o instanceof CharSequence ) {
             return toLong( o.toString() );
         }
@@ -227,11 +197,7 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        if ( bigDecimal.compareTo( BD_INT_MIN ) >= 0 && bigDecimal.compareTo( BD_INT_MAX ) <= 0 ) {
-            return bigDecimal.intValueExact();
-        } else {
-            throw new DataTruncationException();
-        }
+        return bigDecimal.intValueExact();
     }
 
     /**
@@ -260,21 +226,12 @@ public class Casts {
                 throw new DataTruncationException();
             }
         } else if ( o instanceof Float || o instanceof Double ) {
-            double doubleValue = ( (Number) o ).doubleValue();
-            if ( doubleValue >= Integer.MIN_VALUE && doubleValue <= Integer.MAX_VALUE ) {
-                return (int) doubleValue;
-            } else {
-                throw new DataTruncationException();
-            }
+            return new BigDecimal( ( (Number) o ).doubleValue() ).intValueExact();
         } else if ( o instanceof BigDecimal ) {
             return toInteger( (BigDecimal) o );
         } else if ( o instanceof BigInteger ) {
             BigInteger bigInteger = (BigInteger) o;
-            if ( bigInteger.compareTo( BI_INT_MIN ) >= 0 && bigInteger.compareTo( BI_INT_MAX ) <= 0 ) {
-                return bigInteger.intValue();
-            } else {
-                throw new DataTruncationException();
-            }
+            return bigInteger.intValueExact();
         } else if ( o instanceof CharSequence ) {
             return toInteger( o.toString() );
         }
@@ -288,11 +245,7 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        if ( bigDecimal.compareTo( BD_SHORT_MIN ) >= 0 && bigDecimal.compareTo( BD_SHORT_MAX ) <= 0 ) {
-            return bigDecimal.shortValueExact();
-        } else {
-            throw new DataTruncationException();
-        }
+        return bigDecimal.shortValueExact();
     }
 
     /**
@@ -321,21 +274,12 @@ public class Casts {
                 throw new DataTruncationException();
             }
         } else if ( o instanceof Float || o instanceof Double ) {
-            double doubleValue = ( (Number) o ).doubleValue();
-            if ( doubleValue >= Short.MIN_VALUE && doubleValue <= Short.MAX_VALUE ) {
-                return (short) doubleValue;
-            } else {
-                throw new DataTruncationException();
-            }
+            return new BigDecimal( ( (Number) o ).doubleValue() ).shortValueExact();
         } else if ( o instanceof BigDecimal ) {
             return toShort( (BigDecimal) o );
         } else if ( o instanceof BigInteger ) {
             BigInteger bigInteger = (BigInteger) o;
-            if ( bigInteger.compareTo( BI_SHORT_MIN ) >= 0 && bigInteger.compareTo( BI_SHORT_MAX ) <= 0 ) {
-                return bigInteger.shortValue();
-            } else {
-                throw new DataTruncationException();
-            }
+            return bigInteger.shortValueExact();
         } else if ( o instanceof CharSequence ) {
             return toShort( o.toString() );
         }
@@ -349,11 +293,7 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        if ( bigDecimal.compareTo( BD_BYTE_MIN ) >= 0 && bigDecimal.compareTo( BD_BYTE_MAX ) <= 0 ) {
-            return bigDecimal.byteValueExact();
-        } else {
-            throw new DataTruncationException();
-        }
+        return bigDecimal.byteValueExact();
     }
 
     /**
@@ -380,21 +320,12 @@ public class Casts {
                 throw new DataTruncationException();
             }
         } else if ( o instanceof Float || o instanceof Double ) {
-            double doubleValue = ( (Number) o ).doubleValue();
-            if ( doubleValue >= Byte.MIN_VALUE && doubleValue <= Byte.MAX_VALUE ) {
-                return (byte) doubleValue;
-            } else {
-                throw new DataTruncationException();
-            }
+            return new BigDecimal( ( (Number) o ).doubleValue() ).byteValueExact();
         } else if ( o instanceof BigDecimal ) {
             return toByte( (BigDecimal) o );
         } else if ( o instanceof BigInteger ) {
             BigInteger bigInteger = (BigInteger) o;
-            if ( bigInteger.compareTo( BI_BYTE_MIN ) >= 0 && bigInteger.compareTo( BI_BYTE_MAX ) <= 0 ) {
-                return bigInteger.byteValue();
-            } else {
-                throw new DataTruncationException();
-            }
+            return bigInteger.byteValueExact();
         } else if ( o instanceof CharSequence ) {
             return toByte( o.toString() );
         }
