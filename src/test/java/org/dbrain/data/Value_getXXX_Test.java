@@ -17,10 +17,11 @@
 package org.dbrain.data;
 
 import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 import org.junit.Test;
 
 /**
- * Created by epoitras on 30/06/14.
+ * Fun with getXXX methods.
  */
 public class Value_getXXX_Test {
 
@@ -29,25 +30,60 @@ public class Value_getXXX_Test {
 
         Value v = Value.of( true );
         Assert.assertEquals( Boolean.TRUE, v.getBoolean() );
-//        Assert.assertEquals( new Byte( (byte)123 ), v.getByte() );
-//        Assert.assertEquals( new Short( (short)123 ), v.getShort() );
-//        Assert.assertEquals( new Integer( 123 ), v.getInt() );
-//        Assert.assertEquals( new Long( 123 ), v.getLong() );
         Assert.assertEquals( Boolean.TRUE.toString(), v.getString() );
-//        Assert.assertEquals( 123.0f, v.getFloat() );
-//        Assert.assertEquals( 123.0, v.getDouble() );
 
         v = Value.of( false );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
-//        Assert.assertEquals( new Byte( (byte)0 ), v.getByte() );
-//        Assert.assertEquals( new Short( (short)0 ), v.getShort() );
-//        Assert.assertEquals( new Integer( 0 ), v.getInt() );
-//        Assert.assertEquals( new Long( 0 ), v.getLong() );
         Assert.assertEquals( Boolean.FALSE.toString(), v.getString() );
-//        Assert.assertEquals( 0.0f, v.getFloat() );
-//        Assert.assertEquals( 0.0, v.getDouble() );
+
     }
 
+    @Test
+    public void test_getFromBoolean_fail() throws Exception {
+
+        Value v = Value.of( true );
+        try {
+            v.getByte();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( DataCoercionException e ) {
+            // Expected
+        }
+
+        try {
+            v.getShort();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( DataCoercionException e ) {
+            // Expected
+        }
+
+        try {
+            v.getInt();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( DataCoercionException e ) {
+            // Expected
+        }
+
+        try {
+            v.getLong();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( DataCoercionException e ) {
+            // Expected
+        }
+
+        try {
+            v.getFloat();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( DataCoercionException e ) {
+            // Expected
+        }
+
+        try {
+            v.getDouble();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( DataCoercionException e ) {
+            // Expected
+        }
+    }
 
     @Test
     public void test_getFromDouble() throws Exception {
@@ -73,6 +109,38 @@ public class Value_getXXX_Test {
         Assert.assertEquals( 0.0, v.getDouble() );
     }
 
+    @Test
+    public void test_getFromDouble_fail() throws Exception {
+
+        Value v = Value.of( 123.1D );
+        try {
+             v.getByte();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( ArithmeticException e ) {
+            // Expected
+        }
+
+        try {
+            v.getShort();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( ArithmeticException e ) {
+            // Expected
+        }
+
+        try {
+            v.getInt();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( ArithmeticException e ) {
+            // Expected
+        }
+
+        try {
+            v.getLong();
+            throw new AssertionFailedError( "Should not happend." );
+        } catch ( ArithmeticException e ) {
+            // Expected
+        }
+    }
 
 
     @Test
