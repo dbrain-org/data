@@ -30,12 +30,12 @@ public class Strings {
      * Natural order for strings.
      */
     public static final Comparator<String> NATURAL_ORDER = ( o1, o2 ) -> {
-    if ( o1 == null ) {
-        return o2 == null ? 0 : -1;
-    } else {
-        return o2 == null ? 1 : o1.compareTo( o2 );
-    }
-};
+        if ( o1 == null ) {
+            return o2 == null ? 0 : -1;
+        } else {
+            return o2 == null ? 1 : o1.compareTo( o2 );
+        }
+    };
 
     /**
      * Null-safe trim.
@@ -93,7 +93,7 @@ public class Strings {
 
     /**
      * Verify that the string contains all blank characters or is null.
-     *
+     * <p/>
      * <code>
      * Examples of blank strings :
      * "", "     ", null

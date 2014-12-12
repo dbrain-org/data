@@ -33,25 +33,60 @@ import java.util.HashMap;
  */
 public interface Value extends FieldAccessors {
 
+    /**
+     * Create a new empty list.
+     */
     static Value.List newList() {
         return new ListImpl();
     }
 
+    /**
+     * Create a new empty map.
+     */
+    static Value.Map newMap() {
+        return new MapImpl();
+    }
+
     static Value of( String s ) {
-        return s != null ? new ValueImpl( s ) : null;
+        return s != null ? new ValueImpl( s ) : ValueImpl.NULL;
     }
 
     static Value of( Double d ) {
-        return d != null ? new ValueImpl( d ) : null;
+        return d != null ? new ValueImpl( d ) : ValueImpl.NULL;
     }
 
     static Value of( Boolean b ) {
         if ( b != null ) {
             return b ? ValueImpl.TRUE : ValueImpl.FALSE;
         } else {
-            return null;
+            return ValueImpl.NULL;
         }
     }
+
+    /**
+     * Make sure Value is not null.
+     */
+    static Value of( Value v ) {
+        return v != null ? v : ValueImpl.NULL;
+    }
+
+    static Value of( Object v ) {
+        if ( v == null ) {
+            return ValueImpl.NULL;
+        } else if ( v instanceof Value ) {
+            return (Value) v;
+        } else if ( v instanceof String ) {
+            return Value.of( (String) v );
+        } else if ( v instanceof Double ) {
+            return Value.of( (Double) v );
+        } else if ( v instanceof Boolean ) {
+            return Value.of( (Boolean) v );
+        } else {
+            // Can be replaced here with dynamic object mapping.
+            throw new IllegalStateException();
+        }
+    }
+
 
     static Value ofJson( String jsonString ) {
         return ofJson( new JsonParser( new StringReader( jsonString ) ), true );
@@ -80,7 +115,7 @@ public interface Value extends FieldAccessors {
                     break;
                 case NULL:
                     parser.readToken( JsonParser.Token.NULL );
-                    result = null;
+                    result = ValueImpl.NULL;
                     break;
                 case OPEN_OBJECT: {
                     parser.readToken( JsonParser.Token.OPEN_OBJECT );
@@ -133,15 +168,13 @@ public interface Value extends FieldAccessors {
 
     }
 
-    Map asMap();
+    Map getMap();
 
-    Value.List asList();
+    Value.List getList();
 
-    public interface Map extends Value, java.util.Map<String, Value>, NamedFieldsAccessors {
+    boolean isNull();
 
-    }
+    public interface Map extends Value, java.util.Map<String, Value>, NamedFieldsAccessors {}
 
-    public interface List extends Value, java.util.List<Value>, IndexedFieldsAccessors {
-
-    }
+    public interface List extends Value, java.util.List<Value>, IndexedFieldsAccessors {}
 }

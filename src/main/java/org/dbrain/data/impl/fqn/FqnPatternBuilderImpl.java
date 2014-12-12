@@ -23,9 +23,9 @@ import org.dbrain.data.FqnPattern;
  */
 public class FqnPatternBuilderImpl implements FqnPattern.Builder {
 
-    private int partCount = 0;
-    private FqnPatternImpl.Node root = null;
-    private FqnPatternImpl.Node tail = null;
+    private int                 partCount = 0;
+    private FqnPatternImpl.Node root      = null;
+    private FqnPatternImpl.Node tail      = null;
 
     private void addNode( FqnPatternImpl.Node node ) {
         if ( tail == null ) {

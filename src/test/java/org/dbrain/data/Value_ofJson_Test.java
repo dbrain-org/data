@@ -28,14 +28,20 @@ import java.io.InputStreamReader;
 public class Value_ofJson_Test {
 
     @Test
+    public void testEmptyStream() throws Exception {
+        Assert.assertNull( Value.ofJson( "" ) );
+
+    }
+
+    @Test
     public void test_object_1() throws Exception {
-        Value.Map map = Value.ofJson( "{}" ).asMap();
+        Value.Map map = Value.ofJson( "{}" ).getMap();
         Assert.assertEquals( 0, map.size() );
     }
 
     @Test
     public void test_object_2() throws Exception {
-        Value.Map map = Value.ofJson( "{titi:test}" ).asMap();
+        Value.Map map = Value.ofJson( "{titi:test}" ).getMap();
         Assert.assertEquals( 1, map.size() );
         Assert.assertEquals( "test", map.getString( "titi" ) );
 
@@ -43,18 +49,18 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_array_1() throws Exception {
-        Value.List list = Value.ofJson( "[]" ).asList();
+        Value.List list = Value.ofJson( "[]" ).getList();
         Assert.assertEquals( 0, list.size() );
     }
 
     @Test
     public void test_array_2() throws Exception {
-        Value.List list = Value.ofJson( "[test, 123, true, null]" ).asList();
+        Value.List list = Value.ofJson( "[test, 123, true, null]" ).getList();
         Assert.assertEquals( 4, list.size() );
         Assert.assertEquals( "test", list.getString( 0 ) );
         Assert.assertEquals( 123.0, list.getDouble( 1 ) );
         Assert.assertTrue( list.getBoolean( 2 ) );
-        Assert.assertNull( list.get( 3 ) );
+        Assert.assertTrue( list.get( 3 ).isNull() );
     }
 
     @Test

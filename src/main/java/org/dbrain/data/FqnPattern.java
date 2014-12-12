@@ -86,7 +86,7 @@ public interface FqnPattern {
 
     /**
      * Specifications of this pattern.
-     **/
+     */
     interface Specs {
 
         /**
@@ -97,6 +97,7 @@ public interface FqnPattern {
         /**
          * Return the contextual name of this pattern. This value is the leading static nodes
          * of this pattern, if any.
+         *
          * @return
          */
         Fqn scope();

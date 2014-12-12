@@ -17,7 +17,7 @@
 package org.dbrain.data;
 
 /**
- * Occurs when a value cannot be coersed to another value.
+ * Occurs when a value cannot be coerced to another value.
  */
 public class DataCoercionException extends RuntimeException {
 

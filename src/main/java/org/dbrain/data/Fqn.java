@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 /**
  * Describe a fully qualified name.
- *
+ * <p/>
  * Syntax allows for wildcards as well as ways of escaping them.
  * ''
  * test
@@ -53,7 +53,7 @@ public interface Fqn {
 
     static Fqn ofSegment( String segment ) {
         if ( segment != null ) {
-            return new FqnImpl( Arrays.asList( segment ));
+            return new FqnImpl( Arrays.asList( segment ) );
         } else {
             return Fqn.of( (String) null );
         }

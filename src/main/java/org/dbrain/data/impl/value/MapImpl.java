@@ -16,6 +16,7 @@
 
 package org.dbrain.data.impl.value;
 
+import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
 
 import java.util.Collection;
@@ -26,7 +27,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Created by epoitras on 26/06/14.
+ * Implementation of the Value.Map.
  */
 public class MapImpl implements Value.Map {
 
@@ -52,14 +53,60 @@ public class MapImpl implements Value.Map {
     }
 
     @Override
-    public MapImpl asMap() {
+    public Boolean getBoolean() {
+        throw new DataCoercionException( "Cannot cast map to boolean." );
+    }
+
+    @Override
+    public Byte getByte() {
+        throw new DataCoercionException( "Cannot cast map to byte." );
+    }
+
+    @Override
+    public Short getShort() {
+        throw new DataCoercionException( "Cannot cast map to short." );
+    }
+
+    @Override
+    public Integer getInt() {
+        throw new DataCoercionException( "Cannot cast map to integer." );
+    }
+
+    @Override
+    public Long getLong() {
+        throw new DataCoercionException( "Cannot cast map to long." );
+    }
+
+    @Override
+    public Float getFloat() {
+        throw new DataCoercionException( "Cannot cast map to float." );
+    }
+
+    @Override
+    public Double getDouble() {
+        throw new DataCoercionException( "Cannot cast map to double." );
+    }
+
+    @Override
+    public String getString() {
+        throw new DataCoercionException( "Cannot cast map to string." );
+    }
+
+    @Override
+    public MapImpl getMap() {
         return this;
     }
 
     @Override
-    public Value.List asList() {
-        throw new UnsupportedOperationException();
+    public Value.List getList() {
+        throw new DataCoercionException( "Cannot cast map to list." );
     }
+
+    @Override
+    public boolean isNull() {
+        return false;
+    }
+
     @Override
     public int size() {
         return delegate.size();
@@ -72,7 +119,7 @@ public class MapImpl implements Value.Map {
 
     @Override
     public Value get( Object key ) {
-        return delegate.get( key );
+        return Value.of( delegate.get( key ) );
     }
 
     @Override
@@ -82,12 +129,14 @@ public class MapImpl implements Value.Map {
 
     @Override
     public Value put( String key, Value value ) {
-        return delegate.put( key, value );
+        return delegate.put( key, Value.of( value ) );
     }
 
     @Override
     public void putAll( java.util.Map<? extends String, ? extends Value> m ) {
-        delegate.putAll( m );
+        for ( Map.Entry<? extends String, ? extends Value> e : m.entrySet() ) {
+            put( e.getKey(), e.getValue() );
+        }
     }
 
     @Override
@@ -102,7 +151,7 @@ public class MapImpl implements Value.Map {
 
     @Override
     public boolean containsValue( Object value ) {
-        return delegate.containsValue( value );
+        return delegate.containsValue( Value.of( value ) );
     }
 
     @Override
@@ -122,27 +171,32 @@ public class MapImpl implements Value.Map {
 
     @Override
     public Value getOrDefault( Object key, Value defaultValue ) {
-        return delegate.getOrDefault( key, defaultValue );
+        Value result = get( key );
+        return result.isNull() ? Value.of( defaultValue ) : result;
     }
 
     @Override
     public Value putIfAbsent( String key, Value value ) {
-        return delegate.putIfAbsent( key, value );
+        if ( !containsKey( key ) ) {
+            return put( key, Value.of( value ));
+        } else {
+            return get( key );
+        }
     }
 
     @Override
     public boolean remove( Object key, Object value ) {
-        return delegate.remove( key, value );
+        return delegate.remove( key, Value.of( value ) );
     }
 
     @Override
     public boolean replace( String key, Value oldValue, Value newValue ) {
-        return delegate.replace( key, oldValue, newValue );
+        return delegate.replace( key, Value.of( oldValue ) , Value.of( newValue ) );
     }
 
     @Override
     public Value replace( String key, Value value ) {
-        return delegate.replace( key, value );
+        return delegate.replace( key, Value.of( value ) );
     }
 
     @Override

@@ -27,8 +27,8 @@ public class FqnPatternImpl implements FqnPattern {
     // Empty pattern singleton.
     public static final FqnPattern EMPTY_PATTERN = new FqnPatternImpl( null, 0 );
 
-    private Node root;
-    private int partCount;
+    private Node  root;
+    private int   partCount;
     private Specs specs;
 
     public FqnPatternImpl( Node root, int partCount ) {
@@ -54,7 +54,7 @@ public class FqnPatternImpl implements FqnPattern {
     public Specs getSpecs() {
         if ( specs == null ) {
             if ( root == null ) {
-               specs = new SpecsImpl( Type.EXACT_MATCH, FqnImpl.EMPTY_NAME );
+                specs = new SpecsImpl( Type.EXACT_MATCH, FqnImpl.EMPTY_NAME );
             }
             Fqn.Builder scope = Fqn.newBuilder();
             Node node = root;
@@ -86,9 +86,9 @@ public class FqnPatternImpl implements FqnPattern {
      */
     static class MatchResultImpl implements MatchResult {
 
-        private boolean   matched;
-        private int       partCount;
-        private Fqn[]     parts;
+        private boolean matched;
+        private int     partCount;
+        private Fqn[]   parts;
 
         public MatchResultImpl( boolean matched, int partCount ) {
             this.matched = matched;
@@ -108,7 +108,7 @@ public class FqnPatternImpl implements FqnPattern {
         @Override
         public Fqn getPart( int idx ) {
             if ( parts != null ) {
-                return parts[ idx ];
+                return parts[idx];
             } else {
                 if ( idx >= 0 && idx < partCount ) {
                     return null;
@@ -125,9 +125,9 @@ public class FqnPatternImpl implements FqnPattern {
 
         void setPart( int idx, Fqn part ) {
             if ( parts == null ) {
-                parts = new Fqn[ partCount ];
+                parts = new Fqn[partCount];
             }
-            parts[ idx ] = part;
+            parts[idx] = part;
         }
 
     }
@@ -135,7 +135,7 @@ public class FqnPatternImpl implements FqnPattern {
     static class SpecsImpl implements Specs {
 
         private final Type type;
-        private final Fqn scope;
+        private final Fqn  scope;
 
         public SpecsImpl( Type type, Fqn scope ) {
             this.type = type;
@@ -209,7 +209,7 @@ public class FqnPatternImpl implements FqnPattern {
         }
     }
 
-    public static class OneNode extends Node implements PartMatchingNode{
+    public static class OneNode extends Node implements PartMatchingNode {
 
         int partIdx;
 

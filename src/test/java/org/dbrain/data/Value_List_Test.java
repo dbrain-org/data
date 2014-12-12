@@ -30,7 +30,7 @@ public class Value_List_Test {
         Assert.assertEquals( list.size(), 0 );
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test( expected = DataCoercionException.class )
     public void testAsString() throws Exception {
         Value.newList().getString();
     }

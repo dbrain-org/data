@@ -40,7 +40,8 @@ public class LocalDateFormat implements Format<LocalDate> {
 
     @Override
     public synchronized String format( LocalDate value ) throws FormatException {
-        return value != null ? dateFormat.format( Date.from( value.atStartOfDay( ZoneId.systemDefault() ).toInstant() ) ) : null;
+        return value != null ? dateFormat.format( Date.from( value.atStartOfDay( ZoneId.systemDefault() )
+                                                                  .toInstant() ) ) : null;
     }
 
     @Override

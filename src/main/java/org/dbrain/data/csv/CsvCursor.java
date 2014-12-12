@@ -147,7 +147,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Create a new cursor to read tabular data from a text stream.<p>
-     *
+     * <p/>
      * Allow to specify the fields name.
      *
      * @param reader
@@ -178,7 +178,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Create a new cursor to read tabular data from a text stream.
-     *
+     * <p/>
      * Use no quote for string fields.
      *
      * @param reader

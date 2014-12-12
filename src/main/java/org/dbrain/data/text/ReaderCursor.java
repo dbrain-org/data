@@ -96,7 +96,7 @@ public class ReaderCursor implements AutoCloseable {
 
     /**
      * @return Get at the character at the current cursor position.
-     *
+     * <p/>
      * Note: If the current character is consumed. The next one is loaded from
      * the underlying reader.
      */
@@ -165,7 +165,7 @@ public class ReaderCursor implements AutoCloseable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder();
         sb.append( "ReaderCursor index=" );
         sb.append( Integer.toString( index ) );
         sb.append( " char=[" );

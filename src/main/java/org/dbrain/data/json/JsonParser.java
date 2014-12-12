@@ -209,7 +209,7 @@ public class JsonParser {
             skip();
             return token;
         } else {
-            throw new IllegalStateException(  );
+            throw new IllegalStateException();
         }
     }
 

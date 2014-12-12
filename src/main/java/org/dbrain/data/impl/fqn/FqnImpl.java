@@ -117,8 +117,7 @@ public final class FqnImpl implements Fqn {
                 return FqnUtils.encodeSegment( segment( 0 ) );
             } else {
                 StringBuilder sb = null;
-                for ( int i = 0; i < size; i++ )
-                {
+                for ( int i = 0; i < size; i++ ) {
                     String s = segment( i );
                     if ( sb == null ) {
                         sb = new StringBuilder();

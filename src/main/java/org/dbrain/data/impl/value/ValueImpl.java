@@ -25,7 +25,7 @@ public final class ValueImpl implements Value {
 
     public static final Value TRUE  = new ValueImpl( Boolean.TRUE );
     public static final Value FALSE = new ValueImpl( Boolean.FALSE );
-
+    public static final Value NULL  = new ValueImpl( null );
 
     private final Object value;
 
@@ -38,13 +38,34 @@ public final class ValueImpl implements Value {
     }
 
     @Override
-    public MapImpl asMap() {
+    public MapImpl getMap() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ListImpl asList() {
+    public ListImpl getList() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isNull() {
+        return value == null;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
+
+        ValueImpl value1 = (ValueImpl) o;
+
+        if ( value != null ? !value.equals( value1.value ) : value1.value != null ) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
 }

@@ -18,7 +18,7 @@ package org.dbrain.data.text;
 
 /**
  * Simple contract that provide a String representation from a T value.
- *
+ * <p/>
  * Implementation should nicely handle null values and should prefer to return a non-null representation
  * if possible.
  */

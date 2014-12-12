@@ -16,6 +16,7 @@
 
 package org.dbrain.data.impl.value;
 
+import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
 
 import java.util.ArrayList;
@@ -50,18 +51,28 @@ public class ListImpl implements Value.List {
     }
 
     @Override
+    public Boolean getBoolean() {
+        throw new DataCoercionException( "Cannot cast list to boolean." );
+    }
+
+    @Override
     public String getString() {
+        throw new DataCoercionException( "Cannot cast list to string." );
+    }
+
+    @Override
+    public MapImpl getMap() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public MapImpl asMap() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ListImpl asList() {
+    public ListImpl getList() {
         return this;
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 
     @Override

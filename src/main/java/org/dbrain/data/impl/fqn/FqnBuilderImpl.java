@@ -30,7 +30,7 @@ public class FqnBuilderImpl implements Fqn.Builder {
 
     @Override
     public FqnBuilderImpl segment( String segment ) {
-        if (segments == null ) {
+        if ( segments == null ) {
             segments = new ArrayList<>();
         }
         segments.add( segment );

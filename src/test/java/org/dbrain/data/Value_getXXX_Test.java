@@ -107,6 +107,11 @@ public class Value_getXXX_Test {
         Assert.assertEquals( "0.0", v.getString() );
         Assert.assertEquals( 0.0f, v.getFloat() );
         Assert.assertEquals( 0.0, v.getDouble() );
+
+        v = Value.of( (Double) null );
+        Assert.assertNull( v.getObject() );
+        Assert.assertTrue( v.isNull() );
+
     }
 
     @Test
