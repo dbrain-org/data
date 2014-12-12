@@ -235,11 +235,7 @@ public class MapImpl implements Value.Map {
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-
-        MapImpl jsonMap = (MapImpl) o;
-
-        return delegate.equals( jsonMap.delegate );
+        return delegate.equals( o );
 
     }
 

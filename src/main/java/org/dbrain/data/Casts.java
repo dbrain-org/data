@@ -264,7 +264,7 @@ public class Casts {
     public static Short toShort( Object o ) {
         if ( o == null ) return null;
         if ( o instanceof Short ) return (Short) o;
-        if ( o instanceof Byte || o instanceof Short ) {
+        if ( o instanceof Byte ) {
             return ( (Number) o ).shortValue();
         } else if ( o instanceof Integer || o instanceof Long || o instanceof AtomicInteger || o instanceof AtomicLong ) {
             long longValue = ( (Number) o ).longValue();

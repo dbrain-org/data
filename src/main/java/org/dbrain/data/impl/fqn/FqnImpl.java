@@ -126,7 +126,7 @@ public final class FqnImpl implements Fqn {
                     }
                     sb.append( FqnUtils.encodeSegment( s ) );
                 }
-                return sb.toString();
+                return sb != null ? sb.toString() : "";
             }
         }
     }

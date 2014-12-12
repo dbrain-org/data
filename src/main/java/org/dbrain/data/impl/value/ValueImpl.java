@@ -59,9 +59,8 @@ public final class ValueImpl implements Value {
 
         ValueImpl value1 = (ValueImpl) o;
 
-        if ( value != null ? !value.equals( value1.value ) : value1.value != null ) return false;
+        return !( value != null ? !value.equals( value1.value ) : value1.value != null );
 
-        return true;
     }
 
     @Override

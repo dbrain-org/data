@@ -36,14 +36,102 @@ public class Value_Map_Test {
     }
 
     @Test( expected = DataCoercionException.class )
+    public void testGetByte() throws Exception {
+        Value.newMap().getByte();
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testGetShort() throws Exception {
+        Value.newMap().getShort();
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testGetInteger() throws Exception {
+        Value.newMap().getInt();
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testGetLong() throws Exception {
+        Value.newMap().getLong();
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testGetFloat() throws Exception {
+        Value.newMap().getFloat();
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testGetDouble() throws Exception {
+        Value.newMap().getDouble();
+    }
+
+    @Test( expected = DataCoercionException.class )
     public void testGetString() throws Exception {
         Value.newMap().getString();
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testGetList() throws Exception {
+        Value.newMap().getList();
+    }
+
+    @Test
+    public void testGetObject() throws Exception {
+        Value.Map m = Value.newMap();
+        m.put( "key", Value.of( "value" ) );
+
+        Object o = m.getObject();
+        Assert.assertTrue( o instanceof java.util.Map );
+        java.util.Map m2 = (java.util.Map) o;
+        Assert.assertEquals( 1, m2.size() );
+        Assert.assertTrue( m2.containsKey( "key" ) );
+        Assert.assertEquals( m2.get( "key" ), "value" );
+
+    }
+
+    @Test
+    public void testIsEmpty() throws Exception {
+        Value.Map m = Value.newMap();
+
+        Assert.assertTrue( m.isEmpty() );
+        m.put( "test", Value.of( "Test" ) );
+        Assert.assertFalse( m.isEmpty() );
+        m.remove( "test" );
+        Assert.assertTrue( m.isEmpty() );
+
+    }
+
+    @Test
+    public void testPutAll() throws Exception {
+        Value.Map m1 = Value.newMap();
+        Value.Map m2 = Value.newMap();
+
+        m1.put( "test1", Value.of( "Test" ) );
+        m1.put( "test2", Value.of( "Test2" ) );
+        m1.put( "test3", Value.of( "Test3" ) );
+
+        m2.putAll( m1 );
+        Assert.assertEquals( m1, m2 );
+    }
+
+    @Test
+    public void testClear() throws Exception {
+        Value.Map m1 = Value.newMap();
+        m1.put( "test1", Value.of( "Test" ) );
+        m1.put( "test2", Value.of( "Test2" ) );
+        m1.put( "test3", Value.of( "Test3" ) );
+
+        m1.clear();
+        Assert.assertTrue( m1.isEmpty() );
+        Assert.assertEquals( 0, m1.size() );
+
+
     }
 
     @Test
     public void testGetValue() {
         String k = "test";
-        Value s = Value.of("String");
+        Value s = Value.of( "String" );
 
         Value.Map v = Value.newMap();
 
