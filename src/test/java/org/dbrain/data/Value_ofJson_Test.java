@@ -17,7 +17,7 @@
 package org.dbrain.data;
 
 import junit.framework.Assert;
-import org.dbrain.data.json.JsonParser;
+import org.dbrain.data.text.ParseException;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
@@ -30,7 +30,6 @@ public class Value_ofJson_Test {
     @Test
     public void testEmptyStream() throws Exception {
         Assert.assertNull( Value.ofJson( "" ) );
-
     }
 
     @Test
@@ -39,11 +38,28 @@ public class Value_ofJson_Test {
         Assert.assertEquals( 0, map.size() );
     }
 
+    @Test( expected = ParseException.class )
+    public void test_object_fail_1() throws Exception {
+        Value.ofJson( "{" ).getMap();
+    }
+
+    @Test( expected = ParseException.class )
+    public void test_object_fail_2() throws Exception {
+        Value.ofJson( "{} {" ).getMap();
+    }
+
+    @Test( expected = ParseException.class )
+    public void test_object_fail_3() throws Exception {
+        Value.ofJson( "{}  [" ).getMap();
+    }
+
+
+
     @Test
     public void test_object_2() throws Exception {
-        Value.Map map = Value.ofJson( "{titi:test}" ).getMap();
+        Value.Map map = Value.ofJson( "{\"titi\" : true }" ).getMap();
         Assert.assertEquals( 1, map.size() );
-        Assert.assertEquals( "test", map.getString( "titi" ) );
+        Assert.assertEquals( Boolean.TRUE.toString(), map.getString( "titi" ) );
 
     }
 
@@ -55,7 +71,7 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_array_2() throws Exception {
-        Value.List list = Value.ofJson( "[test, 123, true, null]" ).getList();
+        Value.List list = Value.ofJson( "[\"test\", 123, true, null]" ).getList();
         Assert.assertEquals( 4, list.size() );
         Assert.assertEquals( "test", list.getString( 0 ) );
         Assert.assertEquals( 123.0, list.getDouble( 1 ) );
@@ -65,8 +81,8 @@ public class Value_ofJson_Test {
 
     @Test
     public void testPaseJsonFile() throws Exception {
-        Value value = Value.ofJson( new JsonParser( new InputStreamReader( getClass().getResourceAsStream(
-                "/SampleJson.json" ) ) ) );
-
+        Value value = Value.ofJson( new InputStreamReader( getClass().getResourceAsStream(
+                "/SampleJson.json" ) ) );
     }
+
 }

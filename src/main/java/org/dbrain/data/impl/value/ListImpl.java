@@ -62,7 +62,7 @@ public class ListImpl implements Value.List {
 
     @Override
     public MapImpl getMap() {
-        throw new UnsupportedOperationException();
+        throw new DataCoercionException( "Cannot convert list to map." );
     }
 
     @Override

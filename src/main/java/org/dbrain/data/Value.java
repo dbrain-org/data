@@ -22,11 +22,9 @@ import org.dbrain.data.access.NamedFieldsAccessors;
 import org.dbrain.data.impl.value.ListImpl;
 import org.dbrain.data.impl.value.MapImpl;
 import org.dbrain.data.impl.value.ValueImpl;
-import org.dbrain.data.json.JsonParser;
+import org.dbrain.data.impl.value.ValueJsonBridge;
 
 import java.io.Reader;
-import java.io.StringReader;
-import java.util.HashMap;
 
 /**
  * A simple value can only contains primitive values.
@@ -49,6 +47,25 @@ public interface Value extends FieldAccessors {
 
     static Value of( String s ) {
         return s != null ? new ValueImpl( s ) : ValueImpl.NULL;
+    }
+
+    static Value of( Byte b ) {
+        return b != null ? new ValueImpl( b ) : ValueImpl.NULL;
+    }
+
+    static Value of( Short s ) {
+        return s != null ? new ValueImpl( s ) : ValueImpl.NULL;
+    }
+    static Value of( Integer i ) {
+        return i != null ? new ValueImpl( i ) : ValueImpl.NULL;
+    }
+
+    static Value of( Long l ) {
+        return l != null ? new ValueImpl( l ) : ValueImpl.NULL;
+    }
+
+    static Value of( Float f ) {
+        return f != null ? new ValueImpl( f ) : ValueImpl.NULL;
     }
 
     static Value of( Double d ) {
@@ -77,6 +94,16 @@ public interface Value extends FieldAccessors {
             return (Value) v;
         } else if ( v instanceof String ) {
             return Value.of( (String) v );
+        } else if ( v instanceof Byte ) {
+            return Value.of( (Byte) v );
+        } else if ( v instanceof Short ) {
+            return Value.of( (Short) v );
+        } else if ( v instanceof Integer ) {
+            return Value.of( (Integer) v );
+        } else if ( v instanceof Long ) {
+            return Value.of( (Long) v );
+        } else if ( v instanceof Float ) {
+            return Value.of( (Float) v );
         } else if ( v instanceof Double ) {
             return Value.of( (Double) v );
         } else if ( v instanceof Boolean ) {
@@ -89,83 +116,11 @@ public interface Value extends FieldAccessors {
 
 
     static Value ofJson( String jsonString ) {
-        return ofJson( new JsonParser( new StringReader( jsonString ) ), true );
+        return ValueJsonBridge.ofJson( jsonString );
     }
 
     static Value ofJson( Reader json ) {
-        return ofJson( new JsonParser( json ) );
-    }
-
-    static Value ofJson( JsonParser parser ) {
-        return ofJson( parser, true );
-    }
-
-    static Value ofJson( JsonParser parser, boolean validateEof ) {
-        if ( parser.getToken() != null ) {
-            Value result;
-            switch ( parser.getToken() ) {
-                case STRING:
-                    result = of( parser.readString() );
-                    break;
-                case DOUBLE:
-                    result = of( parser.readDouble() );
-                    break;
-                case BOOLEAN:
-                    result = of( parser.readBoolean() );
-                    break;
-                case NULL:
-                    parser.readToken( JsonParser.Token.NULL );
-                    result = ValueImpl.NULL;
-                    break;
-                case OPEN_OBJECT: {
-                    parser.readToken( JsonParser.Token.OPEN_OBJECT );
-                    HashMap<String, Value> values = new HashMap<>();
-                    while ( parser.getToken() != JsonParser.Token.CLOSE_OBJECT ) {
-                        // Skip commas.
-                        while ( parser.getToken() == JsonParser.Token.COMMA ) {
-                            parser.readToken( JsonParser.Token.COMMA );
-                        }
-                        if ( parser.getToken() != JsonParser.Token.CLOSE_OBJECT ) {
-                            String key = parser.readString();
-                            parser.readToken( JsonParser.Token.COLON );
-                            Value value = ofJson( parser, false );
-                            values.put( key, value );
-                        }
-                    }
-                    parser.readToken( JsonParser.Token.CLOSE_OBJECT );
-                    result = new MapImpl( values );
-                }
-                break;
-                case OPEN_ARRAY: {
-                    parser.readToken( JsonParser.Token.OPEN_ARRAY );
-                    Value.List values = Value.newList();
-                    while ( parser.getToken() != JsonParser.Token.CLOSE_ARRAY ) {
-                        // Skip commas.
-                        while ( parser.getToken() == JsonParser.Token.COMMA ) {
-                            parser.readToken( JsonParser.Token.COMMA );
-                        }
-                        if ( parser.getToken() != JsonParser.Token.CLOSE_ARRAY ) {
-                            values.add( ofJson( parser, false ) );
-                        }
-                    }
-                    parser.readToken( JsonParser.Token.CLOSE_ARRAY );
-                    result = values;
-                }
-                break;
-                default:
-                    throw parser.error( "Expected value" );
-            }
-            if ( validateEof ) {
-                if ( parser.getToken() != null ) {
-                    throw parser.error( "Expected end of file." );
-                }
-            }
-
-            return result;
-        } else {
-            return null;
-        }
-
+        return ValueJsonBridge.ofJson( json );
     }
 
     Map getMap();

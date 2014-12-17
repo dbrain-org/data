@@ -16,6 +16,7 @@
 
 package org.dbrain.data.impl.value;
 
+import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
 
 /**
@@ -39,12 +40,12 @@ public final class ValueImpl implements Value {
 
     @Override
     public MapImpl getMap() {
-        throw new UnsupportedOperationException();
+        throw new DataCoercionException( "Cannot cast value to Map.");
     }
 
     @Override
     public ListImpl getList() {
-        throw new UnsupportedOperationException();
+        throw new DataCoercionException( "Cannot cast value to List.");
     }
 
     @Override
