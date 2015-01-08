@@ -18,9 +18,10 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
+import org.dbrain.data.impl.value.json.JsonBridge;
 
 /**
- * Wrap a boolean value;
+ * Wrap a scalar value;
  */
 public final class ValueImpl implements Value {
 
@@ -67,5 +68,10 @@ public final class ValueImpl implements Value {
     @Override
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return JsonBridge.valueAsString( this );
     }
 }

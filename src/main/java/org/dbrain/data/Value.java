@@ -22,7 +22,7 @@ import org.dbrain.data.access.NamedFieldsAccessors;
 import org.dbrain.data.impl.value.ListImpl;
 import org.dbrain.data.impl.value.MapImpl;
 import org.dbrain.data.impl.value.ValueImpl;
-import org.dbrain.data.impl.value.ValueJsonBridge;
+import org.dbrain.data.impl.value.json.JsonBridge;
 
 import java.io.Reader;
 
@@ -87,6 +87,9 @@ public interface Value extends FieldAccessors {
         return v != null ? v : ValueImpl.NULL;
     }
 
+    /**
+     * Cast of one of the primitive type.
+     */
     static Value of( Object v ) {
         if ( v == null ) {
             return ValueImpl.NULL;
@@ -116,11 +119,11 @@ public interface Value extends FieldAccessors {
 
 
     static Value ofJson( String jsonString ) {
-        return ValueJsonBridge.ofJson( jsonString );
+        return JsonBridge.ofJson( jsonString );
     }
 
     static Value ofJson( Reader json ) {
-        return ValueJsonBridge.ofJson( json );
+        return JsonBridge.ofJson( json );
     }
 
     Map getMap();

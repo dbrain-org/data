@@ -14,26 +14,34 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.value;
+package org.dbrain.data.impl.value.json;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbrain.data.Value;
+import org.dbrain.data.impl.value.ListImpl;
+import org.dbrain.data.impl.value.MapImpl;
+import org.dbrain.data.impl.value.ValueImpl;
 import org.dbrain.data.text.ParseException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.Map;
 
 /**
  * Reader and writer for Value to JSON format.
  */
-public class ValueJsonBridge {
+public class JsonBridge {
 
-    private static JsonFactory jsonFactory = new JsonFactory(); // or, for data binding, org.codehaus.jackson.mapper.MappingJsonFactory
+    private static ObjectMapper objectMapper = new ObjectMapper() //
+            .registerModule( new JsonJsCompatibilityModule() );
+    private static JsonFactory  jsonFactory  = objectMapper.getFactory();
 
     private static JsonToken token( JsonParser parser ) throws IOException {
         return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextValue();
@@ -64,12 +72,12 @@ public class ValueJsonBridge {
         return error( parser, message, null );
     }
 
-    public static Value ofJson( Reader r ) {
+    public static Value ofJson( String r ) {
         try {
             JsonParser p = jsonFactory.createParser( r );
             Value v = ofJson( p );
             if ( token( p ) != null ) {
-                throw error( p, "Expected end of file." );
+                throw error( p, "Expected end of string." );
             }
             return v;
         } catch ( IOException e ) {
@@ -77,12 +85,12 @@ public class ValueJsonBridge {
         }
     }
 
-    public static Value ofJson( String r ) {
+    public static Value ofJson( Reader r ) {
         try {
             JsonParser p = jsonFactory.createParser( r );
             Value v = ofJson( p );
             if ( token( p ) != null ) {
-                throw error( p, "Expected end of string." );
+                throw error( p, "Expected end of file." );
             }
             return v;
         } catch ( IOException e ) {
@@ -167,6 +175,58 @@ public class ValueJsonBridge {
         } catch ( IOException e ) {
             throw error( parser, "IO error while parsing.", e );
         }
+    }
+
+    private static void writeMap( Value.Map value, JsonGenerator w ) throws IOException {
+        w.writeStartObject();
+        try {
+            for ( Map.Entry<String, Value> e : value.entrySet() ) {
+                w.writeFieldName( e.getKey() );
+                writeValue( e.getValue(), w );
+            }
+        } finally {
+            w.writeEndObject();
+        }
+    }
+
+    private static void writeList( Value.List value, JsonGenerator w ) throws IOException {
+        w.writeStartArray();
+        try {
+            for ( Value e : value ) {
+                writeValue( e, w );
+            }
+        } finally {
+            w.writeEndObject();
+        }
+    }
+
+    /**
+     * Write a value to a generator.
+     */
+    public static void writeValue( Value value, JsonGenerator w ) throws IOException {
+        if ( value == null || value.isNull() ) {
+            w.writeNull();
+        }
+        if ( value instanceof Value.Map ) {
+           writeMap( (Value.Map) value, w );
+        } else if ( value instanceof Value.List ) {
+            writeList( (Value.List) value, w );
+        } else {
+            w.writeObject( value.getObject() );
+        }
+    }
+
+    /**
+     * Convert a value as a string.
+     */
+    public static String valueAsString( Value v ) {
+        StringWriter sw = new StringWriter( );
+        try {
+            writeValue( v, jsonFactory.createGenerator( sw ) );
+        } catch ( IOException e ) {
+            throw new IllegalStateException( e );
+        }
+        return sw.toString();
     }
 
 }

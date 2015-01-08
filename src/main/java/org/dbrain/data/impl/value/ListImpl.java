@@ -18,6 +18,7 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
+import org.dbrain.data.impl.value.json.JsonBridge;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -153,6 +154,11 @@ public class ListImpl implements Value.List {
     @Override
     public int hashCode() {
         return delegate.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return JsonBridge.valueAsString( this );
     }
 
     @Override
