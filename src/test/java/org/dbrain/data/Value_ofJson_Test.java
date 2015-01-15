@@ -16,17 +16,14 @@
 
 package org.dbrain.data;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.Assert;
-import org.dbrain.data.impl.value.MapImpl;
+import org.dbrain.data.impl.value.json.JsonBridge;
 import org.dbrain.data.text.ParseException;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by epoitras on 30/06/14.
@@ -98,6 +95,9 @@ public class Value_ofJson_Test {
 
     public static class Person {
 
+        public Person() {
+        }
+
         public Person( String name, String lastName ) {
             this.name = name;
             this.lastName = lastName;
@@ -137,16 +137,14 @@ public class Value_ofJson_Test {
     @Test
     public void convert_object_to_map_jackson() throws Exception {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        StringWriter sw = new StringWriter(  );
-
         Person test = new Person( "Hey", "bob" );
         test.setFriend( new Person( "Bob", "Marley" ) );
-        objectMapper.writeValue( sw, test );
+        String s = JsonBridge.get().writeToString( test );
 
-        Value vPerson = Value.ofJson( sw.toString() );
+        Value vPerson = Value.ofJson( s );
         System.out.println( vPerson );
+
+        Person test2 = JsonBridge.get().parseObject( s, Person.class );
 
     }
 

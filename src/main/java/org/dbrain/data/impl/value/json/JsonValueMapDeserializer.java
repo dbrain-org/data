@@ -16,25 +16,21 @@
 
 package org.dbrain.data.impl.value.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import org.dbrain.data.Value;
 
 import java.io.IOException;
 
 /**
-* Created by epoitras on 07/01/15.
-*/
-class JsonLargeNumberSerializer extends JsonSerializer<Number> {
+ * Parse a Json value.
+ */
+public class JsonValueMapDeserializer extends JsonDeserializer<Value.Map> {
+
     @Override
-    public void serialize( Number value,
-                           JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException, JsonProcessingException {
-        if ( value != null ) {
-            jgen.writeString( value.toString() );
-        } else {
-            jgen.writeNull();
-        }
+    public Value.Map deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException, JsonProcessingException {
+        return JsonValueParser.parseValue( jp ).getMap();
     }
 }

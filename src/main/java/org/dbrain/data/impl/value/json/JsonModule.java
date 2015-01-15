@@ -18,7 +18,9 @@ package org.dbrain.data.impl.value.json;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
+import org.dbrain.data.Value;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -27,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by epoitras on 07/01/15.
  */
-public class JsonJsCompatibilityModule extends Module {
+public class JsonModule extends Module {
 
     @Override
     public String getModuleName() {
@@ -43,15 +45,27 @@ public class JsonJsCompatibilityModule extends Module {
     public void setupModule( SetupContext context ) {
         SimpleSerializers serializers = new SimpleSerializers();
 
-        JsonLargeNumberSerializer stringNumberSerializer = new JsonLargeNumberSerializer();
+        JsonLongSerializer longSerializer = new JsonLongSerializer();
 
-        serializers.addSerializer( Long.class, stringNumberSerializer );
-        serializers.addSerializer( Long.TYPE, stringNumberSerializer );
-        serializers.addSerializer( AtomicLong.class, stringNumberSerializer );
-        serializers.addSerializer( BigDecimal.class, stringNumberSerializer );
-        serializers.addSerializer( BigInteger.class, stringNumberSerializer );
+        serializers.addSerializer( Long.class, longSerializer );
+        serializers.addSerializer( Long.TYPE, longSerializer );
+        serializers.addSerializer( AtomicLong.class, longSerializer );
+        serializers.addSerializer( BigDecimal.class, new JsonBigDecimalSerializer() );
+        serializers.addSerializer( BigInteger.class, new JsonBigIntegerSerializer() );
+
+        JsonValueSerializer valueSerializer = new JsonValueSerializer();
+
+        serializers.addSerializer( Value.class, valueSerializer );
+        serializers.addSerializer( Value.Map.class, valueSerializer );
+        serializers.addSerializer( Value.List.class, valueSerializer );
 
         context.addSerializers( serializers );
+
+        SimpleDeserializers deserializers = new SimpleDeserializers();
+        deserializers.addDeserializer( Value.class, new JsonValueDeserializer() );
+        deserializers.addDeserializer( Value.Map.class, new JsonValueMapDeserializer() );
+        deserializers.addDeserializer( Value.List.class, new JsonValueListDeserializer() );
+        context.addDeserializers( deserializers );
 
     }
 }

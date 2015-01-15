@@ -158,7 +158,7 @@ public class ListImpl implements Value.List {
 
     @Override
     public String toString() {
-        return JsonBridge.valueAsString( this );
+        return JsonBridge.get().writeToString( this );
     }
 
     @Override

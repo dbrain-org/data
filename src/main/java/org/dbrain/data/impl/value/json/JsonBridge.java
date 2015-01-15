@@ -16,217 +16,124 @@
 
 package org.dbrain.data.impl.value.json;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbrain.data.Value;
-import org.dbrain.data.impl.value.ListImpl;
-import org.dbrain.data.impl.value.MapImpl;
-import org.dbrain.data.impl.value.ValueImpl;
 import org.dbrain.data.text.ParseException;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringWriter;
-import java.util.Map;
 
 /**
  * Reader and writer for Value to JSON format.
  */
 public class JsonBridge {
 
-    private static ObjectMapper objectMapper = new ObjectMapper() //
-            .registerModule( new JsonJsCompatibilityModule() );
-    private static JsonFactory  jsonFactory  = objectMapper.getFactory();
+    private static JsonBridge INSTANCE = new JsonBridge();
 
-    private static JsonToken token( JsonParser parser ) throws IOException {
-        return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextValue();
+    public static JsonBridge get() {
+        return INSTANCE;
     }
 
-    private static ParseException error( JsonParser parser, String message, Throwable e ) {
-        StringWriter sw = new StringWriter();
-        PrintWriter printWriter = new PrintWriter( sw );
-        if ( message != null ) {
-            printWriter.println( message );
+    private ObjectMapper objectMapper = new ObjectMapper() //
+            .configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true ) //
+            .registerModule( new JsonModule() );
+
+    /**
+     * Check that there is no more token on the wire.
+     */
+    private void checkEof( JsonParser parser ) throws IOException {
+        JsonToken token = parser.nextToken();
+        if ( parser.nextToken() != null ) {
+            throw new ParseException( "Unexpected json token: " + token.name() );
         }
-        if ( parser != null ) {
-            JsonLocation loc = parser.getCurrentLocation();
-            if ( loc != null ) {
-                printWriter.println( String.format( "At line %d, column %d, offset(%d)",
-                                                    loc.getLineNr(),
-                                                    loc.getColumnNr(),
-                                                    loc.getCharOffset() ) );
-
-                printWriter.println( String.format( "Source: %s", loc.getSourceRef() ) );
-            }
-        }
-
-        return new ParseException( sw.toString(), e );
     }
 
-    private static ParseException error( JsonParser parser, String message ) {
-        return error( parser, message, null );
-    }
-
-    public static Value ofJson( String r ) {
+    /**
+     * Parse a value from string.
+     */
+    public Value parseValue( String r ) {
         try {
-            JsonParser p = jsonFactory.createParser( r );
-            Value v = ofJson( p );
-            if ( token( p ) != null ) {
-                throw error( p, "Expected end of string." );
-            }
+            JsonParser parser = objectMapper.getFactory().createParser( r );
+            Value v = parseValue( parser );
+            checkEof( parser );
             return v;
         } catch ( IOException e ) {
             throw new ParseException( e );
         }
     }
 
-    public static Value ofJson( Reader r ) {
+    /**
+     * Parse a value from a reader.
+     */
+    public Value parseValue( Reader r ) {
         try {
-            JsonParser p = jsonFactory.createParser( r );
-            Value v = ofJson( p );
-            if ( token( p ) != null ) {
-                throw error( p, "Expected end of file." );
+            try ( Reader r2 = r ) {
+                JsonParser parser = objectMapper.getFactory().createParser( r2 );
+                Value v = parseValue( parser );
+                checkEof( parser );
+                return v;
             }
-            return v;
         } catch ( IOException e ) {
             throw new ParseException( e );
         }
     }
 
-    public static Value ofJson( JsonParser parser ) {
+    /**
+     * Parse a value from a json parser.
+     */
+    public Value parseValue( JsonParser r ) {
         try {
-            JsonToken token = token( parser );
-            if ( token != null ) {
-                Value result;
-                switch ( token ) {
-                    case VALUE_STRING:
-                        result = new ValueImpl( parser.getValueAsString() );
-                        parser.clearCurrentToken();
-                        break;
-                    case VALUE_NUMBER_FLOAT:
-                        result = new ValueImpl( parser.getDoubleValue() );
-                        parser.clearCurrentToken();
-                        break;
-                    case VALUE_NUMBER_INT:
-                        result = new ValueImpl( parser.getBigIntegerValue() );
-                        parser.clearCurrentToken();
-                        break;
-                    case VALUE_NULL:
-                        result = ValueImpl.NULL;
-                        parser.clearCurrentToken();
-                        break;
-                    case VALUE_TRUE:
-                        result = ValueImpl.TRUE;
-                        parser.clearCurrentToken();
-                        break;
-                    case VALUE_FALSE:
-                        result = ValueImpl.FALSE;
-                        parser.clearCurrentToken();
-                        break;
-                    case START_OBJECT: {
-                        parser.clearCurrentToken();
-                        Value.Map values = new MapImpl();
-                        while ( token( parser ) != JsonToken.END_OBJECT ) {
-                            String key = parser.getCurrentName();
-                            Value v = ofJson( parser );
-                            if ( v == null ) {
-                                throw error( parser, "Expected JSON value." );
-                            }
-                            values.put( key, v );
-                        }
-                        if ( token( parser ) == JsonToken.END_OBJECT ) {
-                            parser.clearCurrentToken();
-                        } else {
-                            throw error( parser, "Expected end of object." );
-                        }
-                        result = values;
-                    }
-                    break;
-                    case START_ARRAY: {
-                        parser.clearCurrentToken();
-                        Value.List values = new ListImpl();
-                        while ( token( parser ) != JsonToken.END_ARRAY ) {
-                            Value v = ofJson( parser );
-                            if ( v == null ) {
-                                throw error( parser, "Expected value." );
-                            }
-                            values.add( v );
-                        }
-                        if ( token( parser ) == JsonToken.END_ARRAY ) {
-                            parser.clearCurrentToken();
-                        } else {
-                            throw error( parser, "Expected end of array." );
-                        }
-                        result = values;
-                    }
-                    break;
-                    default:
-                        throw error( parser, "Expected value." );
-                }
-                return result;
-            } else {
-                return null;
-            }
+            return JsonValueParser.parseValue( r );
         } catch ( IOException e ) {
-            throw error( parser, "IO error while parsing.", e );
-        }
-    }
-
-    private static void writeMap( Value.Map value, JsonGenerator w ) throws IOException {
-        w.writeStartObject();
-        try {
-            for ( Map.Entry<String, Value> e : value.entrySet() ) {
-                w.writeFieldName( e.getKey() );
-                writeValue( e.getValue(), w );
-            }
-        } finally {
-            w.writeEndObject();
-        }
-    }
-
-    private static void writeList( Value.List value, JsonGenerator w ) throws IOException {
-        w.writeStartArray();
-        try {
-            for ( Value e : value ) {
-                writeValue( e, w );
-            }
-        } finally {
-            w.writeEndObject();
+            throw new ParseException( e );
         }
     }
 
     /**
-     * Write a value to a generator.
+     * Read Object from parser.
      */
-    public static void writeValue( Value value, JsonGenerator w ) throws IOException {
-        if ( value == null || value.isNull() ) {
-            w.writeNull();
-        }
-        if ( value instanceof Value.Map ) {
-           writeMap( (Value.Map) value, w );
-        } else if ( value instanceof Value.List ) {
-            writeList( (Value.List) value, w );
-        } else {
-            w.writeObject( value.getObject() );
+    public <T> T parseObject( JsonParser r, Class<T> clazz ) {
+        try {
+            return objectMapper.readValue( r, clazz );
+        } catch ( Exception e ) {
+            throw new ParseException( e );
         }
     }
 
     /**
-     * Convert a value as a string.
+     * Read Json from parser.
      */
-    public static String valueAsString( Value v ) {
-        StringWriter sw = new StringWriter( );
+    public <T> T parseObject( String r, Class<T> clazz ) {
         try {
-            writeValue( v, jsonFactory.createGenerator( sw ) );
-        } catch ( IOException e ) {
+            return objectMapper.readValue( r, clazz );
+        } catch ( Exception e ) {
+            throw new ParseException( e );
+        }
+    }
+
+    /**
+     * Convert object to value.
+     */
+    public Value objectToValue( Object o ) {
+        try {
+            return objectMapper.convertValue( o, Value.class );
+        } catch ( Exception e ) {
+            throw new ParseException( e );
+        }
+    }
+
+    /**
+     * Convert an object to Json
+     */
+    public String writeToString( Object o ) {
+        try {
+            return objectMapper.writeValueAsString( o );
+        } catch ( Exception e ) {
             throw new IllegalStateException( e );
         }
-        return sw.toString();
     }
 
 }

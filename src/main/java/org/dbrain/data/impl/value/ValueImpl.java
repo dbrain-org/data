@@ -72,6 +72,6 @@ public final class ValueImpl implements Value {
 
     @Override
     public String toString() {
-        return JsonBridge.valueAsString( this );
+        return JsonBridge.get().writeToString( this );
     }
 }

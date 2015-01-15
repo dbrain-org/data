@@ -112,18 +112,16 @@ public interface Value extends FieldAccessors {
         } else if ( v instanceof Boolean ) {
             return Value.of( (Boolean) v );
         } else {
-            // Can be replaced here with dynamic object mapping.
-            throw new IllegalStateException();
+            return JsonBridge.get().objectToValue( v );
         }
     }
 
-
     static Value ofJson( String jsonString ) {
-        return JsonBridge.ofJson( jsonString );
+        return JsonBridge.get().parseValue( jsonString );
     }
 
     static Value ofJson( Reader json ) {
-        return JsonBridge.ofJson( json );
+        return JsonBridge.get().parseValue( json );
     }
 
     Map getMap();

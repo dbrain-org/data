@@ -247,7 +247,7 @@ public class MapImpl implements Value.Map {
 
     @Override
     public String toString() {
-        return JsonBridge.valueAsString( this );
+        return JsonBridge.get().writeToString( this );
     }
 
 }
