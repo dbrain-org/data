@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.value.json;
+package org.dbrain.data.impl.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,8 +24,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 
 /**
-* Created by epoitras on 07/01/15.
-*/
+ * Serialize long with more that 15 digits to String literal.
+ *
+ * This class is generic "number" as we want to use it for AtomicLong as well.
+ */
 class JsonLongSerializer extends JsonSerializer<Number> {
 
     private long MAX_VALUE = 999999999999999l;
@@ -38,7 +40,7 @@ class JsonLongSerializer extends JsonSerializer<Number> {
         if ( value != null ) {
             long longValue = value.longValue();
             if ( longValue >= MIN_VALUE && longValue <= MAX_VALUE ) {
-               jgen.writeNumber( longValue );
+                jgen.writeNumber( longValue );
             } else {
                 jgen.writeString( value.toString() );
             }

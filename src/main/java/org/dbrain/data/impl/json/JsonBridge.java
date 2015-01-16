@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.value.json;
+package org.dbrain.data.impl.json;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -46,7 +46,7 @@ public class JsonBridge {
      */
     private void checkEof( JsonParser parser ) throws IOException {
         JsonToken token = parser.nextToken();
-        if ( parser.nextToken() != null ) {
+        if ( parser.getCurrentToken() != null ) {
             throw new ParseException( "Unexpected json token: " + token.name() );
         }
     }
@@ -108,7 +108,10 @@ public class JsonBridge {
      */
     public <T> T parseObject( String r, Class<T> clazz ) {
         try {
-            return objectMapper.readValue( r, clazz );
+            JsonParser parser = objectMapper.getFactory().createParser( r );
+            T value = parseObject( parser, clazz );
+            checkEof( parser );
+            return value;
         } catch ( Exception e ) {
             throw new ParseException( e );
         }

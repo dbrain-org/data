@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.jackson;
+package org.dbrain.data.json;
 
 import junit.framework.Assert;
 import org.dbrain.data.Value;
@@ -29,12 +29,12 @@ import java.math.BigInteger;
  */
 public class JsonBridge_Test {
 
-    org.dbrain.data.impl.value.json.JsonBridge mapper;
+    org.dbrain.data.impl.json.JsonBridge mapper;
 
 
     @Before
     public void setUp() throws Exception {
-        mapper = org.dbrain.data.impl.value.json.JsonBridge.get();
+        mapper = org.dbrain.data.impl.json.JsonBridge.get();
 
     }
 
@@ -117,4 +117,27 @@ public class JsonBridge_Test {
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
     }
+
+    @Test
+    public void testDeserilizeList() throws Exception {
+        Value.List list = mapper.parseObject( "[1,2,3,4]", Value.List.class );
+
+        Assert.assertEquals( 4, list.size() );
+//        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
+//        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
+//        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
+//        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
+    }
+
+    @Test
+    public void testDeserilizeMap() throws Exception {
+        Value.Map map = mapper.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", Value.Map.class );
+
+        Assert.assertEquals( 4, map.size() );
+        //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
+    }
+
 }

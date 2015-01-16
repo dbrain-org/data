@@ -18,7 +18,7 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
-import org.dbrain.data.impl.value.json.JsonBridge;
+import org.dbrain.data.impl.json.JsonBridge;
 
 /**
  * Wrap a scalar value;

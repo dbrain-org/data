@@ -17,7 +17,7 @@
 package org.dbrain.data;
 
 import junit.framework.Assert;
-import org.dbrain.data.impl.value.json.JsonBridge;
+import org.dbrain.data.impl.json.JsonBridge;
 import org.dbrain.data.text.ParseException;
 import org.junit.Test;
 

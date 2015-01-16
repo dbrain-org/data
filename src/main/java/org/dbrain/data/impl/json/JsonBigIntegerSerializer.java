@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.value.json;
+package org.dbrain.data.impl.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
-* Created by epoitras on 07/01/15.
+* Serialize BigInteger with more than 15 significant digits to String literal.
 */
 class JsonBigIntegerSerializer extends JsonSerializer<BigInteger> {
 

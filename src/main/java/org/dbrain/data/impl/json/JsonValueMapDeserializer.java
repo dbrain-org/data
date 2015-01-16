@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.value.json;
+package org.dbrain.data.impl.json;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,10 +27,10 @@ import java.io.IOException;
 /**
  * Parse a Json value.
  */
-public class JsonValueListDeserializer extends JsonDeserializer<Value.List> {
+public class JsonValueMapDeserializer extends JsonDeserializer<Value.Map> {
 
     @Override
-    public Value.List deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException, JsonProcessingException {
-        return JsonValueParser.parseValue( jp ).getList();
+    public Value.Map deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException, JsonProcessingException {
+        return JsonValueParser.parseValue( jp ).getMap();
     }
 }

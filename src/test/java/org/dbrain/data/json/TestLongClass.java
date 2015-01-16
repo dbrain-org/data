@@ -14,9 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.jackson;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+package org.dbrain.data.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

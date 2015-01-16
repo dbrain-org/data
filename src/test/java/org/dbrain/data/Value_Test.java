@@ -61,4 +61,16 @@ public class Value_Test {
         Assert.assertTrue( v.isNull() );
 
     }
+
+    @Test
+    public void testHashCode() throws Exception {
+        Value v1 = Value.of( 2 );
+        Value v2 = Value.of( 2 );
+        Assert.assertTrue( v1.hashCode() == v2.hashCode() );
+
+        v1 = Value.of( (Object)null );
+        v2 = Value.of( (Object)null );
+        Assert.assertTrue( v1.hashCode() == v2.hashCode() );
+
+    }
 }
