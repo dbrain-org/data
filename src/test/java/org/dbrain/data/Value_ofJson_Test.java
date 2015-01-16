@@ -17,7 +17,7 @@
 package org.dbrain.data;
 
 import junit.framework.Assert;
-import org.dbrain.data.impl.json.JsonBridge;
+import org.dbrain.data.json.JsonBridge;
 import org.dbrain.data.text.ParseException;
 import org.junit.Test;
 
@@ -145,6 +145,8 @@ public class Value_ofJson_Test {
         System.out.println( vPerson );
 
         Person test2 = JsonBridge.get().parseObject( s, Person.class );
+        Assert.assertEquals( test2.getName(), "Hey" );
+        Assert.assertEquals( test2.getLastName(), "bob" );
 
     }
 

@@ -14,13 +14,14 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json;
+package org.dbrain.data.impl.json.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbrain.data.Value;
+import org.dbrain.data.json.JsonBridge;
 import org.dbrain.data.text.ParseException;
 
 import java.io.IOException;
@@ -29,13 +30,7 @@ import java.io.Reader;
 /**
  * Reader and writer for Value to JSON format.
  */
-public class JsonBridge {
-
-    private static JsonBridge INSTANCE = new JsonBridge();
-
-    public static JsonBridge get() {
-        return INSTANCE;
-    }
+public class JacksonJsonBridge implements JsonBridge {
 
     private ObjectMapper objectMapper = new ObjectMapper() //
             .configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true ) //
@@ -54,6 +49,7 @@ public class JsonBridge {
     /**
      * Parse a value from string.
      */
+    @Override
     public Value parseValue( String r ) {
         try {
             JsonParser parser = objectMapper.getFactory().createParser( r );
@@ -68,6 +64,7 @@ public class JsonBridge {
     /**
      * Parse a value from a reader.
      */
+    @Override
     public Value parseValue( Reader r ) {
         try {
             try ( Reader r2 = r ) {
@@ -106,6 +103,7 @@ public class JsonBridge {
     /**
      * Read Json from parser.
      */
+    @Override
     public <T> T parseObject( String r, Class<T> clazz ) {
         try {
             JsonParser parser = objectMapper.getFactory().createParser( r );
@@ -120,6 +118,7 @@ public class JsonBridge {
     /**
      * Convert object to value.
      */
+    @Override
     public Value objectToValue( Object o ) {
         try {
             return objectMapper.convertValue( o, Value.class );
@@ -131,6 +130,7 @@ public class JsonBridge {
     /**
      * Convert an object to Json
      */
+    @Override
     public String writeToString( Object o ) {
         try {
             return objectMapper.writeValueAsString( o );

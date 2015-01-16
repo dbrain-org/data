@@ -14,23 +14,32 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json;
+package org.dbrain.data.json;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.dbrain.data.Value;
+import org.dbrain.data.impl.json.jackson.JacksonJsonBridge;
 
-import java.io.IOException;
+import java.io.Reader;
 
 /**
- * Parse a Json value.
+ * Created by epoitras on 16/01/15.
  */
-public class JsonValueMapDeserializer extends JsonDeserializer<Value.Map> {
+public interface JsonBridge {
 
-    @Override
-    public Value.Map deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException, JsonProcessingException {
-        return JsonValueParser.parseValue( jp ).getMap();
+    static JsonBridge INSTANCE = new JacksonJsonBridge();
+
+    static JsonBridge get() {
+        return INSTANCE;
     }
+
+    Value parseValue( String r );
+
+    Value parseValue( Reader r );
+
+    <T> T parseObject( String r, Class<T> clazz );
+
+    Value objectToValue( Object o );
+
+    String writeToString( Object o );
 }

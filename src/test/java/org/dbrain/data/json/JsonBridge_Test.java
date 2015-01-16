@@ -29,22 +29,22 @@ import java.math.BigInteger;
  */
 public class JsonBridge_Test {
 
-    org.dbrain.data.impl.json.JsonBridge mapper;
+    JsonBridge bridge;
 
 
     @Before
     public void setUp() throws Exception {
-        mapper = org.dbrain.data.impl.json.JsonBridge.get();
+        bridge = JsonBridge.get();
 
     }
 
     @Test
     public void testSerializeLong() throws Exception {
-        String s1 = mapper.writeToString( new Long( 10 ) );
-        String s2 = mapper.writeToString( new Long( 999999999999999l ) );
-        String s3 = mapper.writeToString( new Long( 1000000000000000l ) );
-        String s4 = mapper.writeToString( new Long( -999999999999999l ) );
-        String s5 = mapper.writeToString( new Long( -1000000000000000l ) );
+        String s1 = bridge.writeToString( new Long( 10 ) );
+        String s2 = bridge.writeToString( new Long( 999999999999999l ) );
+        String s3 = bridge.writeToString( new Long( 1000000000000000l ) );
+        String s4 = bridge.writeToString( new Long( -999999999999999l ) );
+        String s5 = bridge.writeToString( new Long( -1000000000000000l ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -56,11 +56,11 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeBigInteger() throws Exception {
-        String s1 = mapper.writeToString( new BigInteger( "10" ) );
-        String s2 = mapper.writeToString( new BigInteger( "999999999999999" ) );
-        String s3 = mapper.writeToString( new BigInteger( "1000000000000000" ) );
-        String s4 = mapper.writeToString( new BigInteger( "-999999999999999" ) );
-        String s5 = mapper.writeToString( new BigInteger( "-1000000000000000" ) );
+        String s1 = bridge.writeToString( new BigInteger( "10" ) );
+        String s2 = bridge.writeToString( new BigInteger( "999999999999999" ) );
+        String s3 = bridge.writeToString( new BigInteger( "1000000000000000" ) );
+        String s4 = bridge.writeToString( new BigInteger( "-999999999999999" ) );
+        String s5 = bridge.writeToString( new BigInteger( "-1000000000000000" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -72,15 +72,15 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeBigDecimal() throws Exception {
-        String s1 = mapper.writeToString( new BigDecimal( "10" ) );
-        String s2 = mapper.writeToString( new BigDecimal( "999999999999999" ) );
-        String s3 = mapper.writeToString( new BigDecimal( "1000000000000000" ) );
-        String s4 = mapper.writeToString( new BigDecimal( "99999999999.9999" ) );
-        String s5 = mapper.writeToString( new BigDecimal( "100000000000.1234" ) );
-        String s6 = mapper.writeToString( new BigDecimal( "-999999999999999" ) );
-        String s7 = mapper.writeToString( new BigDecimal( "-1000000000000000" ) );
-        String s8 = mapper.writeToString( new BigDecimal( "-99999999999.9999" ) );
-        String s9 = mapper.writeToString( new BigDecimal( "-100000000000.1234" ) );
+        String s1 = bridge.writeToString( new BigDecimal( "10" ) );
+        String s2 = bridge.writeToString( new BigDecimal( "999999999999999" ) );
+        String s3 = bridge.writeToString( new BigDecimal( "1000000000000000" ) );
+        String s4 = bridge.writeToString( new BigDecimal( "99999999999.9999" ) );
+        String s5 = bridge.writeToString( new BigDecimal( "100000000000.1234" ) );
+        String s6 = bridge.writeToString( new BigDecimal( "-999999999999999" ) );
+        String s7 = bridge.writeToString( new BigDecimal( "-1000000000000000" ) );
+        String s8 = bridge.writeToString( new BigDecimal( "-99999999999.9999" ) );
+        String s9 = bridge.writeToString( new BigDecimal( "-100000000000.1234" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -98,21 +98,21 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeInteger() throws Exception {
-        String s = mapper.writeToString( new Integer( 10 ) );
+        String s = bridge.writeToString( new Integer( 10 ) );
         Assert.assertEquals( "10", s );
     }
 
     @Test
     public void testSerializeObject() throws Exception {
-        String s = mapper.writeToString( new TestLongClass() );
-        TestLongClass tlc = mapper.parseObject( s, TestLongClass.class );
+        String s = bridge.writeToString( new TestLongClass() );
+        TestLongClass tlc = bridge.parseObject( s, TestLongClass.class );
         Assert.assertNotNull( tlc );
     }
 
     @Test
     public void testObjectToValue() throws Exception {
         TestLongClass tlc = new TestLongClass();
-        Value.Map v = mapper.objectToValue( tlc ).getMap();
+        Value.Map v = bridge.objectToValue( tlc ).getMap();
 
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
@@ -120,7 +120,7 @@ public class JsonBridge_Test {
 
     @Test
     public void testDeserilizeList() throws Exception {
-        Value.List list = mapper.parseObject( "[1,2,3,4]", Value.List.class );
+        Value.List list = bridge.parseObject( "[1,2,3,4]", Value.List.class );
 
         Assert.assertEquals( 4, list.size() );
 //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
@@ -131,7 +131,7 @@ public class JsonBridge_Test {
 
     @Test
     public void testDeserilizeMap() throws Exception {
-        Value.Map map = mapper.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", Value.Map.class );
+        Value.Map map = bridge.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", Value.Map.class );
 
         Assert.assertEquals( 4, map.size() );
         //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );

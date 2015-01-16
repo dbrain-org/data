@@ -22,7 +22,7 @@ import org.dbrain.data.access.NamedFieldsAccessors;
 import org.dbrain.data.impl.value.ListImpl;
 import org.dbrain.data.impl.value.MapImpl;
 import org.dbrain.data.impl.value.ValueImpl;
-import org.dbrain.data.impl.json.JsonBridge;
+import org.dbrain.data.json.JsonBridge;
 
 import java.io.Reader;
 
