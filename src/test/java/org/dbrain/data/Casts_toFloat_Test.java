@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -14,28 +14,23 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.util;
+package org.dbrain.data;
 
 import junit.framework.Assert;
 import org.junit.Test;
 
-import java.util.Objects;
-import java.util.function.Function;
-
 /**
- * Created with IntelliJ IDEA.
- * User: epoitras
- * Date: 17/12/12
- * Time: 6:04 PM
- * To change this template use File | Settings | File Templates.
+ * Test toFloat.
  */
-public class TestCompose {
+public class Casts_toFloat_Test {
 
     @Test
-    public void testCompose1() throws Exception {
-        Function<String, String> slc = (s) -> Strings.maxLength( s, 10 );
-        Function<Object, String> composed = Functions.compose( Objects::toString, Strings::trim, slc );
-        Assert.assertEquals( composed.apply( new StringBuilder( "test  " ) ), "test" );
-    }
+    public void testFromString() throws Exception {
+        Float d1 = Casts.toFloat( "10.1" );
+        Float d2 = Casts.toFloat( "" );
 
+        Assert.assertEquals( 10.1f, d1 );
+        Assert.assertNull( d2 );
+
+    }
 }

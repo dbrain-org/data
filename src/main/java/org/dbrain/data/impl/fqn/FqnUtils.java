@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Implements parsing of Fully Qualified Name and Patterns.
  */
-public class FqnUtils {
+public final class FqnUtils {
 
     // Fqn reserved characters
     public static final String FQN_PATTERN_RESERVED_CHARS = "\'\"?!@#%&()[]{}.,;+-/\\^ ";
