@@ -157,7 +157,11 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        return bigDecimal.longValueExact();
+        try {
+            return bigDecimal.longValueExact();
+        } catch ( ArithmeticException e ) {
+            throw new DataCoercionException( e );
+        }
     }
 
 
@@ -197,7 +201,11 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        return bigDecimal.intValueExact();
+        try {
+            return bigDecimal.intValueExact();
+        } catch (ArithmeticException e ) {
+            throw new DataCoercionException( e );
+        }
     }
 
     /**
@@ -350,7 +358,7 @@ public class Casts {
      * Cast a name to an enum. Null-safe.
      */
     public static <T extends Enum<T>> T toEnum( Class<T> enumClass, String name ) {
-        return name != null ? Enum.valueOf( enumClass, name.trim() ) : null;
+        return Strings.isBlank( name ) ? null : Enum.valueOf( enumClass, name.trim() );
     }
 
     /**

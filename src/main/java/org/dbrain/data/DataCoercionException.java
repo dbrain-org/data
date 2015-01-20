@@ -25,4 +25,7 @@ public class DataCoercionException extends RuntimeException {
         super( message );
     }
 
+    public DataCoercionException( Throwable cause ) {
+        super( cause );
+    }
 }

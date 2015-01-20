@@ -20,19 +20,22 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 /**
- * Test toDouble.
+ * Created by epoitras on 19/01/15.
  */
-public class Casts_toDouble_Test {
+public class Casts_toBoolean_Test {
 
     @Test
     public void testFromString() throws Exception {
-        Double d1 = Casts.toDouble( "10.1" );
-        Double d2 = Casts.toDouble( "" );
-        Double d3 = Casts.toDouble( " " );
 
-        Assert.assertEquals( 10.1d, d1 );
-        Assert.assertNull( d2 );
-        Assert.assertNull( d3 );
+        Boolean v1 = Casts.toBoolean( "true" );
+        Boolean v2 = Casts.toBoolean( "false" );
+        Boolean v3 = Casts.toBoolean( "" );
+        Boolean v4 = Casts.toBoolean( "" );
+
+        Assert.assertTrue( v1 );
+        Assert.assertFalse( v2 );
+        Assert.assertNull( v3 );
+        Assert.assertNull( v4 );
 
     }
 }

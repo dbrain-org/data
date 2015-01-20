@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * Test coercions of dates.
  */
-public class Casts_toDate_Test {
+public class Casts_toLocalDate_Test {
 
     @Test
     public void testDate() throws Exception {
@@ -33,6 +33,12 @@ public class Casts_toDate_Test {
         Date date1 = new Date( 2014 - 1900, 0, 1 );
         LocalDate date2 = Casts.toLocalDate( date1 );
         Assert.assertEquals( LocalDate.of( 2014, 1, 1 ), date2 );
+    }
+
+    @Test
+    public void testDateNull() throws Exception {
+        LocalDate date2 = Casts.toLocalDate( null );
+        Assert.assertNull( date2 );
     }
 
     /**
@@ -57,7 +63,6 @@ public class Casts_toDate_Test {
         Assert.assertEquals( LocalDate.of( 2014, 1, 1 ), date2 );
     }
 
-
     /**
      * Should not cast.
      */
@@ -65,7 +70,7 @@ public class Casts_toDate_Test {
     public void testSqlTime() throws Exception {
         // Ugliest API ever made:
         Date date1 = new java.sql.Time( 0, 0, 0 );
-        LocalDate date2 = Casts.toLocalDate( date1 );
+        Casts.toLocalDate( date1 );
     }
 
 }

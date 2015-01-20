@@ -19,20 +19,27 @@ package org.dbrain.data;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
+
 /**
- * Test toDouble.
+ * Test toBigInteger.
  */
-public class Casts_toDouble_Test {
+public class Casts_toBigInteger_Test {
 
     @Test
     public void testFromString() throws Exception {
-        Double d1 = Casts.toDouble( "10.1" );
-        Double d2 = Casts.toDouble( "" );
-        Double d3 = Casts.toDouble( " " );
+        BigInteger d1 = Casts.toBigInteger( "10" );
+        BigInteger d2 = Casts.toBigInteger( "" );
+        BigInteger d3 = Casts.toBigInteger( " " );
 
-        Assert.assertEquals( 10.1d, d1 );
+        Assert.assertEquals( new BigInteger( "10" ), d1 );
         Assert.assertNull( d2 );
         Assert.assertNull( d3 );
 
+    }
+
+    @Test( expected = DataCoercionException.class )
+    public void testFromObject() throws Exception {
+        Casts.toBigInteger( new Object() );
     }
 }

@@ -28,9 +28,12 @@ public class Casts_toFloat_Test {
     public void testFromString() throws Exception {
         Float d1 = Casts.toFloat( "10.1" );
         Float d2 = Casts.toFloat( "" );
+        Float d3 = Casts.toFloat( "" );
 
         Assert.assertEquals( 10.1f, d1 );
         Assert.assertNull( d2 );
+        Assert.assertNull( d3 );
 
     }
+
 }
