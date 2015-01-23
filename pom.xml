@@ -22,7 +22,7 @@
 	<name>dbrain-data</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jackson.version>2.4.4</jackson.version>
+		<jackson.version>2.5.0</jackson.version>
 	</properties>
 	<description>Defines concepts and classes that are at the core of data manipulation and definition.</description>
 	<url>dbrain.org</url>
@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
