@@ -16,14 +16,13 @@
 
 package org.dbrain.data.json;
 
-import com.fasterxml.jackson.core.JsonParser;
 import org.dbrain.data.Value;
 import org.dbrain.data.impl.json.jackson.JacksonJsonBridge;
 
 import java.io.Reader;
 
 /**
- * Created by epoitras on 16/01/15.
+ * Simple bridge to JSON format.
  */
 public interface JsonBridge {
 

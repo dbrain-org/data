@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -29,7 +29,7 @@ public class Casts_toBoolean_Test {
 
         Boolean v1 = Casts.toBoolean( "true" );
         Boolean v2 = Casts.toBoolean( "false" );
-        Boolean v3 = Casts.toBoolean( "" );
+        Boolean v3 = Casts.toBoolean( " " );
         Boolean v4 = Casts.toBoolean( "" );
 
         Assert.assertTrue( v1 );

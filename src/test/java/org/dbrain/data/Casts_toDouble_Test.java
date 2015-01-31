@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -30,7 +30,7 @@ public class Casts_toDouble_Test {
         Double d2 = Casts.toDouble( "" );
         Double d3 = Casts.toDouble( " " );
 
-        Assert.assertEquals( 10.1d, d1 );
+        Assert.assertEquals( new Double( 10.1d ), d1 );
         Assert.assertNull( d2 );
         Assert.assertNull( d3 );
 

@@ -36,7 +36,7 @@ class JsonLongSerializer extends JsonSerializer<Number> {
     @Override
     public void serialize( Number value,
                            JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException, JsonProcessingException {
+                           SerializerProvider provider ) throws IOException {
         if ( value != null ) {
             long longValue = value.longValue();
             if ( longValue >= MIN_VALUE && longValue <= MAX_VALUE ) {

@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -90,5 +90,12 @@ public class Value_of_Test {
         Assert.assertEquals( Value.of( "Test" ).getObject(), "Test" );
     }
 
+    @Test
+    public void testOfCharSequence() throws Exception {
+        Assert.assertTrue( Value.of( (CharSequence) null ).isNull() );
+        StringBuilder sb = new StringBuilder();
+        sb.append( "Test" );
+        Assert.assertEquals( Value.of( sb ).getObject(), "Test" );
+    }
 
 }

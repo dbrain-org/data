@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -30,7 +30,7 @@ public class Casts_toFloat_Test {
         Float d2 = Casts.toFloat( "" );
         Float d3 = Casts.toFloat( "" );
 
-        Assert.assertEquals( 10.1f, d1 );
+        Assert.assertEquals( new Float( 10.1f ), d1 );
         Assert.assertNull( d2 );
         Assert.assertNull( d3 );
 

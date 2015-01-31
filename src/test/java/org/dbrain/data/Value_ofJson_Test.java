@@ -16,9 +16,9 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
 import org.dbrain.data.json.JsonBridge;
 import org.dbrain.data.text.ParseException;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
@@ -32,35 +32,36 @@ public class Value_ofJson_Test {
 
     @Test
     public void testEmptyStream() throws Exception {
-        Assert.assertNull( Value.ofJson( "" ) );
+        Assert.assertNull( JsonBridge.get().parseValue( "" ) );
     }
 
     @Test
     public void test_object_1() throws Exception {
-        Value.Map map = Value.ofJson( "{}" ).getMap();
+        Value.Map map = JsonBridge.get().parseValue( "{}" ).getMap();
         Assert.assertEquals( 0, map.size() );
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_1() throws Exception {
-        Value.ofJson( "{" ).getMap();
+        JsonBridge.get().parseValue( "{" ).getMap();
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_2() throws Exception {
-        Value.ofJson( "{} {" ).getMap();
+        JsonBridge.get().parseValue( "{} {" ).getMap();
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_3() throws Exception {
-        Value.ofJson( "{}  [" ).getMap();
+        JsonBridge.get().parseValue( "{}  [" ).getMap();
     }
 
     @Test
     public void test_object_2() throws Exception {
-        Value.Map map = Value.ofJson(
-                "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
-                             .getMap();
+        Value.Map map = JsonBridge.get()
+                                  .parseValue(
+                                          "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
+                                  .getMap();
         Assert.assertEquals( 8, map.size() );
         Assert.assertEquals( Boolean.TRUE.toString(), map.getString( "boolean_true" ) );
         Assert.assertEquals( Boolean.FALSE.toString(), map.getString( "boolean_false" ) );
@@ -74,23 +75,24 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_array_1() throws Exception {
-        Value.List list = Value.ofJson( "[]" ).getList();
+        Value.List list = JsonBridge.get().parseValue( "[]" ).getList();
         Assert.assertEquals( 0, list.size() );
     }
 
     @Test
     public void test_array_2() throws Exception {
-        Value.List list = Value.ofJson( "[\"test\", 123, true, null]" ).getList();
+        Value.List list = JsonBridge.get().parseValue( "[\"test\", 123, true, null]" ).getList();
         Assert.assertEquals( 4, list.size() );
         Assert.assertEquals( "test", list.getString( 0 ) );
-        Assert.assertEquals( 123.0, list.getDouble( 1 ) );
+        Assert.assertEquals( new Double( 123.0 ), list.getDouble( 1 ) );
         Assert.assertTrue( list.getBoolean( 2 ) );
         Assert.assertTrue( list.get( 3 ).isNull() );
     }
 
     @Test
     public void testPaseJsonFile() throws Exception {
-        Value value = Value.ofJson( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ) );
+        Value value = JsonBridge.get()
+                                .parseValue( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ) );
     }
 
     public static class Person {
@@ -141,7 +143,7 @@ public class Value_ofJson_Test {
         test.setFriend( new Person( "Bob", "Marley" ) );
         String s = JsonBridge.get().writeToString( test );
 
-        Value vPerson = Value.ofJson( s );
+        Value vPerson = JsonBridge.get().parseValue( s );
         System.out.println( vPerson );
 
         Person test2 = JsonBridge.get().parseObject( s, Person.class );

@@ -16,8 +16,8 @@
 
 package org.dbrain.data.json;
 
-import junit.framework.Assert;
 import org.dbrain.data.Value;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -116,6 +116,15 @@ public class JsonBridge_Test {
 
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
+    }
+
+    @Test
+    public void testObjectToValuePrimitive() throws Exception {
+
+        Value v = JsonBridge.get().objectToValue( "Test" );
+        Assert.assertEquals( v, Value.of( "Test" ) );
+
+
     }
 
     @Test

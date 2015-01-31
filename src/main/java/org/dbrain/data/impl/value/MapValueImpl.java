@@ -30,15 +30,15 @@ import java.util.function.Function;
 /**
  * Implementation of the Value.Map.
  */
-public class MapImpl implements Value.Map {
+public class MapValueImpl implements Value.Map {
 
     private final HashMap<String, Value> delegate;
 
-    public MapImpl( HashMap<String, Value> delegate ) {
+    public MapValueImpl( HashMap<String, Value> delegate ) {
         this.delegate = delegate;
     }
 
-    public MapImpl() {
+    public MapValueImpl() {
         this( new HashMap<>() );
     }
 
@@ -94,7 +94,7 @@ public class MapImpl implements Value.Map {
     }
 
     @Override
-    public MapImpl getMap() {
+    public MapValueImpl getMap() {
         return this;
     }
 

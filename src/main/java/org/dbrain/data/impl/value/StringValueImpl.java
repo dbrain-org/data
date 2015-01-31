@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -18,16 +18,18 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
-import org.dbrain.data.json.JsonBridge;
+
+import java.util.Objects;
 
 /**
  * Wrap a scalar value;
  */
-public final class ValueImpl implements Value {
+public final class StringValueImpl implements Value {
 
-    private final Object value;
+    private final String value;
 
-    public ValueImpl( Object value ) {
+    public StringValueImpl( String value ) {
+        Objects.nonNull( value );
         this.value = value;
     }
 
@@ -37,12 +39,12 @@ public final class ValueImpl implements Value {
 
     @Override
     public MapValueImpl getMap() {
-        throw new DataCoercionException( "Cannot cast value to Map.");
+        throw new DataCoercionException( "Cannot cast string to Map." );
     }
 
     @Override
     public ListValueImpl getList() {
-        throw new DataCoercionException( "Cannot cast value to List.");
+        throw new DataCoercionException( "Cannot cast string to List." );
     }
 
     @Override
@@ -55,7 +57,7 @@ public final class ValueImpl implements Value {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
 
-        ValueImpl value1 = (ValueImpl) o;
+        StringValueImpl value1 = (StringValueImpl) o;
 
         return !( value != null ? !value.equals( value1.value ) : value1.value != null );
 
@@ -68,6 +70,6 @@ public final class ValueImpl implements Value {
 
     @Override
     public String toString() {
-        return JsonBridge.get().writeToString( this );
+        return value;
     }
 }

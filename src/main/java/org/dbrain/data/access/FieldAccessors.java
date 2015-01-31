@@ -26,7 +26,7 @@ import java.util.function.Function;
 public interface FieldAccessors {
 
     /**
-     * Read the field value as the original object.
+     * Read the field value as raw java object.
      *
      * @return The field value.
      * @throws IllegalArgumentException if the field with the specified name does not exists.

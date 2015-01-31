@@ -19,15 +19,19 @@ package org.dbrain.data;
 import org.dbrain.data.access.FieldAccessors;
 import org.dbrain.data.access.IndexedFieldsAccessors;
 import org.dbrain.data.access.NamedFieldsAccessors;
-import org.dbrain.data.impl.value.ListImpl;
-import org.dbrain.data.impl.value.MapImpl;
+import org.dbrain.data.impl.value.BoolValueImpl;
+import org.dbrain.data.impl.value.ListValueImpl;
+import org.dbrain.data.impl.value.MapValueImpl;
+import org.dbrain.data.impl.value.NullValueImpl;
+import org.dbrain.data.impl.value.StringValueImpl;
 import org.dbrain.data.impl.value.ValueImpl;
-import org.dbrain.data.json.JsonBridge;
 
-import java.io.Reader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.function.Function;
 
 /**
- * A simple value can only contains primitive values.
+ * A simple value that can only contains primitive values.
  */
 public interface Value extends FieldAccessors {
 
@@ -35,48 +39,61 @@ public interface Value extends FieldAccessors {
      * Create a new empty list.
      */
     static Value.List newList() {
-        return new ListImpl();
+        return new ListValueImpl();
     }
 
     /**
      * Create a new empty map.
      */
     static Value.Map newMap() {
-        return new MapImpl();
+        return new MapValueImpl();
     }
 
     static Value of( String s ) {
-        return s != null ? new ValueImpl( s ) : ValueImpl.NULL;
+        return s != null ? new StringValueImpl( s ) : NullValueImpl.NULL;
+    }
+
+    static Value of( CharSequence s ) {
+        return s != null ? new StringValueImpl( s.toString() ) : NullValueImpl.NULL;
     }
 
     static Value of( Byte b ) {
-        return b != null ? new ValueImpl( b ) : ValueImpl.NULL;
+        return b != null ? new ValueImpl( b ) : NullValueImpl.NULL;
     }
 
     static Value of( Short s ) {
-        return s != null ? new ValueImpl( s ) : ValueImpl.NULL;
+        return s != null ? new ValueImpl( s ) : NullValueImpl.NULL;
     }
+
     static Value of( Integer i ) {
-        return i != null ? new ValueImpl( i ) : ValueImpl.NULL;
+        return i != null ? new ValueImpl( i ) : NullValueImpl.NULL;
     }
 
     static Value of( Long l ) {
-        return l != null ? new ValueImpl( l ) : ValueImpl.NULL;
+        return l != null ? new ValueImpl( l ) : NullValueImpl.NULL;
+    }
+
+    static Value of( BigInteger bi ) {
+        return bi != null ? new ValueImpl( bi ) : NullValueImpl.NULL;
+    }
+
+    static Value of( BigDecimal bd ) {
+        return bd != null ? new ValueImpl( bd ) : NullValueImpl.NULL;
     }
 
     static Value of( Float f ) {
-        return f != null ? new ValueImpl( f ) : ValueImpl.NULL;
+        return f != null ? new ValueImpl( f ) : NullValueImpl.NULL;
     }
 
     static Value of( Double d ) {
-        return d != null ? new ValueImpl( d ) : ValueImpl.NULL;
+        return d != null ? new ValueImpl( d ) : NullValueImpl.NULL;
     }
 
     static Value of( Boolean b ) {
         if ( b != null ) {
-            return b ? ValueImpl.TRUE : ValueImpl.FALSE;
+            return b ? BoolValueImpl.TRUE : BoolValueImpl.FALSE;
         } else {
-            return ValueImpl.NULL;
+            return NullValueImpl.NULL;
         }
     }
 
@@ -84,15 +101,15 @@ public interface Value extends FieldAccessors {
      * Make sure Value is not null.
      */
     static Value of( Value v ) {
-        return v != null ? v : ValueImpl.NULL;
+        return v != null ? v : NullValueImpl.NULL;
     }
 
     /**
      * Cast of one of the primitive type.
      */
-    static Value of( Object v ) {
+    static Value of( Object v, Function<Object, Value> valueFromObject ) {
         if ( v == null ) {
-            return ValueImpl.NULL;
+            return NullValueImpl.NULL;
         } else if ( v instanceof Value ) {
             return (Value) v;
         } else if ( v instanceof String ) {
@@ -105,6 +122,10 @@ public interface Value extends FieldAccessors {
             return Value.of( (Integer) v );
         } else if ( v instanceof Long ) {
             return Value.of( (Long) v );
+        } else if ( v instanceof BigDecimal ) {
+            return Value.of( (BigDecimal) v );
+        } else if ( v instanceof BigInteger ) {
+            return Value.of( (BigInteger) v );
         } else if ( v instanceof Float ) {
             return Value.of( (Float) v );
         } else if ( v instanceof Double ) {
@@ -112,16 +133,14 @@ public interface Value extends FieldAccessors {
         } else if ( v instanceof Boolean ) {
             return Value.of( (Boolean) v );
         } else {
-            return JsonBridge.get().objectToValue( v );
+            return valueFromObject.apply( v );
         }
     }
 
-    static Value ofJson( String jsonString ) {
-        return JsonBridge.get().parseValue( jsonString );
-    }
-
-    static Value ofJson( Reader json ) {
-        return JsonBridge.get().parseValue( json );
+    static Value of( Object o ) {
+        return of( o, o1 -> {
+            throw new DataCoercionException( "Cannot cast " + o1.getClass().getName() + " to value." );
+        } );
     }
 
     Map getMap();

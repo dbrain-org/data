@@ -35,7 +35,7 @@ class JsonBigIntegerSerializer extends JsonSerializer<BigInteger> {
     @Override
     public void serialize( BigInteger value,
                            JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException, JsonProcessingException {
+                           SerializerProvider provider ) throws IOException {
         if ( value != null ) {
             if ( value.compareTo( MIN_VALUE ) >= 0 && value.compareTo( MAX_VALUE ) <= 0 ) {
                 jgen.writeNumber( value );

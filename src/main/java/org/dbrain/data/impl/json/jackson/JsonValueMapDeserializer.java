@@ -17,7 +17,6 @@
 package org.dbrain.data.impl.json.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.dbrain.data.Value;
@@ -30,7 +29,7 @@ import java.io.IOException;
 public class JsonValueMapDeserializer extends JsonDeserializer<Value.Map> {
 
     @Override
-    public Value.Map deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException, JsonProcessingException {
+    public Value.Map deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
         return JsonValueParser.parseValue( jp ).getMap();
     }
 }

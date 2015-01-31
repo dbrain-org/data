@@ -36,7 +36,7 @@ class JsonBigDecimalSerializer extends JsonSerializer<BigDecimal> {
     @Override
     public void serialize( BigDecimal value,
                            JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException, JsonProcessingException {
+                           SerializerProvider provider ) throws IOException {
         if ( value != null ) {
             // Does it have more that 15 significant digits ?
             BigInteger unscaled = value.unscaledValue();

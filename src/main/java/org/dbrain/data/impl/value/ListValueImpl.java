@@ -29,15 +29,15 @@ import java.util.stream.Collectors;
 /**
  * A list of simple values.
  */
-public class ListImpl implements Value.List {
+public class ListValueImpl implements Value.List {
 
     private final java.util.List<Value> delegate;
 
-    private ListImpl( java.util.List<Value> delegate ) {
+    private ListValueImpl( java.util.List<Value> delegate ) {
         this.delegate = delegate;
     }
 
-    public ListImpl() {
+    public ListValueImpl() {
         this( new ArrayList<>() );
     }
 
@@ -62,12 +62,12 @@ public class ListImpl implements Value.List {
     }
 
     @Override
-    public MapImpl getMap() {
+    public MapValueImpl getMap() {
         throw new DataCoercionException( "Cannot convert list to map." );
     }
 
     @Override
-    public ListImpl getList() {
+    public ListValueImpl getList() {
         return this;
     }
 

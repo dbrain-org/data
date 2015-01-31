@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -18,56 +18,51 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
-import org.dbrain.data.json.JsonBridge;
 
 /**
  * Wrap a scalar value;
  */
-public final class ValueImpl implements Value {
+public final class NullValueImpl implements Value {
 
-    private final Object value;
+    public static final Value NULL  = new NullValueImpl();
 
-    public ValueImpl( Object value ) {
-        this.value = value;
+    private NullValueImpl() {
     }
 
     public Object getObject() {
-        return value;
+        return null;
     }
 
     @Override
     public MapValueImpl getMap() {
-        throw new DataCoercionException( "Cannot cast value to Map.");
+        throw new DataCoercionException( "Cannot cast null to Map." );
     }
 
     @Override
     public ListValueImpl getList() {
-        throw new DataCoercionException( "Cannot cast value to List.");
+        throw new DataCoercionException( "Cannot cast null to List." );
     }
 
     @Override
     public boolean isNull() {
-        return value == null;
+        return true;
     }
 
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
-
-        ValueImpl value1 = (ValueImpl) o;
-
-        return !( value != null ? !value.equals( value1.value ) : value1.value != null );
+        return true;
 
     }
 
     @Override
     public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+        return 0;
     }
 
     @Override
     public String toString() {
-        return JsonBridge.get().writeToString( this );
+        return "null";
     }
 }

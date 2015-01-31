@@ -30,7 +30,7 @@ import java.io.IOException;
 public class JsonValueDeserializer extends JsonDeserializer<Value> {
 
     @Override
-    public Value deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException, JsonProcessingException {
+    public Value deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
         return JsonValueParser.parseValue( jp );
     }
 }
