@@ -64,7 +64,7 @@ public class JsonValueParser {
                     break;
                 case START_OBJECT: {
                     parser.clearCurrentToken();
-                    Value.Map values = Value.newMap();
+                    Value.Map values = Value.newEmptyMap();
                     while ( nextToker( parser ) != JsonToken.END_OBJECT ) {
                         String key = parser.getCurrentName();
                         Value v = parseValue( parser );
@@ -83,7 +83,7 @@ public class JsonValueParser {
                 break;
                 case START_ARRAY: {
                     parser.clearCurrentToken();
-                    Value.List values = Value.newList();
+                    Value.List values = Value.newEmptyList();
                     while ( nextToker( parser ) != JsonToken.END_ARRAY ) {
                         Value v = parseValue( parser );
                         if ( v == null ) {

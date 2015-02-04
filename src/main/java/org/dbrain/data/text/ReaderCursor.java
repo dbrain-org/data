@@ -18,6 +18,7 @@ package org.dbrain.data.text;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 
 /**
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
@@ -44,6 +45,13 @@ public class ReaderCursor implements AutoCloseable {
      */
     public ReaderCursor( Reader r ) {
         this.reader = r;
+    }
+
+    /**
+     * Create a cursor from a string.
+     */
+    public ReaderCursor( String s ) {
+        this( new StringReader( s ) );
     }
 
     private int readCodePoint() {

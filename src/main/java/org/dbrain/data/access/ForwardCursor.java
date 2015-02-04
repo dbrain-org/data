@@ -19,7 +19,7 @@ package org.dbrain.data.access;
 /**
  * Allows to read tabular data in a Forward-only manner.
  */
-public interface ForwardCursor extends IndexedFieldsAccessors, NamedFieldsAccessors {
+public interface ForwardCursor extends IndexedFieldAccessors, NamedFieldAccessors {
 
     /**
      * @return true if the cursor is at end-of-file.

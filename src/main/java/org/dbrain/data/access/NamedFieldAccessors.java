@@ -23,7 +23,7 @@ import java.util.function.Function;
 /**
  * Denote a container of fields accessible by names.
  */
-public interface NamedFieldsAccessors {
+public interface NamedFieldAccessors {
 
     /**
      * Read the field having the specified name.

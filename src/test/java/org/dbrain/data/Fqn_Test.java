@@ -17,8 +17,12 @@
 package org.dbrain.data;
 
 import org.dbrain.data.text.ParseException;
+import org.dbrain.data.text.ReaderCursor;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.Reader;
+import java.io.StringReader;
 
 /**
  * Test Fully Qualified Names.
@@ -39,6 +43,15 @@ public class Fqn_Test {
         Assert.assertEquals( Fqn.of( "" ).hashCode(), Fqn.of( "" ).hashCode() );
         Assert.assertEquals( Fqn.of( "test" ).hashCode(), Fqn.of( "test" ).hashCode() );
         Assert.assertEquals( Fqn.of( "test.test2" ).hashCode(), Fqn.of( "test.test2" ).hashCode() );
+    }
+
+
+    @Test
+    public void testOfReader() throws Exception {
+        Assert.assertTrue( Fqn.of( new ReaderCursor( "" ) ).equals( Fqn.of( "" ) ) );
+        Assert.assertTrue( Fqn.of( new ReaderCursor( "   " ) ).equals( Fqn.of( "" ) ) );
+        Assert.assertTrue( Fqn.of( new ReaderCursor( "test.test2" ) ).equals( Fqn.of( "test.test2" ) ) );
+        Assert.assertTrue( Fqn.of( new ReaderCursor( " test.test2 " ) ).equals( Fqn.of( "test.test2" ) ) );
     }
 
     /**

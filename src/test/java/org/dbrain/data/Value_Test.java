@@ -43,10 +43,10 @@ public class Value_Test {
         v = Value.of( Boolean.TRUE );
         Assert.assertFalse( v.isNull() );
 
-        v = Value.newList();
+        v = Value.newEmptyList();
         Assert.assertFalse( v.isNull() );
 
-        v = Value.newMap();
+        v = Value.newEmptyMap();
         Assert.assertFalse( v.isNull() );
 
         v = Value.of( (Boolean) null );

@@ -23,7 +23,7 @@ import java.util.function.Function;
 /**
  * Denote a container of fields accessible by indexes.
  */
-public interface IndexedFieldsAccessors {
+public interface IndexedFieldAccessors {
 
     /**
      * Read the raw field value at the specified index.

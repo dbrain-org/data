@@ -26,12 +26,12 @@ public class Value_List_Test {
         Value.List list;
 
         // Simple constructor
-        list = Value.newList();
+        list = Value.newEmptyList();
         Assert.assertEquals( list.size(), 0 );
     }
 
     @Test( expected = DataCoercionException.class )
     public void testAsString() throws Exception {
-        Value.newList().getString();
+        Value.newEmptyList().getString();
     }
 }

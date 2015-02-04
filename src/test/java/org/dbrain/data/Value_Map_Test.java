@@ -26,58 +26,58 @@ public class Value_Map_Test {
         Value.Map map;
 
         // Simple constructor
-        map = Value.newMap();
+        map = Value.newEmptyMap();
         Assert.assertEquals( map.size(), 0 );
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetBoolean() throws Exception {
-        Value.newMap().getBoolean();
+        Value.newEmptyMap().getBoolean();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetByte() throws Exception {
-        Value.newMap().getByte();
+        Value.newEmptyMap().getByte();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetShort() throws Exception {
-        Value.newMap().getShort();
+        Value.newEmptyMap().getShort();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetInteger() throws Exception {
-        Value.newMap().getInt();
+        Value.newEmptyMap().getInt();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetLong() throws Exception {
-        Value.newMap().getLong();
+        Value.newEmptyMap().getLong();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetFloat() throws Exception {
-        Value.newMap().getFloat();
+        Value.newEmptyMap().getFloat();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetDouble() throws Exception {
-        Value.newMap().getDouble();
+        Value.newEmptyMap().getDouble();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetString() throws Exception {
-        Value.newMap().getString();
+        Value.newEmptyMap().getString();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetList() throws Exception {
-        Value.newMap().getList();
+        Value.newEmptyMap().getList();
     }
 
     @Test
     public void testGetObject() throws Exception {
-        Value.Map m = Value.newMap();
+        Value.Map m = Value.newEmptyMap();
         m.put( "key", Value.of( "value" ) );
 
         Object o = m.getObject();
@@ -91,7 +91,7 @@ public class Value_Map_Test {
 
     @Test
     public void testIsEmpty() throws Exception {
-        Value.Map m = Value.newMap();
+        Value.Map m = Value.newEmptyMap();
 
         Assert.assertTrue( m.isEmpty() );
         m.put( "test", Value.of( "Test" ) );
@@ -103,8 +103,8 @@ public class Value_Map_Test {
 
     @Test
     public void testPutAll() throws Exception {
-        Value.Map m1 = Value.newMap();
-        Value.Map m2 = Value.newMap();
+        Value.Map m1 = Value.newEmptyMap();
+        Value.Map m2 = Value.newEmptyMap();
 
         m1.put( "test1", Value.of( "Test" ) );
         m1.put( "test2", Value.of( "Test2" ) );
@@ -116,7 +116,7 @@ public class Value_Map_Test {
 
     @Test
     public void testClear() throws Exception {
-        Value.Map m1 = Value.newMap();
+        Value.Map m1 = Value.newEmptyMap();
         m1.put( "test1", Value.of( "Test" ) );
         m1.put( "test2", Value.of( "Test2" ) );
         m1.put( "test3", Value.of( "Test3" ) );
@@ -133,7 +133,7 @@ public class Value_Map_Test {
         String k = "test";
         Value s = Value.of( "String" );
 
-        Value.Map v = Value.newMap();
+        Value.Map v = Value.newEmptyMap();
 
         Assert.assertFalse( v.containsKey( k ) );
         Assert.assertFalse( v.containsValue( s ) );

@@ -17,8 +17,8 @@
 package org.dbrain.data;
 
 import org.dbrain.data.access.FieldAccessors;
-import org.dbrain.data.access.IndexedFieldsAccessors;
-import org.dbrain.data.access.NamedFieldsAccessors;
+import org.dbrain.data.access.IndexedFieldAccessors;
+import org.dbrain.data.access.NamedFieldAccessors;
 import org.dbrain.data.impl.value.BoolValueImpl;
 import org.dbrain.data.impl.value.ListValueImpl;
 import org.dbrain.data.impl.value.MapValueImpl;
@@ -38,14 +38,14 @@ public interface Value extends FieldAccessors {
     /**
      * Create a new empty list.
      */
-    static Value.List newList() {
+    static Value.List newEmptyList() {
         return new ListValueImpl();
     }
 
     /**
      * Create a new empty map.
      */
-    static Value.Map newMap() {
+    static Value.Map newEmptyMap() {
         return new MapValueImpl();
     }
 
@@ -149,7 +149,7 @@ public interface Value extends FieldAccessors {
 
     boolean isNull();
 
-    public interface Map extends Value, java.util.Map<String, Value>, NamedFieldsAccessors {}
+    public interface Map extends Value, java.util.Map<String, Value>, NamedFieldAccessors {}
 
-    public interface List extends Value, java.util.List<Value>, IndexedFieldsAccessors {}
+    public interface List extends Value, java.util.List<Value>, IndexedFieldAccessors {}
 }
