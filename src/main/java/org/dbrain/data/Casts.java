@@ -157,11 +157,7 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        try {
-            return bigDecimal.longValueExact();
-        } catch ( ArithmeticException e ) {
-            throw new DataCoercionException( e );
-        }
+        return bigDecimal.longValueExact();
     }
 
 
@@ -201,11 +197,7 @@ public class Casts {
         if ( bigDecimal == null ) {
             return null;
         }
-        try {
-            return bigDecimal.intValueExact();
-        } catch (ArithmeticException e ) {
-            throw new DataCoercionException( e );
-        }
+        return bigDecimal.intValueExact();
     }
 
     /**

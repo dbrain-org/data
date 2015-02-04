@@ -48,7 +48,7 @@ public class Casts_toInteger_Test {
 
     }
 
-    @Test( expected = DataCoercionException.class )
+    @Test( expected = ArithmeticException.class )
     public void testFromBigDecimalFail() throws Exception {
         Casts.toInteger( new BigDecimal( "100000000000000000000000000000000000000000000000000000000" ) );
     }

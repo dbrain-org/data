@@ -19,6 +19,8 @@ package org.dbrain.data;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 /**
  * Test different valueOf.
  */
@@ -45,37 +47,37 @@ public class Value_of_Test {
     @Test
     public void testOfByte() throws Exception {
         Assert.assertTrue( Value.of( (Byte) null ).isNull() );
-        Assert.assertEquals( Value.of( new Byte( (byte) 0 ) ).getObject(), new Byte( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Byte( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
     }
 
     @Test
     public void testOfShort() throws Exception {
         Assert.assertTrue( Value.of( (Short) null ).isNull() );
-        Assert.assertEquals( Value.of( new Short( (byte) 0 ) ).getObject(), new Short( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Short( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
     }
 
     @Test
     public void testOfInteger() throws Exception {
         Assert.assertTrue( Value.of( (Integer) null ).isNull() );
-        Assert.assertEquals( Value.of( new Integer( (byte) 0 ) ).getObject(), new Integer( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Integer( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
     }
 
     @Test
     public void testOfLong() throws Exception {
         Assert.assertTrue( Value.of( (Long) null ).isNull() );
-        Assert.assertEquals( Value.of( new Long( (byte) 0 ) ).getObject(), new Long( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Long( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
     }
 
     @Test
     public void testOfFloat() throws Exception {
         Assert.assertTrue( Value.of( (Float) null ).isNull() );
-        Assert.assertEquals( Value.of( new Float( (byte) 0 ) ).getObject(), new Float( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Float( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
     }
 
     @Test
     public void testOfDouble() throws Exception {
         Assert.assertTrue( Value.of( (Double) null ).isNull() );
-        Assert.assertEquals( Value.of( new Double( (byte) 0 ) ).getObject(), new Double( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Double( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
     }
 
     @Test

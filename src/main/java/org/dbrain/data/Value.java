@@ -24,7 +24,7 @@ import org.dbrain.data.impl.value.ListValueImpl;
 import org.dbrain.data.impl.value.MapValueImpl;
 import org.dbrain.data.impl.value.NullValueImpl;
 import org.dbrain.data.impl.value.StringValueImpl;
-import org.dbrain.data.impl.value.ValueImpl;
+import org.dbrain.data.impl.value.NumberValueImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -58,35 +58,35 @@ public interface Value extends FieldAccessors {
     }
 
     static Value of( Byte b ) {
-        return b != null ? new ValueImpl( b ) : NullValueImpl.NULL;
+        return b != null ? new NumberValueImpl( b ) : NullValueImpl.NULL;
     }
 
     static Value of( Short s ) {
-        return s != null ? new ValueImpl( s ) : NullValueImpl.NULL;
+        return s != null ? new NumberValueImpl( s ) : NullValueImpl.NULL;
     }
 
     static Value of( Integer i ) {
-        return i != null ? new ValueImpl( i ) : NullValueImpl.NULL;
+        return i != null ? new NumberValueImpl( i ) : NullValueImpl.NULL;
     }
 
     static Value of( Long l ) {
-        return l != null ? new ValueImpl( l ) : NullValueImpl.NULL;
+        return l != null ? new NumberValueImpl( l ) : NullValueImpl.NULL;
     }
 
     static Value of( BigInteger bi ) {
-        return bi != null ? new ValueImpl( bi ) : NullValueImpl.NULL;
+        return bi != null ? new NumberValueImpl( bi ) : NullValueImpl.NULL;
     }
 
     static Value of( BigDecimal bd ) {
-        return bd != null ? new ValueImpl( bd ) : NullValueImpl.NULL;
+        return bd != null ? new NumberValueImpl( bd ) : NullValueImpl.NULL;
     }
 
     static Value of( Float f ) {
-        return f != null ? new ValueImpl( f ) : NullValueImpl.NULL;
+        return f != null ? new NumberValueImpl( f ) : NullValueImpl.NULL;
     }
 
     static Value of( Double d ) {
-        return d != null ? new ValueImpl( d ) : NullValueImpl.NULL;
+        return d != null ? new NumberValueImpl( d ) : NullValueImpl.NULL;
     }
 
     static Value of( Boolean b ) {

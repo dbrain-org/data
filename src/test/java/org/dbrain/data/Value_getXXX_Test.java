@@ -16,8 +16,8 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -94,9 +94,9 @@ public class Value_getXXX_Test {
         Assert.assertEquals( new Short( (short)123 ), v.getShort() );
         Assert.assertEquals( new Integer( 123 ), v.getInt() );
         Assert.assertEquals( new Long( 123 ), v.getLong() );
-        Assert.assertEquals( "123.0", v.getString() );
-        Assert.assertEquals( 123.0f, v.getFloat() );
-        Assert.assertEquals( 123.0, v.getDouble() );
+        Assert.assertEquals( "123", v.getString() );
+        Assert.assertEquals( new Float( 123.0f ), v.getFloat() );
+        Assert.assertEquals( new Double( 123.0 ), v.getDouble() );
 
         v = Value.of( 0D );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
@@ -104,9 +104,9 @@ public class Value_getXXX_Test {
         Assert.assertEquals( new Short( (short)0 ), v.getShort() );
         Assert.assertEquals( new Integer( 0 ), v.getInt() );
         Assert.assertEquals( new Long( 0 ), v.getLong() );
-        Assert.assertEquals( "0.0", v.getString() );
-        Assert.assertEquals( 0.0f, v.getFloat() );
-        Assert.assertEquals( 0.0, v.getDouble() );
+        Assert.assertEquals( "0", v.getString() );
+        Assert.assertEquals( new Float( 0.0f ), v.getFloat() );
+        Assert.assertEquals( new Double( 0.0 ), v.getDouble() );
 
         v = Value.of( (Double) null );
         Assert.assertNull( v.getObject() );
@@ -157,8 +157,8 @@ public class Value_getXXX_Test {
         Assert.assertEquals( new Integer( 123 ), v.getInt() );
         Assert.assertEquals( new Long( 123 ), v.getLong() );
         Assert.assertEquals( "123", v.getString() );
-        Assert.assertEquals( 123.0f, v.getFloat() );
-        Assert.assertEquals( 123.0, v.getDouble() );
+        Assert.assertEquals( new Float( 123.0f ), v.getFloat() );
+        Assert.assertEquals( new Double( 123.0 ), v.getDouble() );
 
         v = Value.of( "0" );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
@@ -167,8 +167,8 @@ public class Value_getXXX_Test {
         Assert.assertEquals( new Integer( 0 ), v.getInt() );
         Assert.assertEquals( new Long( 0 ), v.getLong() );
         Assert.assertEquals( "0", v.getString() );
-        Assert.assertEquals( 0.0f, v.getFloat() );
-        Assert.assertEquals( 0.0, v.getDouble() );
+        Assert.assertEquals( new Float( 0.0f ), v.getFloat() );
+        Assert.assertEquals( new Double( 0.0 ), v.getDouble() );
 
         v = Value.of( "1.0" );
         Assert.assertEquals( Boolean.TRUE, v.getBoolean() );
@@ -177,8 +177,8 @@ public class Value_getXXX_Test {
         Assert.assertEquals( new Integer( 1 ), v.getInt() );
         Assert.assertEquals( new Long( 1 ), v.getLong() );
         Assert.assertEquals( "1.0", v.getString() );
-        Assert.assertEquals( 1.0f, v.getFloat() );
-        Assert.assertEquals( 1.0, v.getDouble() );
+        Assert.assertEquals( new Float( 1.0f ), v.getFloat() );
+        Assert.assertEquals( new Double( 1.0 ), v.getDouble() );
 
         v = Value.of( "0.0" );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
@@ -187,8 +187,8 @@ public class Value_getXXX_Test {
         Assert.assertEquals( new Integer( 0 ), v.getInt() );
         Assert.assertEquals( new Long( 0 ), v.getLong() );
         Assert.assertEquals( "0.0", v.getString() );
-        Assert.assertEquals( 0.0f, v.getFloat() );
-        Assert.assertEquals( 0.0, v.getDouble() );
+        Assert.assertEquals( new Float( 0.0f ), v.getFloat() );
+        Assert.assertEquals( new Double( 0.0 ), v.getDouble() );
 
     }
 
