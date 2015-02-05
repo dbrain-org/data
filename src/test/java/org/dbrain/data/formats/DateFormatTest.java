@@ -50,7 +50,7 @@ public class DateFormatTest {
     /**
      * Do not expect the parser to be lenient.
      */
-    @Test(expected = ParseException.class )
+    @Test( expected = ParseException.class )
     public void testParseNonLenient() throws Exception {
         LocalDateFormat df = new LocalDateFormat( "yyyy-MM-DD", Locale.ENGLISH );
         LocalDate testDate = df.parse( "2012-01-32" );

@@ -29,8 +29,6 @@ public class Value_equals_Test {
 
     /**
      * Test the equals on nulls.
-     *
-     * @throws Exception
      */
     @Test
     public void testNullEquals() throws Exception {
@@ -44,8 +42,6 @@ public class Value_equals_Test {
 
     /**
      * Test the equals on booleans.
-     *
-     * @throws Exception
      */
     @Test
     public void testBooleanEquals() throws Exception {
@@ -61,8 +57,6 @@ public class Value_equals_Test {
 
     /**
      * Test the equals on booleans.
-     *
-     * @throws Exception
      */
     @Test
     public void testStringEquals() throws Exception {
@@ -115,16 +109,16 @@ public class Value_equals_Test {
     @Test
     public void testMapEquals() throws Exception {
         Value.Map map1 = Value.newEmptyMap();
-        map1.put( "null", Value.of( (Object) null ));
-        map1.put( "int", Value.of( 123 ));
+        map1.put( "null", Value.of( (Object) null ) );
+        map1.put( "int", Value.of( 123 ) );
 
         Value.Map map2 = Value.newEmptyMap();
-        map2.put( "int", Value.of( 123 ));
-        map2.put( "null", Value.of( (Object) null ));
+        map2.put( "int", Value.of( 123 ) );
+        map2.put( "null", Value.of( (Object) null ) );
 
         Value.Map map3 = Value.newEmptyMap();
-        map3.put( "null", Value.of( (Object) null ));
-        map3.put( "int", Value.of( "123" ));
+        map3.put( "null", Value.of( (Object) null ) );
+        map3.put( "int", Value.of( "123" ) );
 
         Assert.assertEquals( map1, map2 );
         Assert.assertNotEquals( map1, map3 );

@@ -90,8 +90,8 @@ public class Value_getXXX_Test {
 
         Value v = Value.of( 123D );
         Assert.assertEquals( Boolean.TRUE, v.getBoolean() );
-        Assert.assertEquals( new Byte( (byte)123 ), v.getByte() );
-        Assert.assertEquals( new Short( (short)123 ), v.getShort() );
+        Assert.assertEquals( new Byte( (byte) 123 ), v.getByte() );
+        Assert.assertEquals( new Short( (short) 123 ), v.getShort() );
         Assert.assertEquals( new Integer( 123 ), v.getInt() );
         Assert.assertEquals( new Long( 123 ), v.getLong() );
         Assert.assertEquals( "123", v.getString() );
@@ -100,8 +100,8 @@ public class Value_getXXX_Test {
 
         v = Value.of( 0D );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
-        Assert.assertEquals( new Byte( (byte)0 ), v.getByte() );
-        Assert.assertEquals( new Short( (short)0 ), v.getShort() );
+        Assert.assertEquals( new Byte( (byte) 0 ), v.getByte() );
+        Assert.assertEquals( new Short( (short) 0 ), v.getShort() );
         Assert.assertEquals( new Integer( 0 ), v.getInt() );
         Assert.assertEquals( new Long( 0 ), v.getLong() );
         Assert.assertEquals( "0", v.getString() );
@@ -119,7 +119,7 @@ public class Value_getXXX_Test {
 
         Value v = Value.of( 123.1D );
         try {
-             v.getByte();
+            v.getByte();
             throw new AssertionFailedError( "Should not happend." );
         } catch ( ArithmeticException e ) {
             // Expected
@@ -152,8 +152,8 @@ public class Value_getXXX_Test {
     public void test_getFromString() throws Exception {
         Value v = Value.of( "123" );
         Assert.assertEquals( Boolean.TRUE, v.getBoolean() );
-        Assert.assertEquals( new Byte( (byte)123 ), v.getByte() );
-        Assert.assertEquals( new Short( (short)123 ), v.getShort() );
+        Assert.assertEquals( new Byte( (byte) 123 ), v.getByte() );
+        Assert.assertEquals( new Short( (short) 123 ), v.getShort() );
         Assert.assertEquals( new Integer( 123 ), v.getInt() );
         Assert.assertEquals( new Long( 123 ), v.getLong() );
         Assert.assertEquals( "123", v.getString() );
@@ -162,8 +162,8 @@ public class Value_getXXX_Test {
 
         v = Value.of( "0" );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
-        Assert.assertEquals( new Byte( (byte)0 ), v.getByte() );
-        Assert.assertEquals( new Short( (short)0 ), v.getShort() );
+        Assert.assertEquals( new Byte( (byte) 0 ), v.getByte() );
+        Assert.assertEquals( new Short( (short) 0 ), v.getShort() );
         Assert.assertEquals( new Integer( 0 ), v.getInt() );
         Assert.assertEquals( new Long( 0 ), v.getLong() );
         Assert.assertEquals( "0", v.getString() );
@@ -172,8 +172,8 @@ public class Value_getXXX_Test {
 
         v = Value.of( "1.0" );
         Assert.assertEquals( Boolean.TRUE, v.getBoolean() );
-        Assert.assertEquals( new Byte( (byte)1 ), v.getByte() );
-        Assert.assertEquals( new Short( (short)1 ), v.getShort() );
+        Assert.assertEquals( new Byte( (byte) 1 ), v.getByte() );
+        Assert.assertEquals( new Short( (short) 1 ), v.getShort() );
         Assert.assertEquals( new Integer( 1 ), v.getInt() );
         Assert.assertEquals( new Long( 1 ), v.getLong() );
         Assert.assertEquals( "1.0", v.getString() );
@@ -182,8 +182,8 @@ public class Value_getXXX_Test {
 
         v = Value.of( "0.0" );
         Assert.assertEquals( Boolean.FALSE, v.getBoolean() );
-        Assert.assertEquals( new Byte( (byte)0 ), v.getByte() );
-        Assert.assertEquals( new Short( (short)0 ), v.getShort() );
+        Assert.assertEquals( new Byte( (byte) 0 ), v.getByte() );
+        Assert.assertEquals( new Short( (short) 0 ), v.getShort() );
         Assert.assertEquals( new Integer( 0 ), v.getInt() );
         Assert.assertEquals( new Long( 0 ), v.getLong() );
         Assert.assertEquals( "0.0", v.getString() );

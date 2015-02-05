@@ -179,7 +179,7 @@ public class MapValueImpl implements Value.Map {
     @Override
     public Value putIfAbsent( String key, Value value ) {
         if ( !containsKey( key ) ) {
-            return put( key, Value.of( value ));
+            return put( key, Value.of( value ) );
         } else {
             return get( key );
         }
@@ -192,7 +192,7 @@ public class MapValueImpl implements Value.Map {
 
     @Override
     public boolean replace( String key, Value oldValue, Value newValue ) {
-        return delegate.replace( key, Value.of( oldValue ) , Value.of( newValue ) );
+        return delegate.replace( key, Value.of( oldValue ), Value.of( newValue ) );
     }
 
     @Override

@@ -33,10 +33,10 @@ public class Value_of_Test {
         Assert.assertTrue( Value.of( (Object) null ).isNull() );
         Assert.assertEquals( Value.of( (Object) "" ), Value.of( "" ) );
         Assert.assertEquals( Value.of( (Object) Value.of( "" ) ), Value.of( "" ) );
-        Assert.assertEquals( Value.of( (Object) new Byte( (byte)1 )), Value.of( new Byte( (byte)1 ) ) );
-        Assert.assertEquals( Value.of( (Object) new Short( (byte)1 )), Value.of( new Short( (byte)1 ) ) );
-        Assert.assertEquals( Value.of( (Object) new Integer( (byte)1 )), Value.of( new Integer( (byte)1 ) ) );
-        Assert.assertEquals( Value.of( (Object) new Long( (byte)1 )), Value.of( new Long( (byte)1 ) ) );
+        Assert.assertEquals( Value.of( (Object) new Byte( (byte) 1 ) ), Value.of( new Byte( (byte) 1 ) ) );
+        Assert.assertEquals( Value.of( (Object) new Short( (byte) 1 ) ), Value.of( new Short( (byte) 1 ) ) );
+        Assert.assertEquals( Value.of( (Object) new Integer( (byte) 1 ) ), Value.of( new Integer( (byte) 1 ) ) );
+        Assert.assertEquals( Value.of( (Object) new Long( (byte) 1 ) ), Value.of( new Long( (byte) 1 ) ) );
         Assert.assertEquals( Value.of( (Object) 1.0f ), Value.of( 1.0f ) );
         Assert.assertEquals( Value.of( (Object) 1.0D ), Value.of( 1.0D ) );
         Assert.assertEquals( Value.of( (Object) Boolean.FALSE ), Value.of( false ) );

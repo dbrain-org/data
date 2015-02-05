@@ -21,9 +21,6 @@ import org.dbrain.data.text.ReaderCursor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.Reader;
-import java.io.StringReader;
-
 /**
  * Test Fully Qualified Names.
  */
@@ -82,8 +79,6 @@ public class Fqn_Test {
 
     /**
      * Test builder scenarios.
-     *
-     * @throws Exception
      */
     @Test
     public void testBuilder() throws Exception {
@@ -140,12 +135,12 @@ public class Fqn_Test {
         Assert.assertEquals( "", Fqn.of( "test.''" ).segment( 1 ) );
     }
 
-    @Test(expected = IndexOutOfBoundsException.class )
+    @Test( expected = IndexOutOfBoundsException.class )
     public void testOutOfBoundSegment1() throws Exception {
-        Fqn.of( "test").segment( 1 );
+        Fqn.of( "test" ).segment( 1 );
     }
 
-    @Test(expected = IndexOutOfBoundsException.class )
+    @Test( expected = IndexOutOfBoundsException.class )
     public void testOutOfBoundSegment2() throws Exception {
         Fqn.of( "" ).segment( 0 );
     }

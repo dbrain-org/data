@@ -38,7 +38,7 @@ public class TestStringToNumberAdapter {
         Assert.assertEquals( n.intValue(), 124 );
     }
 
-    @Test(expected = DataTruncationException.class)
+    @Test( expected = DataTruncationException.class )
     public void testSimpleFailure() {
         Function<String, Number> dfa = Numbers.numberParser( DecimalFormat.getIntegerInstance( Locale.ENGLISH ) );
         Number n = dfa.apply( "NAN" );

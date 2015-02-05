@@ -27,7 +27,6 @@ public class Value_Test {
 
     /**
      * Test the isNull method.
-     * @throws Exception
      */
     @Test
     public void testIsNull() throws Exception {
@@ -69,8 +68,8 @@ public class Value_Test {
         Value v2 = Value.of( 2 );
         Assert.assertTrue( v1.hashCode() == v2.hashCode() );
 
-        v1 = Value.of( (Object)null );
-        v2 = Value.of( (Object)null );
+        v1 = Value.of( (Object) null );
+        v2 = Value.of( (Object) null );
         Assert.assertTrue( v1.hashCode() == v2.hashCode() );
 
     }

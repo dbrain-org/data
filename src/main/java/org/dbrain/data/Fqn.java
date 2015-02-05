@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 /**
  * Describe a fully qualified name.
- * <p/>
+ *
  * Syntax allows for wildcards as well as ways of escaping them.
  * ''
  * test

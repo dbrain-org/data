@@ -104,7 +104,7 @@ public class ReaderCursor implements AutoCloseable {
 
     /**
      * @return Get at the character at the current cursor position.
-     * <p/>
+     *
      * Note: If the current character is consumed. The next one is loaded from
      * the underlying reader.
      */

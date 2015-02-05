@@ -32,6 +32,7 @@ public class Lookups {
      *
      * @param fromValue initial from value.
      * @param toValue   initial to value.
+     *
      * @return A Builder to continue building a lookup.
      */
     public static <FROM, TO> LookupBuilder<FROM, TO> map( FROM fromValue, TO toValue ) {
@@ -43,6 +44,7 @@ public class Lookups {
      * Inverse an existing lookup table. Please note that fails if multiple from values map to the same to value.
      *
      * @param lookup The lookup to inverse.
+     *
      * @return An inverse lookup.
      */
     public static <FROM, TO> Lookup<TO, FROM> inverse( Lookup<FROM, TO> lookup ) {
@@ -56,9 +58,6 @@ public class Lookups {
 
     /**
      * Builder for Lookup.
-     *
-     * @param <FROM>
-     * @param <TO>
      */
     public static class LookupBuilder<FROM, TO> {
 

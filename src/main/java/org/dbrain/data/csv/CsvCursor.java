@@ -41,9 +41,6 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Return true if the specified character is an end of column character.
-     *
-     * @param c
-     * @return
      */
     private boolean isEOC( int c ) {
         return c == separator || ParserUtils.isEOL( c );
@@ -62,8 +59,6 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Read a quoted string from the stream;
-     *
-     * @return
      */
     private String readQuotedString() {
 
@@ -104,8 +99,6 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Read a string from the stream;
-     *
-     * @return
      */
     private String readString() {
         String spaces = readSpace();
@@ -147,12 +140,8 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Create a new cursor to read tabular data from a text stream.<p>
-     * <p/>
-     * Allow to specify the fields name.
      *
-     * @param reader
-     * @param separator
-     * @param stringQuote
+     * Allow to specify the fields name.
      */
     public CsvCursor( Reader reader, int separator, int stringQuote, String[] fieldNames ) {
         this.cursor = new ReaderCursor( reader );
@@ -163,10 +152,6 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Create a new cursor to read tabular data from a text stream.
-     *
-     * @param reader
-     * @param separator
-     * @param stringQuote
      */
     public CsvCursor( Reader reader, int separator, int stringQuote ) {
         this.cursor = new ReaderCursor( reader );
@@ -178,11 +163,8 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
     /**
      * Create a new cursor to read tabular data from a text stream.
-     * <p/>
-     * Use no quote for string fields.
      *
-     * @param reader
-     * @param separator
+     * Use no quote for string fields.
      */
     public CsvCursor( Reader reader, int separator ) {
         this( reader, separator, -1 );
@@ -216,6 +198,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * Read the field value.
      *
      * @param index Index of the field to read.
+     *
      * @return The field value, as string.
      */
     public Object getObject( int index ) {
@@ -233,6 +216,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      * Get the value of the field or null.
      *
      * @param name Field name
+     *
      * @return The getValue or null if getValue out of bound for this row.
      */
     public Object getObject( String name ) {

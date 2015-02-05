@@ -23,8 +23,8 @@ import org.dbrain.data.impl.value.BoolValueImpl;
 import org.dbrain.data.impl.value.ListValueImpl;
 import org.dbrain.data.impl.value.MapValueImpl;
 import org.dbrain.data.impl.value.NullValueImpl;
-import org.dbrain.data.impl.value.StringValueImpl;
 import org.dbrain.data.impl.value.NumberValueImpl;
+import org.dbrain.data.impl.value.StringValueImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

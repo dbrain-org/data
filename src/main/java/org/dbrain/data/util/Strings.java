@@ -41,6 +41,7 @@ public class Strings {
      * Null-safe trim.
      *
      * @param s The String to trim.
+     *
      * @return A string with.
      */
     public static String trim( String s ) {
@@ -51,6 +52,7 @@ public class Strings {
      * Trim trailing spaces.
      *
      * @param s The String to trim.
+     *
      * @return a copy of the string with the trailing spaces removed.
      */
     public static String rtrim( String s ) {
@@ -93,7 +95,7 @@ public class Strings {
 
     /**
      * Verify that the string contains all blank characters or is null.
-     * <p/>
+     *
      * <code>
      * Examples of blank strings :
      * "", "     ", null
@@ -142,6 +144,7 @@ public class Strings {
      * Apply a lowercase transform to the string.
      *
      * @param locale The locale to use in the transformation,
+     *
      * @return A lowercase string.
      */
     public static String lowercase( String s, Locale locale ) {
@@ -152,6 +155,7 @@ public class Strings {
      * Apply an uppercase transform to the string.
      *
      * @param locale The locale to use in the transformation,
+     *
      * @return A uppercase string.
      */
     public static String uppercase( String s, Locale locale ) {

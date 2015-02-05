@@ -19,7 +19,6 @@ package org.dbrain.data;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 /**
@@ -30,7 +29,7 @@ public class Casts_toEnum_Test {
     @Test
     public void testFromName() throws Exception {
         RoundingMode rm1 = Casts.toEnum( RoundingMode.class, RoundingMode.CEILING.name() );
-        RoundingMode rm2 = Casts.toEnum( RoundingMode.class, " "+RoundingMode.CEILING.name() + " " );
+        RoundingMode rm2 = Casts.toEnum( RoundingMode.class, " " + RoundingMode.CEILING.name() + " " );
         RoundingMode rm3 = Casts.toEnum( RoundingMode.class, "" );
         RoundingMode rm4 = Casts.toEnum( RoundingMode.class, " " );
         RoundingMode rm5 = Casts.toEnum( RoundingMode.class, null );

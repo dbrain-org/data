@@ -24,7 +24,7 @@ import org.dbrain.data.Value;
  */
 public final class NullValueImpl implements Value {
 
-    public static final Value NULL  = new NullValueImpl();
+    public static final Value NULL = new NullValueImpl();
 
     private NullValueImpl() {
     }

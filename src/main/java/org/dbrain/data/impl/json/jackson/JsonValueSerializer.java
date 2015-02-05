@@ -73,6 +73,6 @@ public class JsonValueSerializer extends JsonSerializer<Value> {
     public void serialize( Value value,
                            JsonGenerator jgen,
                            SerializerProvider provider ) throws IOException, JsonProcessingException {
-           writeValue( value, jgen );
+        writeValue( value, jgen );
     }
 }

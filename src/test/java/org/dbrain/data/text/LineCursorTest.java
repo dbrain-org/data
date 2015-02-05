@@ -42,9 +42,9 @@ public class LineCursorTest {
         String line3 = lineCursor.read();
         String eof = lineCursor.read();
 
-        Assert.assertEquals( line1, "Line1");
-        Assert.assertEquals( line2, "Line2");
-        Assert.assertEquals( line3, "Line3");
+        Assert.assertEquals( line1, "Line1" );
+        Assert.assertEquals( line2, "Line2" );
+        Assert.assertEquals( line3, "Line3" );
 
         Assert.assertNull( eof );
 

@@ -95,7 +95,6 @@ public class JsonBridge_Test {
     }
 
 
-
     @Test
     public void testSerializeInteger() throws Exception {
         String s = bridge.writeToString( new Integer( 10 ) );
@@ -132,10 +131,10 @@ public class JsonBridge_Test {
         Value.List list = bridge.parseObject( "[1,2,3,4]", Value.List.class );
 
         Assert.assertEquals( 4, list.size() );
-//        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
-//        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
-//        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
-//        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
+        //        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
     }
 
     @Test

@@ -34,7 +34,9 @@ public class TestObjectToNumbersAdapters {
     /**
      * Test that number conversion works fine.
      */
-    private <T extends Number> void testObjectToNumberAdaptation( Function<Object, T> function, Number numberValue, T expected ) {
+    private <T extends Number> void testObjectToNumberAdaptation( Function<Object, T> function,
+                                                                  Number numberValue,
+                                                                  T expected ) {
         BigDecimal value = new BigDecimal( numberValue.toString() );
 
         Assert.assertEquals( function.apply( value.toString() ), expected );
@@ -52,7 +54,8 @@ public class TestObjectToNumbersAdapters {
             Assert.assertEquals( function.apply( value.longValue() ), expected );
             Assert.assertEquals( function.apply( new AtomicLong( value.longValue() ) ), expected );
         }
-        if ( value.compareTo( BigDecimal.valueOf( Integer.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf( Integer.MAX_VALUE ) ) <= 0 ) {
+        if ( value.compareTo( BigDecimal.valueOf( Integer.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf(
+                Integer.MAX_VALUE ) ) <= 0 ) {
             Assert.assertEquals( function.apply( value.intValue() ), expected );
             Assert.assertEquals( function.apply( new AtomicInteger( value.intValue() ) ), expected );
         }
@@ -90,7 +93,8 @@ public class TestObjectToNumbersAdapters {
             Assert.assertTrue( testOneNumberAdaptationFailure( function, value.longValue() ) );
             Assert.assertTrue( testOneNumberAdaptationFailure( function, new AtomicLong( value.longValue() ) ) );
         }
-        if ( value.compareTo( BigDecimal.valueOf( Integer.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf( Integer.MAX_VALUE ) ) <= 0 ) {
+        if ( value.compareTo( BigDecimal.valueOf( Integer.MIN_VALUE ) ) >= 0 && value.compareTo( BigDecimal.valueOf(
+                Integer.MAX_VALUE ) ) <= 0 ) {
             Assert.assertTrue( testOneNumberAdaptationFailure( function, value.intValue() ) );
             Assert.assertTrue( testOneNumberAdaptationFailure( function, new AtomicInteger( value.intValue() ) ) );
         }
@@ -149,7 +153,9 @@ public class TestObjectToNumbersAdapters {
         testObjectToNumberAdaptation( Casts::toFloat, (float) Long.MIN_VALUE, (float) Long.MIN_VALUE );
         testObjectToNumberAdaptation( Casts::toFloat, (float) Long.MAX_VALUE, (float) Long.MAX_VALUE );
         testObjectToNumberAdaptation( Casts::toFloat, 0f, 0f );
-        testObjectToNumberAdaptation( Casts::toFloat, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).floatValue() );
+        testObjectToNumberAdaptation( Casts::toFloat,
+                                      new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ),
+                                      new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).floatValue() );
 
     }
 
@@ -159,7 +165,9 @@ public class TestObjectToNumbersAdapters {
         testObjectToNumberAdaptation( Casts::toDouble, (double) Long.MIN_VALUE, (double) Long.MIN_VALUE );
         testObjectToNumberAdaptation( Casts::toDouble, (double) Long.MAX_VALUE, (double) Long.MAX_VALUE );
         testObjectToNumberAdaptation( Casts::toDouble, 0d, 0d );
-        testObjectToNumberAdaptation( Casts::toDouble, new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ), new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).doubleValue() );
+        testObjectToNumberAdaptation( Casts::toDouble,
+                                      new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ),
+                                      new BigDecimal( Long.MAX_VALUE ).add( BigDecimal.ONE ).doubleValue() );
 
     }
 

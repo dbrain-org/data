@@ -18,7 +18,7 @@ package org.dbrain.data.text;
 
 /**
  * Token class.
- * <p/>
+ *
  * Tokens represent elements of a text stream. The only special token is EOF that means there is no more
  * characters available to read from the stream.
  *
@@ -39,15 +39,15 @@ public enum Token {
 
     /**
      * Identifier getValue.
-     * <p/>
-     * <p/>
+     *
+     *
      * 'StringInSingleQuote';
      */
     IDENTIFIER,
 
     /**
      * String getValue.
-     * <p/>
+     *
      * <ul>
      * <li>"string in double quote";</li>
      * <li>\long multi and possibly multi-line string\</li>
@@ -57,9 +57,9 @@ public enum Token {
 
     /**
      * NumericOps values.
-     * <p/>
+     *
      * Examples :
-     * <p/>
+     *
      * <ul>
      * <li>123.23 - Real number</li>
      * <li>123 - Integral number</li>
