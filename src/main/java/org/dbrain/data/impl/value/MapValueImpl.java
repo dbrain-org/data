@@ -18,6 +18,8 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
+import org.dbrain.data.ValueMap;
 import org.dbrain.data.json.JsonBridge;
 
 import java.util.Collection;
@@ -30,7 +32,7 @@ import java.util.function.Function;
 /**
  * Implementation of the Value.Map.
  */
-public class MapValueImpl implements Value.Map {
+public class MapValueImpl implements ValueMap {
 
     private final HashMap<String, Value> delegate;
 
@@ -99,7 +101,7 @@ public class MapValueImpl implements Value.Map {
     }
 
     @Override
-    public Value.List getList() {
+    public ValueList getList() {
         throw new DataCoercionException( "Cannot cast map to list." );
     }
 
@@ -135,7 +137,7 @@ public class MapValueImpl implements Value.Map {
 
     @Override
     public void putAll( java.util.Map<? extends String, ? extends Value> m ) {
-        for ( Map.Entry<? extends String, ? extends Value> e : m.entrySet() ) {
+        for ( ValueMap.Entry<? extends String, ? extends Value> e : m.entrySet() ) {
             put( e.getKey(), e.getValue() );
         }
     }

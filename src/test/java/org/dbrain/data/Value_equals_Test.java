@@ -108,15 +108,15 @@ public class Value_equals_Test {
 
     @Test
     public void testMapEquals() throws Exception {
-        Value.Map map1 = Value.newEmptyMap();
+        ValueMap map1 = ValueMap.create();
         map1.put( "null", Value.of( (Object) null ) );
         map1.put( "int", Value.of( 123 ) );
 
-        Value.Map map2 = Value.newEmptyMap();
+        ValueMap map2 = ValueMap.create();
         map2.put( "int", Value.of( 123 ) );
         map2.put( "null", Value.of( (Object) null ) );
 
-        Value.Map map3 = Value.newEmptyMap();
+        ValueMap map3 = ValueMap.create();
         map3.put( "null", Value.of( (Object) null ) );
         map3.put( "int", Value.of( "123" ) );
 
@@ -129,15 +129,15 @@ public class Value_equals_Test {
     @Test
     public void testListEquals() throws Exception {
 
-        Value.List list1 = Value.newEmptyList();
+        ValueList list1 = ValueList.create();
         list1.add( Value.of( (Object) null ) );
         list1.add( Value.of( 123 ) );
 
-        Value.List list2 = Value.newEmptyList();
+        ValueList list2 = ValueList.create();
         list2.add( Value.of( (Object) null ) );
         list2.add( Value.of( 123 ) );
 
-        Value.List list3 = Value.newEmptyList();
+        ValueList list3 = ValueList.create();
         list3.add( Value.of( 123 ) );
         list3.add( Value.of( (Object) null ) );
 

@@ -52,7 +52,7 @@ public class Fqn_Test {
     }
 
     /**
-     * Test the parsing method of and toString at the same time.
+     * Test the parsing method of and toString at the same time. (Which is probably a bad thing).
      */
     @Test
     public void testOfString() throws Exception {

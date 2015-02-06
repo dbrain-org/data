@@ -19,17 +19,17 @@ package org.dbrain.data.impl.json.jackson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.dbrain.data.Value;
+import org.dbrain.data.ValueMap;
 
 import java.io.IOException;
 
 /**
  * Parse a Json value.
  */
-public class JsonValueMapDeserializer extends JsonDeserializer<Value.Map> {
+public class JsonValueMapDeserializer extends JsonDeserializer<ValueMap> {
 
     @Override
-    public Value.Map deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
+    public ValueMap deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
         return JsonValueParser.parseValue( jp ).getMap();
     }
 }

@@ -37,7 +37,7 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_object_1() throws Exception {
-        Value.Map map = JsonBridge.get().parseValue( "{}" ).getMap();
+        ValueMap map = JsonBridge.get().parseValue( "{}" ).getMap();
         Assert.assertEquals( 0, map.size() );
     }
 
@@ -58,7 +58,7 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_object_2() throws Exception {
-        Value.Map map = JsonBridge.get()
+        ValueMap map = JsonBridge.get()
                                   .parseValue(
                                           "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
                                   .getMap();
@@ -75,13 +75,13 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_array_1() throws Exception {
-        Value.List list = JsonBridge.get().parseValue( "[]" ).getList();
+        ValueList list = JsonBridge.get().parseValue( "[]" ).getList();
         Assert.assertEquals( 0, list.size() );
     }
 
     @Test
     public void test_array_2() throws Exception {
-        Value.List list = JsonBridge.get().parseValue( "[\"test\", 123, true, null]" ).getList();
+        ValueList list = JsonBridge.get().parseValue( "[\"test\", 123, true, null]" ).getList();
         Assert.assertEquals( 4, list.size() );
         Assert.assertEquals( "test", list.getString( 0 ) );
         Assert.assertEquals( new Double( 123.0 ), list.getDouble( 1 ) );

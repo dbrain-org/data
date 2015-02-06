@@ -18,6 +18,7 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
 import org.dbrain.data.json.JsonBridge;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 /**
  * A list of simple values.
  */
-public class ListValueImpl implements Value.List {
+public class ListValueImpl implements ValueList {
 
     private final java.util.List<Value> delegate;
 

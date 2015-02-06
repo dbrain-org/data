@@ -17,11 +17,7 @@
 package org.dbrain.data;
 
 import org.dbrain.data.access.FieldAccessors;
-import org.dbrain.data.access.IndexedFieldAccessors;
-import org.dbrain.data.access.NamedFieldAccessors;
 import org.dbrain.data.impl.value.BoolValueImpl;
-import org.dbrain.data.impl.value.ListValueImpl;
-import org.dbrain.data.impl.value.MapValueImpl;
 import org.dbrain.data.impl.value.NullValueImpl;
 import org.dbrain.data.impl.value.NumberValueImpl;
 import org.dbrain.data.impl.value.StringValueImpl;
@@ -34,20 +30,6 @@ import java.util.function.Function;
  * A simple value that can only contains primitive values.
  */
 public interface Value extends FieldAccessors {
-
-    /**
-     * Create a new empty list.
-     */
-    static Value.List newEmptyList() {
-        return new ListValueImpl();
-    }
-
-    /**
-     * Create a new empty map.
-     */
-    static Value.Map newEmptyMap() {
-        return new MapValueImpl();
-    }
 
     static Value of( String s ) {
         return s != null ? new StringValueImpl( s ) : NullValueImpl.NULL;
@@ -143,13 +125,10 @@ public interface Value extends FieldAccessors {
         } );
     }
 
-    Map getMap();
+    ValueMap getMap();
 
-    Value.List getList();
+    ValueList getList();
 
     boolean isNull();
 
-    public interface Map extends Value, java.util.Map<String, Value>, NamedFieldAccessors {}
-
-    public interface List extends Value, java.util.List<Value>, IndexedFieldAccessors {}
 }

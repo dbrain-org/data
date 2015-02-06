@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -16,22 +16,19 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
-import org.junit.Test;
+import org.dbrain.data.access.IndexedFieldAccessors;
+import org.dbrain.data.impl.value.ListValueImpl;
 
-public class Value_List_Test {
+/**
+* An ordered list of value.
+*/
+public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAccessors {
 
-    @Test
-    public void testConstruction() throws Exception {
-        ValueList list;
-
-        // Simple constructor
-        list = ValueList.create();
-        Assert.assertEquals( list.size(), 0 );
+    /**
+     * Create a new empty list.
+     */
+    static ValueList create() {
+        return new ListValueImpl();
     }
 
-    @Test( expected = DataCoercionException.class )
-    public void testAsString() throws Exception {
-        ValueList.create().getString();
-    }
 }

@@ -21,6 +21,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
+import org.dbrain.data.ValueMap;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,7 +32,7 @@ import java.util.Map;
  */
 public class JsonValueSerializer extends JsonSerializer<Value> {
 
-    private void writeMap( Value.Map value, JsonGenerator w ) throws IOException {
+    private void writeMap( ValueMap value, JsonGenerator w ) throws IOException {
         w.writeStartObject();
         try {
             for ( Map.Entry<String, Value> e : value.entrySet() ) {
@@ -42,7 +44,7 @@ public class JsonValueSerializer extends JsonSerializer<Value> {
         }
     }
 
-    private void writeList( Value.List value, JsonGenerator w ) throws IOException {
+    private void writeList( ValueList value, JsonGenerator w ) throws IOException {
         w.writeStartArray();
         try {
             for ( Value e : value ) {
@@ -59,10 +61,10 @@ public class JsonValueSerializer extends JsonSerializer<Value> {
     public void writeValue( Value value, JsonGenerator w ) throws IOException {
         if ( value == null || value.isNull() ) {
             w.writeNull();
-        } else if ( value instanceof Value.Map ) {
-            writeMap( (Value.Map) value, w );
-        } else if ( value instanceof Value.List ) {
-            writeList( (Value.List) value, w );
+        } else if ( value instanceof ValueMap ) {
+            writeMap( (ValueMap) value, w );
+        } else if ( value instanceof ValueList ) {
+            writeList( (ValueList) value, w );
         } else {
             w.writeObject( value.getObject() );
         }

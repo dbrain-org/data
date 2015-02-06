@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -16,22 +16,19 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
-import org.junit.Test;
+import org.dbrain.data.access.NamedFieldAccessors;
+import org.dbrain.data.impl.value.MapValueImpl;
 
-public class Value_List_Test {
+/**
+* An map of value.
+*/
+public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFieldAccessors {
 
-    @Test
-    public void testConstruction() throws Exception {
-        ValueList list;
-
-        // Simple constructor
-        list = ValueList.create();
-        Assert.assertEquals( list.size(), 0 );
+    /**
+     * Create a new empty map.
+     */
+    static ValueMap create() {
+        return new MapValueImpl();
     }
 
-    @Test( expected = DataCoercionException.class )
-    public void testAsString() throws Exception {
-        ValueList.create().getString();
-    }
 }

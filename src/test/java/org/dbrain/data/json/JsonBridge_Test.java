@@ -17,6 +17,8 @@
 package org.dbrain.data.json;
 
 import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
+import org.dbrain.data.ValueMap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -111,7 +113,7 @@ public class JsonBridge_Test {
     @Test
     public void testObjectToValue() throws Exception {
         TestLongClass tlc = new TestLongClass();
-        Value.Map v = bridge.objectToValue( tlc ).getMap();
+        ValueMap v = bridge.objectToValue( tlc ).getMap();
 
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
@@ -128,7 +130,7 @@ public class JsonBridge_Test {
 
     @Test
     public void testDeserilizeList() throws Exception {
-        Value.List list = bridge.parseObject( "[1,2,3,4]", Value.List.class );
+        ValueList list = bridge.parseObject( "[1,2,3,4]", ValueList.class );
 
         Assert.assertEquals( 4, list.size() );
         //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
@@ -139,7 +141,7 @@ public class JsonBridge_Test {
 
     @Test
     public void testDeserilizeMap() throws Exception {
-        Value.Map map = bridge.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", Value.Map.class );
+        ValueMap map = bridge.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
 
         Assert.assertEquals( 4, map.size() );
         //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );

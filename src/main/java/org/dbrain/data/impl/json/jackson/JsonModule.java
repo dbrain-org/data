@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
+import org.dbrain.data.ValueMap;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -56,15 +58,15 @@ public class JsonModule extends Module {
         JsonValueSerializer valueSerializer = new JsonValueSerializer();
 
         serializers.addSerializer( Value.class, valueSerializer );
-        serializers.addSerializer( Value.Map.class, valueSerializer );
-        serializers.addSerializer( Value.List.class, valueSerializer );
+        serializers.addSerializer( ValueMap.class, valueSerializer );
+        serializers.addSerializer( ValueList.class, valueSerializer );
 
         context.addSerializers( serializers );
 
         SimpleDeserializers deserializers = new SimpleDeserializers();
         deserializers.addDeserializer( Value.class, new JsonValueDeserializer() );
-        deserializers.addDeserializer( Value.Map.class, new JsonValueMapDeserializer() );
-        deserializers.addDeserializer( Value.List.class, new JsonValueListDeserializer() );
+        deserializers.addDeserializer( ValueMap.class, new JsonValueMapDeserializer() );
+        deserializers.addDeserializer( ValueList.class, new JsonValueListDeserializer() );
         context.addDeserializers( deserializers );
 
     }
