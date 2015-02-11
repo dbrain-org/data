@@ -71,13 +71,22 @@ public class Value_of_Test {
     @Test
     public void testOfFloat() throws Exception {
         Assert.assertTrue( Value.of( (Float) null ).isNull() );
-        Assert.assertEquals( Value.of( new Float( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
+        Assert.assertEquals( Value.of( new Float( (byte) 0 ) ).getDouble().doubleValue(), 0d, 0.0000000000001 );
+
+        Float f = 10f / 3;
+        Assert.assertEquals( Value.of( f ).getFloat(), f, .0000000000001f );
+
+        Assert.assertNull( Value.of( Float.NaN ).getObject() );
+
     }
 
     @Test
     public void testOfDouble() throws Exception {
         Assert.assertTrue( Value.of( (Double) null ).isNull() );
         Assert.assertEquals( Value.of( new Double( (byte) 0 ) ).getObject(), new BigDecimal( (byte) 0 ) );
+
+        Assert.assertEquals( Value.of( Double.NaN ), Value.nullValue() );
+
     }
 
     @Test

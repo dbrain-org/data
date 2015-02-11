@@ -37,6 +37,7 @@ public class Serializables {
      *
      * @param o        The object to serialize.
      * @param hashType The type of hash requested.
+     *
      * @return the hash getValue.
      */
     public static byte[] hashSerializable( Serializable o, String hashType ) {
@@ -60,10 +61,6 @@ public class Serializables {
      * Retrieve a hash getValue for the provided Serializable type. The hashing algorithm is provided
      * by the hashType parameter and can be anything supported by the java security api. The hash
      * binary buffer is converted to string using an hexadecimal encoding.
-     *
-     * @param o
-     * @param hashType
-     * @return
      */
     public static String hashSerializableAsString( Serializable o, String hashType ) {
         byte[] hash = hashSerializable( o, hashType );
@@ -81,6 +78,7 @@ public class Serializables {
      * Deep clone using serializable interface.
      *
      * @param o The objcet to clone, or null.
+     *
      * @return The cloned object, or null if null was provided.
      */
     public static <T extends Serializable> T clone( T o ) {

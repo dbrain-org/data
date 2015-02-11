@@ -16,22 +16,58 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class Value_List_Test {
 
     @Test
-    public void testConstruction() throws Exception {
+    public void testNewInstance() throws Exception {
         ValueList list;
 
         // Simple constructor
-        list = ValueList.create();
+        list = ValueList.newInstance();
         Assert.assertEquals( list.size(), 0 );
+    }
+
+    @Test
+    public void testNewBuilder() throws Exception {
+        ValueList vl = ValueList.newBuilder() //
+                .addNull() //
+                .add( new Byte( (byte) 1 ) ) //
+                .add( new Short( (short) 2 ) ) //
+                .add( new Integer( 3 ) ) //
+                .add( new Long( 4l ) ) //
+                .add( new BigInteger( "5" ) ) //
+                .add( new BigDecimal( "6.1" ) ) //
+                .add( "string" ) //
+                .add( true ) //
+                .add( 1.1f ) //
+                .add( 1.2d ) //
+                .add( Value.of( "value" ) ) //
+                .build();
+
+        Assert.assertTrue( vl.get( 0 ).equals( Value.nullValue() ) );
+        Assert.assertTrue( vl.get( 1 ).equals( Value.of( 1 ) ) );
+        Assert.assertTrue( vl.get( 2 ).equals( Value.of( 2 ) ) );
+        Assert.assertTrue( vl.get( 3 ).equals( Value.of( 3 ) ) );
+        Assert.assertTrue( vl.get( 4 ).equals( Value.of( 4 ) ) );
+        Assert.assertTrue( vl.get( 5 ).equals( Value.of( 5 ) ) );
+        Assert.assertTrue( vl.get( 6 ).equals( Value.of( 6.1 ) ) );
+        Assert.assertTrue( vl.get( 7 ).equals( Value.of( "string" ) ) );
+        Assert.assertTrue( vl.get( 8 ).equals( Value.of( true ) ) );
+        Assert.assertTrue( vl.get( 9 ).equals( Value.of( 1.1f ) ) );
+        Assert.assertTrue( vl.get( 10 ).equals( Value.of( 1.2d ) ) );
+        Assert.assertTrue( vl.get( 11 ).equals( Value.of( "value" ) ) );
+
+
     }
 
     @Test( expected = DataCoercionException.class )
     public void testAsString() throws Exception {
-        ValueList.create().getString();
+        ValueList.newInstance().getString();
     }
 }

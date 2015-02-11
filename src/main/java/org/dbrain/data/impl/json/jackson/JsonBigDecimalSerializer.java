@@ -17,7 +17,6 @@
 package org.dbrain.data.impl.json.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -31,12 +30,10 @@ import java.math.BigInteger;
 class JsonBigDecimalSerializer extends JsonSerializer<BigDecimal> {
 
     private BigInteger MAX_VALUE = new BigInteger( "999999999999999" );
-    private BigInteger MIN_VALUE =  new BigInteger( "-999999999999999" );
+    private BigInteger MIN_VALUE = new BigInteger( "-999999999999999" );
 
     @Override
-    public void serialize( BigDecimal value,
-                           JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException {
+    public void serialize( BigDecimal value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
         if ( value != null ) {
             // Does it have more that 15 significant digits ?
             BigInteger unscaled = value.unscaledValue();

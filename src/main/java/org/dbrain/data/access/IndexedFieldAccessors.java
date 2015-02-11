@@ -29,7 +29,9 @@ public interface IndexedFieldAccessors {
      * Read the raw field value at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     Object getObject( int fieldIndex );
@@ -38,7 +40,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getAs( int fieldIndex, Function<Object, T> function ) {
@@ -49,7 +53,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Byte getByte( int fieldIndex ) {
@@ -60,7 +66,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getByteAs( int fieldIndex, Function<? super Byte, T> function ) {
@@ -71,7 +79,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Short getShort( int fieldIndex ) {
@@ -82,7 +92,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getShortAs( int fieldIndex, Function<? super Short, T> function ) {
@@ -93,7 +105,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Integer getInt( int fieldIndex ) {
@@ -104,7 +118,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getIntAs( int fieldIndex, Function<? super Integer, T> function ) {
@@ -115,7 +131,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Long getLong( int fieldIndex ) {
@@ -126,7 +144,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getLongAs( int fieldIndex, Function<? super Long, T> function ) {
@@ -137,7 +157,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Float getFloat( int fieldIndex ) {
@@ -148,7 +170,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getFloatAs( int fieldIndex, Function<? super Float, T> function ) {
@@ -159,7 +183,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Double getDouble( int fieldIndex ) {
@@ -170,7 +196,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getDoubleAs( int fieldIndex, Function<? super Double, T> function ) {
@@ -181,7 +209,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Boolean getBoolean( int fieldIndex ) {
@@ -192,7 +222,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getBooleanAs( int fieldIndex, Function<? super Boolean, T> function ) {
@@ -203,7 +235,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default String getString( int fieldIndex ) {
@@ -214,7 +248,9 @@ public interface IndexedFieldAccessors {
      * Read the field at the specified index. Use the adapter to transform the object prior to return.
      *
      * @param fieldIndex 0-based field index.
+     *
      * @return The field value.
+     *
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default <T> T getStringAs( int fieldIndex, Function<? super String, T> function ) {

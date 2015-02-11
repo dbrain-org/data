@@ -27,7 +27,9 @@ public interface Parser<T> {
      * Parse a string value and return an instance of value T.
      *
      * @param value The value to parse.
+     *
      * @return T or null.
+     *
      * @throws ParseException If a problem occurs parsing the string value.
      */
     T parse( String value ) throws ParseException;

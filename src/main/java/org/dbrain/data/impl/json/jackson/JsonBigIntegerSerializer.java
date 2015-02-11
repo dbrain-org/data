@@ -17,7 +17,6 @@
 package org.dbrain.data.impl.json.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -25,17 +24,15 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
-* Serialize BigInteger with more than 15 significant digits to String literal.
-*/
+ * Serialize BigInteger with more than 15 significant digits to String literal.
+ */
 class JsonBigIntegerSerializer extends JsonSerializer<BigInteger> {
 
     private BigInteger MAX_VALUE = new BigInteger( "999999999999999" );
-    private BigInteger MIN_VALUE =  new BigInteger( "-999999999999999" );
+    private BigInteger MIN_VALUE = new BigInteger( "-999999999999999" );
 
     @Override
-    public void serialize( BigInteger value,
-                           JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException {
+    public void serialize( BigInteger value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
         if ( value != null ) {
             if ( value.compareTo( MIN_VALUE ) >= 0 && value.compareTo( MAX_VALUE ) <= 0 ) {
                 jgen.writeNumber( value );

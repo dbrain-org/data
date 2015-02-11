@@ -26,58 +26,58 @@ public class Value_Map_Test {
         ValueMap map;
 
         // Simple constructor
-        map = ValueMap.create();
+        map = ValueMap.newInstance();
         Assert.assertEquals( map.size(), 0 );
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetBoolean() throws Exception {
-        ValueMap.create().getBoolean();
+        ValueMap.newInstance().getBoolean();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetByte() throws Exception {
-        ValueMap.create().getByte();
+        ValueMap.newInstance().getByte();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetShort() throws Exception {
-        ValueMap.create().getShort();
+        ValueMap.newInstance().getShort();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetInteger() throws Exception {
-        ValueMap.create().getInt();
+        ValueMap.newInstance().getInt();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetLong() throws Exception {
-        ValueMap.create().getLong();
+        ValueMap.newInstance().getLong();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetFloat() throws Exception {
-        ValueMap.create().getFloat();
+        ValueMap.newInstance().getFloat();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetDouble() throws Exception {
-        ValueMap.create().getDouble();
+        ValueMap.newInstance().getDouble();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetString() throws Exception {
-        ValueMap.create().getString();
+        ValueMap.newInstance().getString();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetList() throws Exception {
-        ValueMap.create().getList();
+        ValueMap.newInstance().getList();
     }
 
     @Test
     public void testGetObject() throws Exception {
-        ValueMap m = ValueMap.create();
+        ValueMap m = ValueMap.newInstance();
         m.put( "key", Value.of( "value" ) );
 
         Object o = m.getObject();
@@ -91,7 +91,7 @@ public class Value_Map_Test {
 
     @Test
     public void testIsEmpty() throws Exception {
-        ValueMap m = ValueMap.create();
+        ValueMap m = ValueMap.newInstance();
 
         Assert.assertTrue( m.isEmpty() );
         m.put( "test", Value.of( "Test" ) );
@@ -103,8 +103,8 @@ public class Value_Map_Test {
 
     @Test
     public void testPutAll() throws Exception {
-        ValueMap m1 = ValueMap.create();
-        ValueMap m2 = ValueMap.create();
+        ValueMap m1 = ValueMap.newInstance();
+        ValueMap m2 = ValueMap.newInstance();
 
         m1.put( "test1", Value.of( "Test" ) );
         m1.put( "test2", Value.of( "Test2" ) );
@@ -116,7 +116,7 @@ public class Value_Map_Test {
 
     @Test
     public void testClear() throws Exception {
-        ValueMap m1 = ValueMap.create();
+        ValueMap m1 = ValueMap.newInstance();
         m1.put( "test1", Value.of( "Test" ) );
         m1.put( "test2", Value.of( "Test2" ) );
         m1.put( "test3", Value.of( "Test3" ) );
@@ -133,7 +133,7 @@ public class Value_Map_Test {
         String k = "test";
         Value s = Value.of( "String" );
 
-        ValueMap v = ValueMap.create();
+        ValueMap v = ValueMap.newInstance();
 
         Assert.assertFalse( v.containsKey( k ) );
         Assert.assertFalse( v.containsValue( s ) );

@@ -18,7 +18,6 @@ package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
-import org.dbrain.data.json.JsonBridge;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -61,14 +60,14 @@ public final class NumberValueImpl implements Value {
         this.value = value;
     }
 
-    public NumberValueImpl( Float value ) {
-        Objects.nonNull( value );
-        this.value = new BigDecimal( value );
+    public NumberValueImpl( float value ) {
+        if ( !Float.isFinite( value ) ) throw new IllegalArgumentException();
+        this.value = new BigDecimal( Float.toString( value ) ).stripTrailingZeros();
     }
 
-    public NumberValueImpl( Double value ) {
-        Objects.nonNull( value );
-        this.value = new BigDecimal( value );
+    public NumberValueImpl( double value ) {
+        if ( !Double.isFinite( value ) ) throw new IllegalArgumentException();
+        this.value = new BigDecimal( Double.toString( value ) ).stripTrailingZeros();
     }
 
     public Object getObject() {
@@ -77,12 +76,12 @@ public final class NumberValueImpl implements Value {
 
     @Override
     public MapValueImpl getMap() {
-        throw new DataCoercionException( "Cannot cast number to Map.");
+        throw new DataCoercionException( "Cannot cast number to Map." );
     }
 
     @Override
     public ListValueImpl getList() {
-        throw new DataCoercionException( "Cannot cast number to List.");
+        throw new DataCoercionException( "Cannot cast number to List." );
     }
 
     @Override

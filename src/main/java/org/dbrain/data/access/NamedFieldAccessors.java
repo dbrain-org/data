@@ -29,7 +29,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     Object getObject( String fieldName );
@@ -42,7 +44,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Byte getByte( String fieldName ) {
@@ -57,7 +61,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Short getShort( String fieldName ) {
@@ -72,7 +78,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Integer getInt( String fieldName ) {
@@ -87,7 +95,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Long getLong( String fieldName ) {
@@ -98,7 +108,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getLongAs( String fieldName, Function<? super Long, T> function ) {
@@ -109,7 +121,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Float getFloat( String fieldName ) {
@@ -120,7 +134,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getFloatAs( String fieldName, Function<? super Float, T> function ) {
@@ -131,7 +147,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Double getDouble( String fieldName ) {
@@ -142,7 +160,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getDoubleAs( String fieldName, Function<? super Double, T> function ) {
@@ -153,7 +173,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Boolean getBoolean( String fieldName ) {
@@ -164,7 +186,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getBooleanAs( String fieldName, Function<? super Boolean, T> function ) {
@@ -175,7 +199,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default String getString( String fieldName ) {
@@ -186,7 +212,9 @@ public interface NamedFieldAccessors {
      * Read the field having the specified name. Use the adapter to transform the object prior to return.
      *
      * @param fieldName The field name, non-null.
+     *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getStringAs( String fieldName, Function<? super String, T> function ) {

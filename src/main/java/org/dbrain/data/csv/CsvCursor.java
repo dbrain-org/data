@@ -40,6 +40,38 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private boolean bof = true;
 
     /**
+     * Create a new cursor to read tabular data from a text stream.<p>
+     *
+     * Allow to specify the fields name.
+     */
+    public CsvCursor( Reader reader, int separator, int stringQuote, String[] fieldNames ) {
+        this.cursor = new ReaderCursor( reader );
+        this.separator = separator;
+        this.quote = stringQuote;
+        setFieldNames( fieldNames );
+    }
+
+    /**
+     * Create a new cursor to read tabular data from a text stream.
+     */
+    public CsvCursor( Reader reader, int separator, int stringQuote ) {
+        this.cursor = new ReaderCursor( reader );
+        this.separator = separator;
+        this.quote = stringQuote;
+        List<String> fieldNames = readLine();
+        setFieldNames( fieldNames.toArray( new String[fieldNames.size()] ) );
+    }
+
+    /**
+     * Create a new cursor to read tabular data from a text stream.
+     *
+     * Use no quote for string fields.
+     */
+    public CsvCursor( Reader reader, int separator ) {
+        this( reader, separator, -1 );
+    }
+
+    /**
      * Return true if the specified character is an end of column character.
      */
     private boolean isEOC( int c ) {
@@ -136,38 +168,6 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
             fieldsMap.put( name.trim(), i );
             i++;
         }
-    }
-
-    /**
-     * Create a new cursor to read tabular data from a text stream.<p>
-     *
-     * Allow to specify the fields name.
-     */
-    public CsvCursor( Reader reader, int separator, int stringQuote, String[] fieldNames ) {
-        this.cursor = new ReaderCursor( reader );
-        this.separator = separator;
-        this.quote = stringQuote;
-        setFieldNames( fieldNames );
-    }
-
-    /**
-     * Create a new cursor to read tabular data from a text stream.
-     */
-    public CsvCursor( Reader reader, int separator, int stringQuote ) {
-        this.cursor = new ReaderCursor( reader );
-        this.separator = separator;
-        this.quote = stringQuote;
-        List<String> fieldNames = readLine();
-        setFieldNames( fieldNames.toArray( new String[fieldNames.size()] ) );
-    }
-
-    /**
-     * Create a new cursor to read tabular data from a text stream.
-     *
-     * Use no quote for string fields.
-     */
-    public CsvCursor( Reader reader, int separator ) {
-        this( reader, separator, -1 );
     }
 
     /**

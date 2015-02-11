@@ -18,17 +18,61 @@ package org.dbrain.data;
 
 import org.dbrain.data.access.IndexedFieldAccessors;
 import org.dbrain.data.impl.value.ListValueImpl;
+import org.dbrain.data.impl.value.ValueListBuilder;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
-* An ordered list of value.
-*/
+ * An ordered list of value.
+ */
 public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAccessors {
 
     /**
      * Create a new empty list.
      */
-    static ValueList create() {
+    static ValueList newInstance() {
         return new ListValueImpl();
+    }
+
+    /**
+     * Create a new builder.
+     */
+    static ValueList.Builder newBuilder() {
+        return new ValueListBuilder();
+    }
+
+    /**
+     * Fluid builder interface to build list.
+     */
+    public interface Builder {
+
+        Builder addNull();
+
+        Builder add( Byte v );
+
+        Builder add( Short v );
+
+        Builder add( Integer v );
+
+        Builder add( Long v );
+
+        Builder add( BigInteger v );
+
+        Builder add( BigDecimal v );
+
+        Builder add( Float v );
+
+        Builder add( Double v );
+
+        Builder add( String v );
+
+        Builder add( Boolean v );
+
+        Builder add( Value v );
+
+        ValueList build();
+
     }
 
 }

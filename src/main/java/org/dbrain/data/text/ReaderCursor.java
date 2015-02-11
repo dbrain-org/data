@@ -146,7 +146,6 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @param count
      * @return A string of characters. This method can return more characters than asked since it counts codepoints.
      */
     public String read( int count ) {

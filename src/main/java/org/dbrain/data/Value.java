@@ -31,51 +31,77 @@ import java.util.function.Function;
  */
 public interface Value extends FieldAccessors {
 
+    static Value nullValue() {
+        return NullValueImpl.NULL;
+    }
+
     static Value of( String s ) {
-        return s != null ? new StringValueImpl( s ) : NullValueImpl.NULL;
+        return s != null ? new StringValueImpl( s ) : nullValue();
     }
 
     static Value of( CharSequence s ) {
-        return s != null ? new StringValueImpl( s.toString() ) : NullValueImpl.NULL;
+        return s != null ? new StringValueImpl( s.toString() ) : nullValue();
     }
 
     static Value of( Byte b ) {
-        return b != null ? new NumberValueImpl( b ) : NullValueImpl.NULL;
+        return b != null ? new NumberValueImpl( b ) : nullValue();
     }
 
     static Value of( Short s ) {
-        return s != null ? new NumberValueImpl( s ) : NullValueImpl.NULL;
+        return s != null ? new NumberValueImpl( s ) : nullValue();
     }
 
     static Value of( Integer i ) {
-        return i != null ? new NumberValueImpl( i ) : NullValueImpl.NULL;
+        return i != null ? new NumberValueImpl( i ) : nullValue();
     }
 
     static Value of( Long l ) {
-        return l != null ? new NumberValueImpl( l ) : NullValueImpl.NULL;
+        return l != null ? new NumberValueImpl( l ) : nullValue();
     }
 
     static Value of( BigInteger bi ) {
-        return bi != null ? new NumberValueImpl( bi ) : NullValueImpl.NULL;
+        return bi != null ? new NumberValueImpl( bi ) : nullValue();
     }
 
     static Value of( BigDecimal bd ) {
-        return bd != null ? new NumberValueImpl( bd ) : NullValueImpl.NULL;
+        return bd != null ? new NumberValueImpl( bd ) : nullValue();
     }
 
-    static Value of( Float f ) {
-        return f != null ? new NumberValueImpl( f ) : NullValueImpl.NULL;
+    static Value of( Float v ) {
+        if ( v != null ) {
+            float value = v.floatValue();
+            if ( Float.isNaN( value ) ) {
+                return nullValue();
+            } else if ( Float.isFinite( value ) ) {
+                return new NumberValueImpl( value );
+            } else {
+                throw new DataCoercionException( "Value cannot contain infinity." );
+            }
+        } else {
+            return nullValue();
+        }
     }
 
-    static Value of( Double d ) {
-        return d != null ? new NumberValueImpl( d ) : NullValueImpl.NULL;
+    static Value of( Double v ) {
+        if ( v != null ) {
+            double doubleValue = v.doubleValue();
+            if ( Double.isNaN( doubleValue ) ) {
+                return nullValue();
+            } else if ( Double.isFinite( doubleValue ) ) {
+                return new NumberValueImpl( doubleValue );
+            } else {
+                throw new DataCoercionException( "Value cannot contain infinity." );
+            }
+        } else {
+            return nullValue();
+        }
     }
 
     static Value of( Boolean b ) {
         if ( b != null ) {
             return b ? BoolValueImpl.TRUE : BoolValueImpl.FALSE;
         } else {
-            return NullValueImpl.NULL;
+            return nullValue();
         }
     }
 
@@ -83,7 +109,7 @@ public interface Value extends FieldAccessors {
      * Make sure Value is not null.
      */
     static Value of( Value v ) {
-        return v != null ? v : NullValueImpl.NULL;
+        return v != null ? v : nullValue();
     }
 
     /**
@@ -91,7 +117,7 @@ public interface Value extends FieldAccessors {
      */
     static Value of( Object v, Function<Object, Value> valueFromObject ) {
         if ( v == null ) {
-            return NullValueImpl.NULL;
+            return nullValue();
         } else if ( v instanceof Value ) {
             return (Value) v;
         } else if ( v instanceof String ) {

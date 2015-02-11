@@ -56,6 +56,7 @@ public class TokenParser implements AutoCloseable {
      * Create a new Parser.
      *
      * @param aReader The source of the text stream.
+     *
      * @since 1.0
      */
     public TokenParser( Reader aReader ) {
@@ -74,30 +75,12 @@ public class TokenParser implements AutoCloseable {
     }
 
     /**
-     * Throw a ParseException.
-     *
-     * @param msg The message to include in the error.
-     * @since 1.0
-     */
-    public void raiseError( String msg ) {
-        throw new ParseException( msg );
-    }
-
-    public void raiseExpectedTokenError( Token foundToken, Token... expectedTokens ) {
-        StringBuilder sb = new StringBuilder();
-        for ( Token t : expectedTokens ) {
-            if ( sb.length() > 0 ) sb.append( " - " );
-            sb.append( t.toString() );
-        }
-        raiseError( String.format( ERR_EXPECTED_TOKEN, sb.toString(), foundToken.toString() ) );
-    }
-
-
-    /**
      * Get the binary getValue of a single digit.<p>
      *
      * @param c The digit to evaluate.
+     *
      * @return The getValue of the digit from 0 to 9 or -1 if this is not a valid digit.
+     *
      * @since 1.0
      */
     private static int getBinDigitValue( char c ) {
@@ -108,7 +91,9 @@ public class TokenParser implements AutoCloseable {
      * Get the decimal getValue of a single digit.<p>
      *
      * @param c The digit to evaluate.
+     *
      * @return The getValue of the digit from 0 to 9 or -1 if this is not a valid digit.
+     *
      * @since 1.0
      */
     private static int getDigitValue( char c ) {
@@ -119,7 +104,9 @@ public class TokenParser implements AutoCloseable {
      * Verify if a character is a digit.
      *
      * @param c The character to verify.
+     *
      * @return True if c is a digit.
+     *
      * @since 1.0
      */
     private static boolean isDigit( char c ) {
@@ -130,7 +117,9 @@ public class TokenParser implements AutoCloseable {
      * Get the hexadecimal getValue of a single digit. Both upper and lower case are accepted.<p>
      *
      * @param c The digit to evaluate.
+     *
      * @return The getValue of the digit from 0 to 15 or -1 if this is not a valid digit.
+     *
      * @since 1.0
      */
     private static int getHexDigitValue( char c ) {
@@ -150,7 +139,9 @@ public class TokenParser implements AutoCloseable {
      * Verify if a character is a valid starting character for an unquoted string.
      *
      * @param c The character to verify.
+     *
      * @return True if c is a starting identifier character.
+     *
      * @since 1.0
      */
     private static boolean isUnquotedStringStart( char c ) {
@@ -160,16 +151,37 @@ public class TokenParser implements AutoCloseable {
 
     }
 
-
     /**
      * Verify if a character is a valid character for an unquoted string.
      *
      * @param c The character to verify.
+     *
      * @return True if c is a valid identifier character.
+     *
      * @since 1.0
      */
     private static boolean isUnquotedStringPart( char c ) {
         return ( isUnquotedStringStart( c ) || isDigit( c ) );
+    }
+
+    /**
+     * Throw a ParseException.
+     *
+     * @param msg The message to include in the error.
+     *
+     * @since 1.0
+     */
+    public void raiseError( String msg ) {
+        throw new ParseException( msg );
+    }
+
+    public void raiseExpectedTokenError( Token foundToken, Token... expectedTokens ) {
+        StringBuilder sb = new StringBuilder();
+        for ( Token t : expectedTokens ) {
+            if ( sb.length() > 0 ) sb.append( " - " );
+            sb.append( t.toString() );
+        }
+        raiseError( String.format( ERR_EXPECTED_TOKEN, sb.toString(), foundToken.toString() ) );
     }
 
     /**
@@ -201,6 +213,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * @return A long containing the decoded binary getValue
+     *
      * @since 1.0
      */
     private long parseBinary() {
@@ -220,6 +233,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * @return A long containing the decoded decimal getValue. Does not handle signs.
+     *
      * @since 1.0
      */
     private long parseDecimal() {
@@ -269,6 +283,7 @@ public class TokenParser implements AutoCloseable {
 
     /**
      * @param scale The number is multiplied by scale before being returned.
+     *
      * @return A Number containing the decoded numeric getValue.
      */
     private Number parseNumeric( long scale ) {
@@ -359,7 +374,9 @@ public class TokenParser implements AutoCloseable {
      *
      * @param forbidControlCharacter If true, control characters inside the string will throw
      *                               an error.
+     *
      * @return The string without the quotes.
+     *
      * @since 1.0
      */
     private void parseQuotedString( StringBuilder sb, boolean forbidControlCharacter ) {
@@ -393,6 +410,7 @@ public class TokenParser implements AutoCloseable {
      * </ul>
      *
      * @return the decoded character.
+     *
      * @since 1.0
      */
     private char parseSingleCharString() {
@@ -409,6 +427,7 @@ public class TokenParser implements AutoCloseable {
      * "first line"$13$10"second line"$13$10
      *
      * @return a string.
+     *
      * @since 1.0
      */
     private String parseMultiPartString() {
@@ -430,9 +449,6 @@ public class TokenParser implements AutoCloseable {
     /**
      * Internally used to set current token getValue after if have been read from
      * the stream.
-     *
-     * @param aToken
-     * @param aValue
      */
     private void setToken( Token aToken, Object aValue ) {
         curToken = aToken;
@@ -657,6 +673,7 @@ public class TokenParser implements AutoCloseable {
      * Read the numeric getValue from the parser.
      *
      * @return the current numeric getValue.
+     *
      * @throws ParseException if current token is not numeric.
      */
     public Number getNumeric() {
@@ -668,6 +685,7 @@ public class TokenParser implements AutoCloseable {
      * Move the parser on the next token.<p>
      *
      * @return the current numeric getValue.
+     *
      * @throws ParseException if current token is not numeric.
      */
     public Number readNumeric() {
@@ -680,6 +698,7 @@ public class TokenParser implements AutoCloseable {
      * Read the keyword from the parser.<p>
      *
      * @return the current keyword.
+     *
      * @throws ParseException if current token is not a keyword.
      */
     public String getKeyword() {
@@ -691,6 +710,7 @@ public class TokenParser implements AutoCloseable {
      * Move the parser on the next token.<p>
      *
      * @return the current string getValue.
+     *
      * @throws ParseException if current token is not a keyword.
      */
     public String readKeyword() {
@@ -704,6 +724,7 @@ public class TokenParser implements AutoCloseable {
      * Read the identifier getValue from the parser.<p>
      *
      * @return the current identifier getValue.
+     *
      * @throws ParseException if current token is not string.
      */
     public String getIdentifier() {
@@ -715,6 +736,7 @@ public class TokenParser implements AutoCloseable {
      * Move the parser on the next token.<p>
      *
      * @return the current string getValue.
+     *
      * @throws ParseException if current token is not string.
      */
     public String readIdentifier() {
@@ -728,6 +750,7 @@ public class TokenParser implements AutoCloseable {
      * Does not care about the quoting of the string.<p>
      *
      * @return the current string getValue.
+     *
      * @throws ParseException if current token is not string.
      */
     public String getString() {
@@ -740,6 +763,7 @@ public class TokenParser implements AutoCloseable {
      * Move the parser on the next token.<p>
      *
      * @return the current string getValue.
+     *
      * @throws ParseException if current token is not string.
      */
     public String readString() {

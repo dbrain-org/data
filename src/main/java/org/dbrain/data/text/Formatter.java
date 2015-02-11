@@ -26,6 +26,7 @@ public interface Formatter<T> {
 
     /**
      * @return A string representation for the value T.
+     *
      * @throws FormatException In case there is a problem with formatting.
      */
     String format( T value ) throws FormatException;

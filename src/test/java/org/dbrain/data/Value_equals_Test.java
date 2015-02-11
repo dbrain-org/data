@@ -108,15 +108,15 @@ public class Value_equals_Test {
 
     @Test
     public void testMapEquals() throws Exception {
-        ValueMap map1 = ValueMap.create();
+        ValueMap map1 = ValueMap.newInstance();
         map1.put( "null", Value.of( (Object) null ) );
         map1.put( "int", Value.of( 123 ) );
 
-        ValueMap map2 = ValueMap.create();
+        ValueMap map2 = ValueMap.newInstance();
         map2.put( "int", Value.of( 123 ) );
         map2.put( "null", Value.of( (Object) null ) );
 
-        ValueMap map3 = ValueMap.create();
+        ValueMap map3 = ValueMap.newInstance();
         map3.put( "null", Value.of( (Object) null ) );
         map3.put( "int", Value.of( "123" ) );
 
@@ -129,17 +129,11 @@ public class Value_equals_Test {
     @Test
     public void testListEquals() throws Exception {
 
-        ValueList list1 = ValueList.create();
-        list1.add( Value.of( (Object) null ) );
-        list1.add( Value.of( 123 ) );
+        ValueList list1 = ValueList.newBuilder().addNull().add( 123 ).build();
 
-        ValueList list2 = ValueList.create();
-        list2.add( Value.of( (Object) null ) );
-        list2.add( Value.of( 123 ) );
+        ValueList list2 = ValueList.newBuilder().addNull().add( 123 ).build();
 
-        ValueList list3 = ValueList.create();
-        list3.add( Value.of( 123 ) );
-        list3.add( Value.of( (Object) null ) );
+        ValueList list3 = ValueList.newBuilder().add( 123 ).addNull().build();
 
         Assert.assertEquals( list1, list2 );
         Assert.assertNotEquals( list1, list3 );

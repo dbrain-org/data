@@ -52,22 +52,6 @@ public interface FqnPattern {
     Specs getSpecs();
 
     /**
-     * Match result of a pattern matching.
-     */
-    interface MatchResult {
-
-        /**
-         * @return true if the pattern matched.
-         */
-        boolean matched();
-
-        int partCount();
-
-        Fqn getPart( int idx );
-
-    }
-
-    /**
      * Define the type of pattern.
      */
     public enum Type {
@@ -81,6 +65,22 @@ public interface FqnPattern {
          *
          */
         PARTIAL
+
+    }
+
+    /**
+     * Match result of a pattern matching.
+     */
+    interface MatchResult {
+
+        /**
+         * @return true if the pattern matched.
+         */
+        boolean matched();
+
+        int partCount();
+
+        Fqn getPart( int idx );
 
     }
 

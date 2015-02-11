@@ -59,9 +59,9 @@ public class Value_ofJson_Test {
     @Test
     public void test_object_2() throws Exception {
         ValueMap map = JsonBridge.get()
-                                  .parseValue(
-                                          "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
-                                  .getMap();
+                                 .parseValue(
+                                         "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
+                                 .getMap();
         Assert.assertEquals( 8, map.size() );
         Assert.assertEquals( Boolean.TRUE.toString(), map.getString( "boolean_true" ) );
         Assert.assertEquals( Boolean.FALSE.toString(), map.getString( "boolean_false" ) );
@@ -95,7 +95,27 @@ public class Value_ofJson_Test {
                                 .parseValue( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ) );
     }
 
+    @Test
+    public void convert_object_to_map_jackson() throws Exception {
+
+        Person test = new Person( "Hey", "bob" );
+        test.setFriend( new Person( "Bob", "Marley" ) );
+        String s = JsonBridge.get().writeToString( test );
+
+        Value vPerson = JsonBridge.get().parseValue( s );
+        System.out.println( vPerson );
+
+        Person test2 = JsonBridge.get().parseObject( s, Person.class );
+        Assert.assertEquals( test2.getName(), "Hey" );
+        Assert.assertEquals( test2.getLastName(), "bob" );
+
+    }
+
     public static class Person {
+
+        String name;
+        String lastName;
+        Person friend;
 
         public Person() {
         }
@@ -105,10 +125,6 @@ public class Value_ofJson_Test {
             this.lastName = lastName;
         }
 
-        String name;
-
-        String lastName;
-
         public Person getFriend() {
             return friend;
         }
@@ -116,8 +132,6 @@ public class Value_ofJson_Test {
         public void setFriend( Person friend ) {
             this.friend = friend;
         }
-
-        Person friend;
 
         public String getName() {
             return name;
@@ -134,22 +148,6 @@ public class Value_ofJson_Test {
         public void setLastName( String lastName ) {
             this.lastName = lastName;
         }
-    }
-
-    @Test
-    public void convert_object_to_map_jackson() throws Exception {
-
-        Person test = new Person( "Hey", "bob" );
-        test.setFriend( new Person( "Bob", "Marley" ) );
-        String s = JsonBridge.get().writeToString( test );
-
-        Value vPerson = JsonBridge.get().parseValue( s );
-        System.out.println( vPerson );
-
-        Person test2 = JsonBridge.get().parseObject( s, Person.class );
-        Assert.assertEquals( test2.getName(), "Hey" );
-        Assert.assertEquals( test2.getLastName(), "bob" );
-
     }
 
 }

@@ -82,6 +82,15 @@ public class FqnPatternImpl implements FqnPattern {
     }
 
     /**
+     * Denote a node that returns a part in the match result.
+     */
+    public interface PartMatchingNode {
+
+        void setPartIdx( int partIdx );
+
+    }
+
+    /**
      * Default implementation of the matchresult.
      */
     static class MatchResultImpl implements MatchResult {
@@ -166,15 +175,6 @@ public class FqnPatternImpl implements FqnPattern {
         void setNext( Node next ) {
             this.next = next;
         }
-    }
-
-    /**
-     * Denote a node that returns a part in the match result.
-     */
-    public interface PartMatchingNode {
-
-        void setPartIdx( int partIdx );
-
     }
 
     public static class SpecificNode extends Node {

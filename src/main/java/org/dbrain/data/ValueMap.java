@@ -20,14 +20,14 @@ import org.dbrain.data.access.NamedFieldAccessors;
 import org.dbrain.data.impl.value.MapValueImpl;
 
 /**
-* An map of value.
-*/
+ * An map of value.
+ */
 public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFieldAccessors {
 
     /**
      * Create a new empty map.
      */
-    static ValueMap create() {
+    static ValueMap newInstance() {
         return new MapValueImpl();
     }
 

@@ -17,7 +17,6 @@
 package org.dbrain.data.impl.json.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -34,9 +33,7 @@ class JsonLongSerializer extends JsonSerializer<Number> {
     private long MIN_VALUE = -999999999999999l;
 
     @Override
-    public void serialize( Number value,
-                           JsonGenerator jgen,
-                           SerializerProvider provider ) throws IOException {
+    public void serialize( Number value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
         if ( value != null ) {
             long longValue = value.longValue();
             if ( longValue >= MIN_VALUE && longValue <= MAX_VALUE ) {

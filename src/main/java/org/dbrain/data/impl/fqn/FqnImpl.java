@@ -51,6 +51,7 @@ public final class FqnImpl implements Fqn {
      * Retrieve the decoded segment.
      *
      * @param i Index of the segment to retrieve.
+     *
      * @return A segment.
      */
     @Override

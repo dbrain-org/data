@@ -29,6 +29,7 @@ public interface FieldAccessors {
      * Read the field value as raw java object.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     Object getObject();
@@ -41,6 +42,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Byte getByte() {
@@ -55,6 +57,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Short getShort() {
@@ -69,6 +72,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Integer getInt() {
@@ -83,6 +87,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Long getLong() {
@@ -93,6 +98,7 @@ public interface FieldAccessors {
      * Read the field. Use the adapter to transform the object prior to return.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getLongAs( Function<? super Long, T> function ) {
@@ -103,6 +109,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Float getFloat() {
@@ -113,6 +120,7 @@ public interface FieldAccessors {
      * Read the field. Use the adapter to transform the object prior to return.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getFloatAs( Function<? super Float, T> function ) {
@@ -123,6 +131,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Double getDouble() {
@@ -133,6 +142,7 @@ public interface FieldAccessors {
      * Read the field. Use the adapter to transform the object prior to return.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getDoubleAs( Function<? super Double, T> function ) {
@@ -143,6 +153,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Boolean getBoolean() {
@@ -153,6 +164,7 @@ public interface FieldAccessors {
      * Read the field. Use the adapter to transform the object prior to return.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getBooleanAs( Function<? super Boolean, T> function ) {
@@ -163,6 +175,7 @@ public interface FieldAccessors {
      * Read the field.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default String getString() {
@@ -173,6 +186,7 @@ public interface FieldAccessors {
      * Read the field. Use the adapter to transform the object prior to return.
      *
      * @return The field value.
+     *
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default <T> T getStringAs( Function<? super String, T> function ) {
