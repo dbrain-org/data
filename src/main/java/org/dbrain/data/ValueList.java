@@ -18,7 +18,7 @@ package org.dbrain.data;
 
 import org.dbrain.data.access.IndexedFieldAccessors;
 import org.dbrain.data.impl.value.ListValueImpl;
-import org.dbrain.data.impl.value.ValueListBuilder;
+import org.dbrain.data.impl.value.ValueListBuilderImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -39,11 +39,11 @@ public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAcc
      * Create a new builder.
      */
     static ValueList.Builder newBuilder() {
-        return new ValueListBuilder();
+        return new ValueListBuilderImpl();
     }
 
     /**
-     * Fluid builder interface to build list.
+     * Fluid builder interface for list.
      */
     public interface Builder {
 

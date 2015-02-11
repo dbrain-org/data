@@ -16,8 +16,14 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Value_Map_Test {
 
@@ -27,7 +33,7 @@ public class Value_Map_Test {
 
         // Simple constructor
         map = ValueMap.newInstance();
-        Assert.assertEquals( map.size(), 0 );
+        assertEquals( map.size(), 0 );
     }
 
     @Test( expected = DataCoercionException.class )
@@ -81,11 +87,11 @@ public class Value_Map_Test {
         m.put( "key", Value.of( "value" ) );
 
         Object o = m.getObject();
-        Assert.assertTrue( o instanceof java.util.Map );
+        assertTrue( o instanceof java.util.Map );
         java.util.Map m2 = (java.util.Map) o;
-        Assert.assertEquals( 1, m2.size() );
-        Assert.assertTrue( m2.containsKey( "key" ) );
-        Assert.assertEquals( m2.get( "key" ), "value" );
+        assertEquals( 1, m2.size() );
+        assertTrue( m2.containsKey( "key" ) );
+        assertEquals( m2.get( "key" ), "value" );
 
     }
 
@@ -93,11 +99,11 @@ public class Value_Map_Test {
     public void testIsEmpty() throws Exception {
         ValueMap m = ValueMap.newInstance();
 
-        Assert.assertTrue( m.isEmpty() );
+        assertTrue( m.isEmpty() );
         m.put( "test", Value.of( "Test" ) );
         Assert.assertFalse( m.isEmpty() );
         m.remove( "test" );
-        Assert.assertTrue( m.isEmpty() );
+        assertTrue( m.isEmpty() );
 
     }
 
@@ -111,7 +117,7 @@ public class Value_Map_Test {
         m1.put( "test3", Value.of( "Test3" ) );
 
         m2.putAll( m1 );
-        Assert.assertEquals( m1, m2 );
+        assertEquals( m1, m2 );
     }
 
     @Test
@@ -122,8 +128,8 @@ public class Value_Map_Test {
         m1.put( "test3", Value.of( "Test3" ) );
 
         m1.clear();
-        Assert.assertTrue( m1.isEmpty() );
-        Assert.assertEquals( 0, m1.size() );
+        assertTrue( m1.isEmpty() );
+        assertEquals( 0, m1.size() );
 
 
     }
@@ -137,20 +143,51 @@ public class Value_Map_Test {
 
         Assert.assertFalse( v.containsKey( k ) );
         Assert.assertFalse( v.containsValue( s ) );
-        Assert.assertEquals( 0, v.size() );
+        assertEquals( 0, v.size() );
 
         v.put( k, Value.of( "String" ) );
-        Assert.assertTrue( v.containsKey( k ) );
-        Assert.assertTrue( v.containsValue( s ) );
-        Assert.assertEquals( 1, v.size() );
-        Assert.assertEquals( s, v.get( "test" ) );
+        assertTrue( v.containsKey( k ) );
+        assertTrue( v.containsValue( s ) );
+        assertEquals( 1, v.size() );
+        assertEquals( s, v.get( "test" ) );
 
-        Assert.assertEquals( s, v.remove( "test" ) );
+        assertEquals( s, v.remove( "test" ) );
         Assert.assertFalse( v.containsKey( k ) );
         Assert.assertFalse( v.containsValue( s ) );
-        Assert.assertEquals( 0, v.size() );
+        assertEquals( 0, v.size() );
 
-        Assert.assertTrue( v.get( "non-existing" ).isNull() );
+        assertTrue( v.get( "non-existing" ).isNull() );
     }
 
+    @Test
+    public void testNewBuilder() throws Exception {
+        ValueMap vl = ValueMap.newBuilder() //
+                .putNull( "0" ) //
+                .put( "1", new Byte( (byte) 1 ) ) //
+                .put( "2", new Short( (short) 2 ) ) //
+                .put( "3", new Integer( 3 ) ) //
+                .put( "4", new Long( 4l ) ) //
+                .put( "5", new BigInteger( "5" ) ) //
+                .put( "6", new BigDecimal( "6.1" ) ) //
+                .put( "7", "string" ) //
+                .put( "8", true ) //
+                .put( "9", 1.1f ) //
+                .put( "10", 1.2d ) //
+                .put( "11", Value.of( "value" ) ) //
+                .build();
+
+        Assert.assertTrue( vl.get( "0" ).equals( Value.nullValue() ) );
+        Assert.assertTrue( vl.get( "1" ).equals( Value.of( 1 ) ) );
+        Assert.assertTrue( vl.get( "2" ).equals( Value.of( 2 ) ) );
+        Assert.assertTrue( vl.get( "3" ).equals( Value.of( 3 ) ) );
+        Assert.assertTrue( vl.get( "4" ).equals( Value.of( 4 ) ) );
+        Assert.assertTrue( vl.get( "5" ).equals( Value.of( 5 ) ) );
+        Assert.assertTrue( vl.get( "6" ).equals( Value.of( 6.1 ) ) );
+        Assert.assertTrue( vl.get( "7" ).equals( Value.of( "string" ) ) );
+        Assert.assertTrue( vl.get( "8" ).equals( Value.of( true ) ) );
+        Assert.assertTrue( vl.get( "9" ).equals( Value.of( 1.1f ) ) );
+        Assert.assertTrue( vl.get( "10" ).equals( Value.of( 1.2d ) ) );
+        Assert.assertTrue( vl.get( "11" ).equals( Value.of( "value" ) ) );
+
+    }
 }

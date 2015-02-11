@@ -22,10 +22,7 @@ import org.dbrain.data.ValueList;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-/**
- * Created by epoitras on 2/10/15.
- */
-public class ValueListBuilder implements ValueList.Builder {
+public class ValueListBuilderImpl implements ValueList.Builder {
 
     private ValueList building = ValueList.newInstance();
 

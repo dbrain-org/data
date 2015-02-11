@@ -18,6 +18,10 @@ package org.dbrain.data;
 
 import org.dbrain.data.access.NamedFieldAccessors;
 import org.dbrain.data.impl.value.MapValueImpl;
+import org.dbrain.data.impl.value.ValueMapBuilderImpl;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * An map of value.
@@ -29,6 +33,46 @@ public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFiel
      */
     static ValueMap newInstance() {
         return new MapValueImpl();
+    }
+
+    /**
+     * Create a new builder.
+     */
+    static ValueMap.Builder newBuilder() {
+        return new ValueMapBuilderImpl();
+    }
+
+    /**
+     * Fluid builder interface for map.
+     */
+    public interface Builder {
+
+        Builder putNull( String name );
+
+        Builder put( String name, Byte v );
+
+        Builder put( String name, Short v );
+
+        Builder put( String name, Integer v );
+
+        Builder put( String name, Long v );
+
+        Builder put( String name, BigInteger v );
+
+        Builder put( String name, BigDecimal v );
+
+        Builder put( String name, Float v );
+
+        Builder put( String name, Double v );
+
+        Builder put( String name, String v );
+
+        Builder put( String name, Boolean v );
+
+        Builder put( String name, Value v );
+
+        ValueMap build();
+
     }
 
 }
