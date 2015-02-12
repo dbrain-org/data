@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public class Casts {
 
-    private static Pattern NUMBER_PATTERN = Pattern.compile( "\\d+\\.?\\d+" );
+    private static Pattern NUMBER_PATTERN = Pattern.compile( "\\d+(\\.\\d+)?" );
 
     /**
      * @param o
@@ -166,7 +166,7 @@ public class Casts {
      */
     public static Long toLong( String o ) {
         if ( Strings.isBlank( o ) ) return null;
-        return toLong( new BigDecimal( o ) );
+        return toLong( new BigDecimal( o.trim() ) );
     }
 
     /**
@@ -364,7 +364,13 @@ public class Casts {
         if ( NUMBER_PATTERN.matcher( o ).matches() ) {
             return !( Casts.toBigDecimal( o ).compareTo( BigDecimal.ZERO ) == 0 );
         }
-        return Boolean.parseBoolean( o.trim() );
+        if ( Boolean.TRUE.toString().equalsIgnoreCase( o ) ) {
+            return true;
+        } else if ( Boolean.FALSE.toString().equalsIgnoreCase( o ) ) {
+            return false;
+        } else {
+            throw new DataCoercionException( "Cannot cast '" + o + "' to boolean." );
+        }
     }
 
     /**
