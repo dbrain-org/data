@@ -25,10 +25,10 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * Created by epoitras on 19/01/15.
+ * Test a large range of casting that fails.
  */
 @RunWith( Parameterized.class )
-public class Casts_ObjectToXXXX_Fail_Test {
+public class Casts_toXXXX_Fail_Test {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -63,7 +63,7 @@ public class Casts_ObjectToXXXX_Fail_Test {
     private Function<Object, Object> function;
     private Object                   input;
 
-    public Casts_ObjectToXXXX_Fail_Test( Function<Object, Object> function, Object input ) {
+    public Casts_toXXXX_Fail_Test( Function<Object, Object> function, Object input ) {
         this.function = function;
         this.input = input;
     }

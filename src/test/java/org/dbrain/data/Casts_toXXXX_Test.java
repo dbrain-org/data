@@ -28,10 +28,10 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * Created by epoitras on 19/01/15.
+ * Massive casting test of toXXXX functions.
  */
 @RunWith( Parameterized.class )
-public class Casts_ObjectToXXXX_Test {
+public class Casts_toXXXX_Test {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -170,7 +170,6 @@ public class Casts_ObjectToXXXX_Test {
                               //
 
                               // BigDecimal to -> XXX
-                              // Boolean
                               new Object[]{ (Function<BigDecimal, Object>) Casts::toByte, new BigDecimal( "10" ), (byte) 10 },
                               new Object[]{ (Function<BigDecimal, Object>) Casts::toByte, null, null },
                               new Object[]{ (Function<BigDecimal, Object>) Casts::toShort, new BigDecimal( "10" ), (short) 10 },
@@ -183,8 +182,68 @@ public class Casts_ObjectToXXXX_Test {
                                       (Function<BigDecimal, Object>) Casts::toBigInteger, new BigDecimal( "10" ), new BigInteger(
                                       "10" )
                               },
-                              new Object[]{ (Function<BigDecimal, Object>) Casts::toBigInteger, null, null }
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toBigInteger, null, null },
 
+                              // Boolean
+                              new Object[]{ (Function<String, Object>) Casts::toBoolean, "true", Boolean.TRUE },
+                              new Object[]{ (Function<String, Object>) Casts::toBoolean, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toByte, "10", new Byte( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toByte, " 10", new Byte( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toByte, "10 ", new Byte( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toByte, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toByte, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toByte, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toShort, "10", new Short( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toShort, " 10", new Short( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toShort, "10 ", new Short( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toShort, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toShort, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toShort, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toInteger, "10", new Integer( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toInteger, " 10", new Integer( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toInteger, "10 ", new Integer( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toInteger, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toInteger, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toInteger, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toLong, "10", new Long( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toLong, " 10", new Long( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toLong, "10 ", new Long( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toLong, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toLong, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toLong, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toBigInteger, "10", new BigInteger( "10" ) },
+                              new Object[]{ (Function<String, Object>) Casts::toBigInteger, " 10", new BigInteger( "10" ) },
+                              new Object[]{ (Function<String, Object>) Casts::toBigInteger, "10 ", new BigInteger( "10" ) },
+                              new Object[]{ (Function<String, Object>) Casts::toBigInteger, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toBigInteger, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toBigInteger, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toBigDecimal, "10", new BigDecimal( "10" ) },
+                              new Object[]{ (Function<String, Object>) Casts::toBigDecimal, " 10", new BigDecimal( "10" ) },
+                              new Object[]{ (Function<String, Object>) Casts::toBigDecimal, "10 ", new BigDecimal( "10" ) },
+                              new Object[]{ (Function<String, Object>) Casts::toBigDecimal, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toBigDecimal, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toBigDecimal, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toFloat, "10", new Float( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toFloat, " 10", new Float( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toFloat, "10 ", new Float( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toFloat, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toFloat, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toFloat, null, null },
+
+                              new Object[]{ (Function<String, Object>) Casts::toDouble, "10", new Double( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toDouble, " 10", new Double( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toDouble, "10 ", new Double( (byte) 10 ) },
+                              new Object[]{ (Function<String, Object>) Casts::toDouble, " ", null },
+                              new Object[]{ (Function<String, Object>) Casts::toDouble, "", null },
+                              new Object[]{ (Function<String, Object>) Casts::toDouble, null, null }
+                              //
                             );
     }
 
@@ -192,7 +251,7 @@ public class Casts_ObjectToXXXX_Test {
     private Object                   expected;
     private Object                   input;
 
-    public Casts_ObjectToXXXX_Test( Function<Object, Object> function, Object input, Object expected ) {
+    public Casts_toXXXX_Test( Function<Object, Object> function, Object input, Object expected ) {
         this.function = function;
         this.expected = expected;
         this.input = input;
