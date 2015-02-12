@@ -111,7 +111,9 @@ public class Casts_ObjectToXXXX_Test {
 
                               new Object[]{ (Function) Casts::toBigInteger, new Byte( (byte) 10 ), new BigInteger( "10" ) },
                               new Object[]{ (Function) Casts::toBigInteger, new Short( (byte) 10 ), new BigInteger( "10" ) },
-                              new Object[]{ (Function) Casts::toBigInteger, new Integer( (byte) 10 ), new BigInteger( "10" ) },
+                              new Object[]{
+                                      (Function) Casts::toBigInteger, new Integer( (byte) 10 ), new BigInteger( "10" )
+                              },
                               new Object[]{ (Function) Casts::toBigInteger, new Long( 10 ), new BigInteger( "10" ) },
                               new Object[]{ (Function) Casts::toBigInteger, new Float( 10 ), new BigInteger( "10" ) },
                               new Object[]{ (Function) Casts::toBigInteger, new Double( 10 ), new BigInteger( "10" ) },
@@ -124,7 +126,9 @@ public class Casts_ObjectToXXXX_Test {
 
                               new Object[]{ (Function) Casts::toBigDecimal, new Byte( (byte) 10 ), new BigDecimal( "10" ) },
                               new Object[]{ (Function) Casts::toBigDecimal, new Short( (byte) 10 ), new BigDecimal( "10" ) },
-                              new Object[]{ (Function) Casts::toBigDecimal, new Integer( (byte) 10 ), new BigDecimal( "10" ) },
+                              new Object[]{
+                                      (Function) Casts::toBigDecimal, new Integer( (byte) 10 ), new BigDecimal( "10" )
+                              },
                               new Object[]{ (Function) Casts::toBigDecimal, new Long( 10 ), new BigDecimal( "10" ) },
                               new Object[]{ (Function) Casts::toBigDecimal, new Float( 10 ), new BigDecimal( "10" ) },
                               new Object[]{ (Function) Casts::toBigDecimal, new Double( 10 ), new BigDecimal( "10" ) },
@@ -134,7 +138,7 @@ public class Casts_ObjectToXXXX_Test {
                               new Object[]{ (Function) Casts::toBigDecimal, " ", null },
                               new Object[]{ (Function) Casts::toBigDecimal, "", null },
                               new Object[]{ (Function) Casts::toBigDecimal, null, null },
-                              
+
                               new Object[]{ (Function) Casts::toFloat, new Byte( (byte) 10 ), new Float( (byte) 10 ) },
                               new Object[]{ (Function) Casts::toFloat, new Short( (byte) 10 ), new Float( (byte) 10 ) },
                               new Object[]{ (Function) Casts::toFloat, new Integer( (byte) 10 ), new Float( (byte) 10 ) },
@@ -162,8 +166,25 @@ public class Casts_ObjectToXXXX_Test {
                               new Object[]{ (Function) Casts::toDouble, null, null },
 
                               new Object[]{ (Function) Casts::toString, Integer.class, Integer.class.toString() },
-                              new Object[]{ (Function) Casts::toString, null, null }
+                              new Object[]{ (Function) Casts::toString, null, null },
                               //
+
+                              // BigDecimal to -> XXX
+                              // Boolean
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toByte, new BigDecimal( "10" ), (byte) 10 },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toByte, null, null },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toShort, new BigDecimal( "10" ), (short) 10 },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toShort, null, null },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toInteger, new BigDecimal( "10" ), 10 },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toInteger, null, null },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toLong, new BigDecimal( "10" ), 10l },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toLong, null, null },
+                              new Object[]{
+                                      (Function<BigDecimal, Object>) Casts::toBigInteger, new BigDecimal( "10" ), new BigInteger(
+                                      "10" )
+                              },
+                              new Object[]{ (Function<BigDecimal, Object>) Casts::toBigInteger, null, null }
+
                             );
     }
 

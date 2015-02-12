@@ -30,7 +30,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 /**
- * Methods used to coerce values to specific types.
+ * Methods used to cast values to specific types.
+ *
+ * Unless noted, those functions handle null fluently so you can call func1(func2(func3(x))) without
+ * worrying that x might be null.
+ *
  */
 public class Casts {
 
@@ -417,6 +421,7 @@ public class Casts {
     public static LocalDate toLocalDate( Date date ) {
         return toLocalDate( date, ZoneId.systemDefault() );
     }
+
 
     public static java.util.Date toDate( DateFormat format, String value ) {
         if ( !Strings.isBlank( value ) ) {
