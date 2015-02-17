@@ -37,6 +37,13 @@ import java.util.Arrays;
 public interface Fqn {
 
     /**
+     * @return An empty name.
+     */
+    static Fqn empty() {
+        return FqnImpl.EMPTY_NAME;
+    }
+
+    /**
      * Create a fully qualified name from a ReaderCursor.
      */
     static Fqn of( ReaderCursor c ) {

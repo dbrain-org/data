@@ -27,8 +27,15 @@ import org.junit.Test;
 public class Fqn_Test {
 
     @Test
+    public void testEmpty() throws Exception {
+        Assert.assertEquals( 0, Fqn.empty().size() );
+        Assert.assertEquals( "", Fqn.empty().toString() );
+    }
+
+    @Test
     public void testEquals() throws Exception {
         Assert.assertTrue( Fqn.of( "" ).equals( Fqn.of( "" ) ) );
+        Assert.assertTrue( Fqn.of( "" ).equals( Fqn.empty() ) );
         Assert.assertTrue( Fqn.of( "test" ).equals( Fqn.of( "test" ) ) );
         Assert.assertTrue( Fqn.of( "test.test2" ).equals( Fqn.of( "test.test2" ) ) );
         Assert.assertFalse( Fqn.of( "" ).equals( Fqn.of( "test" ) ) );
@@ -37,6 +44,7 @@ public class Fqn_Test {
         Assert.assertFalse( Fqn.of( "test" ).equals( Fqn.of( "test.test2" ) ) );
         Assert.assertFalse( Fqn.of( "test.test2" ).equals( Fqn.of( "test" ) ) );
 
+        Assert.assertEquals( Fqn.of( "" ).hashCode(), Fqn.empty().hashCode() );
         Assert.assertEquals( Fqn.of( "" ).hashCode(), Fqn.of( "" ).hashCode() );
         Assert.assertEquals( Fqn.of( "test" ).hashCode(), Fqn.of( "test" ).hashCode() );
         Assert.assertEquals( Fqn.of( "test.test2" ).hashCode(), Fqn.of( "test.test2" ).hashCode() );
