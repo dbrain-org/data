@@ -100,6 +100,31 @@ public interface Fqn {
     String segment( int i );
 
     /**
+     * @param toIndex the number of segments to return.
+     *
+     * @return The head of the fully qualified name up to toIndex segment.
+     * @throws java.lang.IndexOutOfBoundsException if toIndex &gt; than size.
+     */
+    Fqn head( int toIndex );
+
+    /**
+     * @param size the number of segments to return.
+     *
+     * @return The head of the fully qualified name up to count segment.
+     * @throws java.lang.IndexOutOfBoundsException if size &gt; than fqn size.
+     */
+    Fqn tail( int size );
+
+
+    /**
+     * @param fromIndex the index of the starting segment.
+     *
+     * @return The tail of the fully qualified name starting at fromIndex.
+     * @throws java.lang.IndexOutOfBoundsException if fromIndex &gt; than size.
+     */
+    Fqn tailFrom( int fromIndex );
+
+    /**
      * @return Test if a name starts with another.
      */
     boolean startsWith( Fqn other );

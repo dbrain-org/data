@@ -143,6 +143,32 @@ public class Fqn_Test {
         Assert.assertEquals( "", Fqn.of( "test.''" ).segment( 1 ) );
     }
 
+    @Test
+    public void testHead() throws Exception {
+        Assert.assertEquals( Fqn.of( "test.toto.tutu" ), Fqn.of("test.toto.tutu" ).head( 3 ) );
+        Assert.assertEquals( Fqn.of( "test.toto" ), Fqn.of("test.toto.tutu" ).head( 2 ) );
+        Assert.assertEquals( Fqn.of( "test" ), Fqn.of("test.toto.tutu" ).head( 1 ) );
+        Assert.assertEquals( Fqn.empty(), Fqn.of("test.toto.tutu" ).head( 0 ) );
+    }
+
+    @Test
+    public void testTail() throws Exception {
+        Assert.assertEquals( Fqn.empty(), Fqn.of("test.toto.tutu" ).tail( 0 ) );
+        Assert.assertEquals( Fqn.of( "tutu" ), Fqn.of("test.toto.tutu" ).tail( 1 ) );
+        Assert.assertEquals( Fqn.of( "toto.tutu" ), Fqn.of("test.toto.tutu" ).tail( 2 ) );
+        Assert.assertEquals( Fqn.of( "test.toto.tutu" ), Fqn.of("test.toto.tutu" ).tail( 3 ) );
+    }
+
+
+    @Test
+    public void testTailFrom() throws Exception {
+        Assert.assertEquals( Fqn.empty(), Fqn.of("test.toto.tutu" ).tailFrom( 3 ) );
+        Assert.assertEquals( Fqn.of( "tutu" ), Fqn.of("test.toto.tutu" ).tailFrom( 2 ) );
+        Assert.assertEquals( Fqn.of( "toto.tutu" ), Fqn.of("test.toto.tutu" ).tailFrom( 1 ) );
+        Assert.assertEquals( Fqn.of( "test.toto.tutu" ), Fqn.of("test.toto.tutu" ).tailFrom( 0 ) );
+    }
+
+
     @Test( expected = IndexOutOfBoundsException.class )
     public void testOutOfBoundSegment1() throws Exception {
         Fqn.of( "test" ).segment( 1 );

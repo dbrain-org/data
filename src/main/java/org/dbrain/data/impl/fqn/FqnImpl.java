@@ -63,6 +63,39 @@ public final class FqnImpl implements Fqn {
         }
     }
 
+    @Override
+    public Fqn head( int toIndex ) {
+        if ( toIndex == 0 ) {
+            return new FqnImpl( null );
+        } else if ( segments != null ) {
+            return new FqnImpl( segments.subList( 0, toIndex ) );
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    @Override
+    public Fqn tail( int size ) {
+        return tailFrom( size() - size );
+    }
+
+    @Override
+    public Fqn tailFrom( int fromIndex ) {
+        if ( segments != null ) {
+            if ( fromIndex == segments.size() ) {
+                return new FqnImpl( null );
+            } else {
+                return new FqnImpl( segments.subList( fromIndex, segments.size() ) );
+            }
+        } else {
+            if ( fromIndex != 0 ) {
+                throw new IndexOutOfBoundsException();
+            } else {
+                return new FqnImpl( null );
+            }
+        }
+    }
+
     /**
      * Validate that the current Fqn starts with the other Fqn.
      */
