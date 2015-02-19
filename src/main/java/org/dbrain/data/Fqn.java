@@ -136,6 +136,15 @@ public interface Fqn {
 
         /**
          * Add a segment to the fqn.
+         *
+         * @param segment The segment. If null is provided, no segment is added.
+         */
+        Builder optSegment( String segment );
+
+        /**
+         * Add a segment to the fqn.
+         *
+         * @param segment The segment, cannot be null.
          */
         Builder segment( String segment );
 

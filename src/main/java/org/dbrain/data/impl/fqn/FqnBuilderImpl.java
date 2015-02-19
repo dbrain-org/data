@@ -20,6 +20,7 @@ import org.dbrain.data.Fqn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Builder implementation of Fully Qualified Names.
@@ -29,7 +30,20 @@ public class FqnBuilderImpl implements Fqn.Builder {
     private List<String> segments;
 
     @Override
+    public FqnBuilderImpl optSegment( String segment ) {
+        if ( segment != null ) {
+            if ( segments == null ) {
+                segments = new ArrayList<>();
+            }
+            segments.add( segment );
+        }
+        return this;
+    }
+
+
+    @Override
     public FqnBuilderImpl segment( String segment ) {
+        Objects.nonNull( segment );
         if ( segments == null ) {
             segments = new ArrayList<>();
         }
