@@ -25,7 +25,7 @@ import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class Value_Map_Test {
+public class ValueMap_Test {
 
     @Test
     public void testConstruction() throws Exception {

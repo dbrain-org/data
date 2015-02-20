@@ -43,6 +43,43 @@ public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAcc
     }
 
     /**
+     * List from array.
+     */
+    static <T extends Object> ValueList asList( Object... list ) {
+        return of( list );
+    }
+
+    /**
+     * List from array.
+     */
+    static <T extends Object> ValueList of( T[] list ) {
+        if ( list != null ) {
+            ValueList result = newInstance();
+            for ( Object o : list ) {
+                result.add( Value.of( o ) );
+            }
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Create a ValueList from a generic list.
+     */
+    static ValueList of( Iterable<Object> list ) {
+        if ( list != null ) {
+            ValueList result = newInstance();
+            for ( Object o : list ) {
+                result.add( Value.of( o ) );
+            }
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Fluid builder interface for list.
      */
     public interface Builder {

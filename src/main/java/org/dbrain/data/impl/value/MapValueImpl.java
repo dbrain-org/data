@@ -24,6 +24,7 @@ import org.dbrain.data.json.JsonBridge;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -132,6 +133,7 @@ public class MapValueImpl implements ValueMap {
 
     @Override
     public Value put( String key, Value value ) {
+        Objects.requireNonNull( key );
         return delegate.put( key, Value.of( value ) );
     }
 

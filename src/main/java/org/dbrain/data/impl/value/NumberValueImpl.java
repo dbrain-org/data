@@ -31,32 +31,32 @@ public final class NumberValueImpl implements Value {
     private final BigDecimal value;
 
     public NumberValueImpl( Byte value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = new BigDecimal( value );
     }
 
     public NumberValueImpl( Short value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = new BigDecimal( value );
     }
 
     public NumberValueImpl( Integer value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = new BigDecimal( value );
     }
 
     public NumberValueImpl( Long value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = new BigDecimal( value );
     }
 
     public NumberValueImpl( BigInteger value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = new BigDecimal( value );
     }
 
     public NumberValueImpl( BigDecimal value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = value;
     }
 

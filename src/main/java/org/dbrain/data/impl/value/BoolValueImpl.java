@@ -32,7 +32,7 @@ public final class BoolValueImpl implements Value {
     private final Boolean value;
 
     public BoolValueImpl( Boolean value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = value;
     }
 

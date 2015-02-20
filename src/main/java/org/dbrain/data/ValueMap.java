@@ -22,6 +22,8 @@ import org.dbrain.data.impl.value.ValueMapBuilderImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * An map of value.
@@ -33,6 +35,32 @@ public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFiel
      */
     static ValueMap newInstance() {
         return new MapValueImpl();
+    }
+
+    /**
+     * From a map of strings.
+     */
+    static ValueMap of( Map<String, ?> v ) {
+        ValueMap result = newInstance();
+        for ( Map.Entry<String, ?> e : v.entrySet() ) {
+            result.put( e.getKey(), Value.of( e.getValue() ) );
+        }
+        return result;
+    }
+
+    /**
+     * Convert a Map to a value map using a key mapper.
+     */
+    static ValueMap of( Map<?, ?> v, Function<Object, String> keyMapper ) {
+        ValueMap result = newInstance();
+        for ( Map.Entry<?, ?> e : v.entrySet() ) {
+            String key = keyMapper.apply( e.getKey() );
+            Value oldValue = result.put( key, Value.of( e.getValue() ) );
+            if ( oldValue != null ) {
+                throw new DataCoercionException( "Duplicate value when casting to map: " + key );
+            }
+        }
+        return result;
     }
 
     /**

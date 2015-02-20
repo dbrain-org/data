@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class Value_List_Test {
 
@@ -63,6 +64,24 @@ public class Value_List_Test {
         Assert.assertTrue( vl.get( 10 ).equals( Value.of( 1.2d ) ) );
         Assert.assertTrue( vl.get( 11 ).equals( Value.of( "value" ) ) );
 
+    }
+
+    @Test
+    public void testOf() throws Exception {
+        ValueList v1 = ValueList.newBuilder() //
+                 .add( 12 )             //
+                 .add( 23 )              //
+                 .add( 34 )               //
+                 .build();
+        ValueList v2 = ValueList.of( new Object[]{ 12, 23, 34 } );
+        ValueList v3 = ValueList.of( Arrays.asList( 12, 23, 34 ) );
+        ValueList v4 = ValueList.asList( 12, 23, 34 );
+        Assert.assertEquals( v1, v2 );
+        Assert.assertEquals( v1, v3 );
+        Assert.assertEquals( v1, v4 );
+
+        Assert.assertNull( ValueList.of( (Object[]) null ));
+        Assert.assertNull( ValueList.of( (Iterable) null ));
 
     }
 

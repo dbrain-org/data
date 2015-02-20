@@ -24,6 +24,7 @@ import org.dbrain.data.impl.value.StringValueImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -140,6 +141,10 @@ public interface Value extends FieldAccessors {
             return Value.of( (Double) v );
         } else if ( v instanceof Boolean ) {
             return Value.of( (Boolean) v );
+        } else if ( v instanceof Map ) {
+            return ValueMap.of( (Map) v );
+        } else if ( v instanceof Iterable ) {
+            return ValueList.of( (Iterable) v );
         } else {
             return valueFromObject.apply( v );
         }
@@ -149,6 +154,18 @@ public interface Value extends FieldAccessors {
         return of( o, o1 -> {
             throw new DataCoercionException( "Cannot cast " + o1.getClass().getName() + " to value." );
         } );
+    }
+
+    static Object toObject( Value value ) {
+        if ( value == null ) {
+            return null;
+        } else {
+            return value.getObject();
+        }
+    }
+
+    static Object unwrap( Object value ) {
+        return value instanceof Value ? unwrap( value ) : value;
     }
 
     ValueMap getMap();

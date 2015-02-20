@@ -43,7 +43,7 @@ public class FqnBuilderImpl implements Fqn.Builder {
 
     @Override
     public FqnBuilderImpl segment( String segment ) {
-        Objects.nonNull( segment );
+        Objects.requireNonNull( segment );
         if ( segments == null ) {
             segments = new ArrayList<>();
         }

@@ -29,7 +29,7 @@ public final class StringValueImpl implements Value {
     private final String value;
 
     public StringValueImpl( String value ) {
-        Objects.nonNull( value );
+        Objects.requireNonNull( value );
         this.value = value;
     }
 
