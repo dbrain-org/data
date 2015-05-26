@@ -115,6 +115,15 @@ public class JacksonJsonBridge implements JsonBridge {
         }
     }
 
+    @Override
+    public <T> T parseObject( Value v, Class<T> clazz ) {
+        try {
+            return objectMapper.convertValue( v, clazz );
+        } catch ( Exception e ) {
+            throw new ParseException( e );
+        }
+    }
+
     /**
      * Convert object to value.
      */
@@ -128,10 +137,10 @@ public class JacksonJsonBridge implements JsonBridge {
     }
 
     /**
-     * Convert an object to Json
+     * Convert an object to Json String.
      */
     @Override
-    public String writeToString( Object o ) {
+    public String objectToString( Object o ) {
         try {
             return objectMapper.writeValueAsString( o );
         } catch ( Exception e ) {

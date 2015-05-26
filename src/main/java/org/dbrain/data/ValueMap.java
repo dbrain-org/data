@@ -73,7 +73,7 @@ public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFiel
     /**
      * Fluid builder interface for map.
      */
-    public interface Builder {
+    interface Builder {
 
         Builder putNull( String name );
 

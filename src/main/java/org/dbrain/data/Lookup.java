@@ -27,6 +27,6 @@ public interface Lookup<FROM, TO> extends Function<FROM, TO> {
     /**
      * List possible values this lookup can map.
      */
-    public Set<FROM> keySet();
+    Set<FROM> keySet();
 
 }

@@ -27,7 +27,7 @@ public interface FqnPattern {
     /**
      * @return A new builder instance.
      */
-    public static Builder newBuilder() {
+    static Builder newBuilder() {
         return new FqnPatternBuilderImpl();
     }
 
@@ -54,7 +54,7 @@ public interface FqnPattern {
     /**
      * Define the type of pattern.
      */
-    public enum Type {
+    enum Type {
 
         /**
          * The pattern define an exact match.

@@ -251,7 +251,7 @@ public class MapValueImpl implements ValueMap {
 
     @Override
     public String toString() {
-        return JsonBridge.get().writeToString( this );
+        return JsonBridge.get().objectToString( this );
     }
 
 }

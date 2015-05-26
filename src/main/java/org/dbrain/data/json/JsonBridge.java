@@ -26,7 +26,7 @@ import java.io.Reader;
  */
 public interface JsonBridge {
 
-    static JsonBridge INSTANCE = new JacksonJsonBridge();
+    JsonBridge INSTANCE = new JacksonJsonBridge();
 
     static JsonBridge get() {
         return INSTANCE;
@@ -38,7 +38,9 @@ public interface JsonBridge {
 
     <T> T parseObject( String r, Class<T> clazz );
 
+    <T> T parseObject( Value v, Class<T> clazz );
+
     Value objectToValue( Object o );
 
-    String writeToString( Object o );
+    String objectToString( Object o );
 }

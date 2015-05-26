@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Locale;
 
 /**
  * Created by epoitras on 06/01/15.
@@ -37,16 +38,15 @@ public class JsonBridge_Test {
     @Before
     public void setUp() throws Exception {
         bridge = JsonBridge.get();
-
     }
 
     @Test
     public void testSerializeLong() throws Exception {
-        String s1 = bridge.writeToString( new Long( 10 ) );
-        String s2 = bridge.writeToString( new Long( 999999999999999l ) );
-        String s3 = bridge.writeToString( new Long( 1000000000000000l ) );
-        String s4 = bridge.writeToString( new Long( -999999999999999l ) );
-        String s5 = bridge.writeToString( new Long( -1000000000000000l ) );
+        String s1 = bridge.objectToString( new Long( 10 ) );
+        String s2 = bridge.objectToString( new Long( 999999999999999l ) );
+        String s3 = bridge.objectToString( new Long( 1000000000000000l ) );
+        String s4 = bridge.objectToString( new Long( -999999999999999l ) );
+        String s5 = bridge.objectToString( new Long( -1000000000000000l ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -58,11 +58,11 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeBigInteger() throws Exception {
-        String s1 = bridge.writeToString( new BigInteger( "10" ) );
-        String s2 = bridge.writeToString( new BigInteger( "999999999999999" ) );
-        String s3 = bridge.writeToString( new BigInteger( "1000000000000000" ) );
-        String s4 = bridge.writeToString( new BigInteger( "-999999999999999" ) );
-        String s5 = bridge.writeToString( new BigInteger( "-1000000000000000" ) );
+        String s1 = bridge.objectToString( new BigInteger( "10" ) );
+        String s2 = bridge.objectToString( new BigInteger( "999999999999999" ) );
+        String s3 = bridge.objectToString( new BigInteger( "1000000000000000" ) );
+        String s4 = bridge.objectToString( new BigInteger( "-999999999999999" ) );
+        String s5 = bridge.objectToString( new BigInteger( "-1000000000000000" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -74,15 +74,15 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeBigDecimal() throws Exception {
-        String s1 = bridge.writeToString( new BigDecimal( "10" ) );
-        String s2 = bridge.writeToString( new BigDecimal( "999999999999999" ) );
-        String s3 = bridge.writeToString( new BigDecimal( "1000000000000000" ) );
-        String s4 = bridge.writeToString( new BigDecimal( "99999999999.9999" ) );
-        String s5 = bridge.writeToString( new BigDecimal( "100000000000.1234" ) );
-        String s6 = bridge.writeToString( new BigDecimal( "-999999999999999" ) );
-        String s7 = bridge.writeToString( new BigDecimal( "-1000000000000000" ) );
-        String s8 = bridge.writeToString( new BigDecimal( "-99999999999.9999" ) );
-        String s9 = bridge.writeToString( new BigDecimal( "-100000000000.1234" ) );
+        String s1 = bridge.objectToString( new BigDecimal( "10" ) );
+        String s2 = bridge.objectToString( new BigDecimal( "999999999999999" ) );
+        String s3 = bridge.objectToString( new BigDecimal( "1000000000000000" ) );
+        String s4 = bridge.objectToString( new BigDecimal( "99999999999.9999" ) );
+        String s5 = bridge.objectToString( new BigDecimal( "100000000000.1234" ) );
+        String s6 = bridge.objectToString( new BigDecimal( "-999999999999999" ) );
+        String s7 = bridge.objectToString( new BigDecimal( "-1000000000000000" ) );
+        String s8 = bridge.objectToString( new BigDecimal( "-99999999999.9999" ) );
+        String s9 = bridge.objectToString( new BigDecimal( "-100000000000.1234" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -99,13 +99,13 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeInteger() throws Exception {
-        String s = bridge.writeToString( new Integer( 10 ) );
+        String s = bridge.objectToString( new Integer( 10 ) );
         Assert.assertEquals( "10", s );
     }
 
     @Test
     public void testSerializeObject() throws Exception {
-        String s = bridge.writeToString( new TestLongClass() );
+        String s = bridge.objectToString( new TestLongClass() );
         TestLongClass tlc = bridge.parseObject( s, TestLongClass.class );
         Assert.assertNotNull( tlc );
     }
@@ -122,10 +122,31 @@ public class JsonBridge_Test {
     @Test
     public void testObjectToValuePrimitive() throws Exception {
 
-        Value v = JsonBridge.get().objectToValue( "Test" );
+        Value v = bridge.objectToValue( "Test" );
         Assert.assertEquals( v, Value.of( "Test" ) );
 
+    }
 
+    /**
+     * Test serialization and deserialization of java's Locale.
+     * @throws Exception
+     */
+    @Test
+    public void testLocale() throws Exception {
+        Locale original = new Locale( "fr", "CA");
+
+        Value value1 = bridge.objectToValue( original );
+        Locale copy1 = bridge.parseObject( value1, Locale.class );
+
+        String string1 = bridge.objectToString( original );
+        Locale copy2 = bridge.parseObject( string1, Locale.class );
+
+        // Read the json untyped.
+        Value untypedValue = bridge.parseValue( string1 );
+
+        Assert.assertEquals( Value.of( "fr_CA" ), untypedValue );
+        Assert.assertEquals( original, copy1 );
+        Assert.assertEquals( original, copy2 );
     }
 
     @Test

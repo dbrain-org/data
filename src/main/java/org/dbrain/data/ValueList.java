@@ -82,7 +82,7 @@ public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAcc
     /**
      * Fluid builder interface for list.
      */
-    public interface Builder {
+    interface Builder {
 
         Builder addNull();
 

@@ -100,7 +100,7 @@ public class Value_ofJson_Test {
 
         Person test = new Person( "Hey", "bob" );
         test.setFriend( new Person( "Bob", "Marley" ) );
-        String s = JsonBridge.get().writeToString( test );
+        String s = JsonBridge.get().objectToString( test );
 
         Value vPerson = JsonBridge.get().parseValue( s );
         System.out.println( vPerson );
