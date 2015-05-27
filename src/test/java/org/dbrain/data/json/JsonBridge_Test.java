@@ -19,6 +19,7 @@ package org.dbrain.data.json;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
+import org.dbrain.data.json.artefacts.MapOfLocaleAsKey;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -129,11 +130,10 @@ public class JsonBridge_Test {
 
     /**
      * Test serialization and deserialization of java's Locale.
-     * @throws Exception
      */
     @Test
     public void testLocale() throws Exception {
-        Locale original = new Locale( "fr", "CA");
+        Locale original = new Locale( "fr", "CA" );
 
         Value value1 = bridge.objectToValue( original );
         Locale copy1 = bridge.parseObject( value1, Locale.class );
@@ -149,15 +149,39 @@ public class JsonBridge_Test {
         Assert.assertEquals( original, copy2 );
     }
 
+
+    /**
+     * Test serialization and deserialization of java's Locale.
+     */
+    @Test
+    public void testAsKeyLocale() throws Exception {
+        MapOfLocaleAsKey original = new MapOfLocaleAsKey();
+        original.put( new Locale( "fr", "CA" ), "test" );
+
+        Value value1 = bridge.objectToValue( original );
+        MapOfLocaleAsKey copy1 = bridge.parseObject( value1, MapOfLocaleAsKey.class );
+
+        String string1 = bridge.objectToString( original );
+        MapOfLocaleAsKey copy2 = bridge.parseObject( string1, MapOfLocaleAsKey.class );
+
+        // Read the json untyped.
+        Value untypedValue = bridge.parseValue( string1 );
+
+        Assert.assertEquals( ValueMap.newBuilder().put( "fr_CA", "test" ).build(), untypedValue );
+        Assert.assertEquals( original, copy1 );
+        Assert.assertEquals( original, copy2 );
+    }
+
+
     @Test
     public void testDeserilizeList() throws Exception {
         ValueList list = bridge.parseObject( "[1,2,3,4]", ValueList.class );
 
         Assert.assertEquals( 4, list.size() );
-        //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
-        //        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
-        //        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
-        //        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
+        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
+        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
+        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
+        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
     }
 
     @Test
@@ -165,10 +189,10 @@ public class JsonBridge_Test {
         ValueMap map = bridge.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
 
         Assert.assertEquals( 4, map.size() );
-        //        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
-        //        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
-        //        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
-        //        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
+        Assert.assertEquals( map.get( "1" ), Value.of( 1 ) );
+        Assert.assertEquals( map.get( "2" ), Value.of( 2 ) );
+        Assert.assertEquals( map.get( "3" ), Value.of( 3 ) );
+        Assert.assertEquals( map.get( "4" ), Value.of( 4 ) );
     }
 
 }
