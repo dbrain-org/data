@@ -154,7 +154,7 @@ public class JsonBridge_Test {
      * Test serialization and deserialization of java's Locale.
      */
     @Test
-    public void testAsKeyLocale() throws Exception {
+    public void testLocaleAsKey() throws Exception {
         MapOfLocaleAsKey original = new MapOfLocaleAsKey();
         original.put( new Locale( "fr", "CA" ), "test" );
 
