@@ -32,15 +32,33 @@ public interface JsonBridge {
         return INSTANCE;
     }
 
+    /**
+     * Parse a JSON String to Value.
+     */
     Value parseValue( String r );
 
+    /**
+     * Parse a JSON stream to Value.
+     */
     Value parseValue( Reader r );
 
+    /**
+     * Parse a JSON String to the specific class.
+     */
     <T> T parseObject( String r, Class<T> clazz );
 
+    /**
+     * Parse a Value to the specific class.
+     */
     <T> T parseObject( Value v, Class<T> clazz );
 
+    /**
+     * Stream object to Value.
+     */
     Value objectToValue( Object o );
 
+    /**
+     * Stream Object to String.
+     */
     String objectToString( Object o );
 }

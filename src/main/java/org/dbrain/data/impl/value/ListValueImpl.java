@@ -159,7 +159,7 @@ public class ListValueImpl implements ValueList {
 
     @Override
     public String toString() {
-        return JsonBridge.get().objectToString( this );
+        return delegate.toString();
     }
 
     @Override

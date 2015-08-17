@@ -1,0 +1,54 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = "org.dbrain"
+archivesBaseName = "dbrain-data"
+version = '0.11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.3',
+            'com.fasterxml.jackson.core:jackson-annotations:2.5.3',
+            'com.fasterxml.jackson.core:jackson-databind:2.5.3'
+
+    testCompile 'junit:junit:4.+'
+}
+
+idea {
+    project {
+        //if you want to set specific jdk and language level
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/tmp/myRepo/")
+        }
+    }
+}
