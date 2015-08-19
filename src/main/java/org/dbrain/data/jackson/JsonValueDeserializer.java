@@ -14,15 +14,22 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.json.artifacts;
+package org.dbrain.data.jackson;
 
-import java.util.HashMap;
-import java.util.Locale;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import org.dbrain.data.Value;
+
+import java.io.IOException;
 
 /**
- * Created by epoitras on 5/27/15.
+ * Parse a Json value.
  */
-public class MapOfLocaleAsKey extends HashMap<Locale, String> {
-    public MapOfLocaleAsKey() {
+public class JsonValueDeserializer extends JsonDeserializer<Value> {
+
+    @Override
+    public Value deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
+        return JsonValueParser.parseValue( jp );
     }
 }

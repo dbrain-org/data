@@ -14,36 +14,27 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.json;
-
-import org.dbrain.data.Value;
-import org.dbrain.data.impl.json.jackson.JacksonJsonBridge;
+package org.dbrain.data;
 
 import java.io.Reader;
 
 /**
- * Simple bridge to JSON format.
+ * Serializer interface.
  */
-public interface JsonBridge {
-
-    JsonBridge INSTANCE = new JacksonJsonBridge();
-
-    static JsonBridge get() {
-        return INSTANCE;
-    }
+public interface Serializer {
 
     /**
-     * Parse a JSON String to Value.
+     * Parse a String to Value.
      */
     Value parseValue( String r );
 
     /**
-     * Parse a JSON stream to Value.
+     * Parse a Reader to Value.
      */
     Value parseValue( Reader r );
 
     /**
-     * Parse a JSON String to the specific class.
+     * Parse a String to the specific class.
      */
     <T> T parseObject( String r, Class<T> clazz );
 
@@ -53,7 +44,7 @@ public interface JsonBridge {
     <T> T parseObject( Value v, Class<T> clazz );
 
     /**
-     * Stream object to Value.
+     * Stream Object to Value.
      */
     Value objectToValue( Object o );
 
@@ -61,4 +52,5 @@ public interface JsonBridge {
      * Stream Object to String.
      */
     String objectToString( Object o );
+
 }

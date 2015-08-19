@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json.jackson;
+package org.dbrain.data.jackson;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;

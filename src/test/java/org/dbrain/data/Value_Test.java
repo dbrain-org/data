@@ -16,8 +16,7 @@
 
 package org.dbrain.data;
 
-import junit.framework.Assert;
-import org.dbrain.data.json.JsonBridge;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -57,7 +56,7 @@ public class Value_Test {
         v = Value.of( (String) null );
         Assert.assertTrue( v.isNull() );
 
-        v = JsonBridge.get().parseValue( "null" );
+        v = Value.nullValue();
         Assert.assertTrue( v.isNull() );
 
     }

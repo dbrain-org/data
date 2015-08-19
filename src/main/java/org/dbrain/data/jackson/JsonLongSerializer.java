@@ -14,28 +14,30 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json.jackson;
+package org.dbrain.data.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
-import java.math.BigInteger;
 
 /**
- * Serialize BigInteger with more than 15 significant digits to String literal.
+ * Serialize long with more that 15 digits to String literal.
+ *
+ * This class is generic "number" as we want to use it for AtomicLong as well.
  */
-class JsonBigIntegerSerializer extends JsonSerializer<BigInteger> {
+class JsonLongSerializer extends JsonSerializer<Number> {
 
-    private BigInteger MAX_VALUE = new BigInteger( "999999999999999" );
-    private BigInteger MIN_VALUE = new BigInteger( "-999999999999999" );
+    private long MAX_VALUE = 999999999999999l;
+    private long MIN_VALUE = -999999999999999l;
 
     @Override
-    public void serialize( BigInteger value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
+    public void serialize( Number value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
         if ( value != null ) {
-            if ( value.compareTo( MIN_VALUE ) >= 0 && value.compareTo( MAX_VALUE ) <= 0 ) {
-                jgen.writeNumber( value );
+            long longValue = value.longValue();
+            if ( longValue >= MIN_VALUE && longValue <= MAX_VALUE ) {
+                jgen.writeNumber( longValue );
             } else {
                 jgen.writeString( value.toString() );
             }

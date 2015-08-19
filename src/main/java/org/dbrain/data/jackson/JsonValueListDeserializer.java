@@ -14,22 +14,22 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json.jackson;
+package org.dbrain.data.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
 
 import java.io.IOException;
 
 /**
  * Parse a Json value.
  */
-public class JsonValueDeserializer extends JsonDeserializer<Value> {
+public class JsonValueListDeserializer extends JsonDeserializer<ValueList> {
 
     @Override
-    public Value deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
-        return JsonValueParser.parseValue( jp );
+    public ValueList deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
+        return JsonValueParser.parseValue( jp ).getList();
     }
 }

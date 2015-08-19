@@ -19,7 +19,6 @@ package org.dbrain.data.impl.value;
 import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
-import org.dbrain.data.json.JsonBridge;
 
 import java.util.ArrayList;
 import java.util.Collection;

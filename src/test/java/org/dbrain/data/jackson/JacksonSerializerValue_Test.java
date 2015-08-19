@@ -14,15 +14,15 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.json;
+package org.dbrain.data.jackson;
 
+import org.dbrain.data.Serializer;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
-import org.dbrain.data.json.artifacts.MapOfLocaleAsKey;
-import org.dbrain.data.json.artifacts.TestLongClass;
+import org.dbrain.data.jackson.artifacts.MapOfLocaleAsKey;
+import org.dbrain.data.jackson.artifacts.TestLongClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -32,23 +32,17 @@ import java.util.Locale;
 /**
  * Created by epoitras on 06/01/15.
  */
-public class JsonBridge_Test {
+public class JacksonSerializerValue_Test {
 
-    JsonBridge bridge;
-
-
-    @Before
-    public void setUp() throws Exception {
-        bridge = JsonBridge.get();
-    }
+    Serializer serializer = new JacksonJsonSerializer();
 
     @Test
     public void testSerializeLong() throws Exception {
-        String s1 = bridge.objectToString( new Long( 10 ) );
-        String s2 = bridge.objectToString( new Long( 999999999999999l ) );
-        String s3 = bridge.objectToString( new Long( 1000000000000000l ) );
-        String s4 = bridge.objectToString( new Long( -999999999999999l ) );
-        String s5 = bridge.objectToString( new Long( -1000000000000000l ) );
+        String s1 = serializer.objectToString( new Long( 10 ) );
+        String s2 = serializer.objectToString( new Long( 999999999999999l ) );
+        String s3 = serializer.objectToString( new Long( 1000000000000000l ) );
+        String s4 = serializer.objectToString( new Long( -999999999999999l ) );
+        String s5 = serializer.objectToString( new Long( -1000000000000000l ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -60,11 +54,11 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeBigInteger() throws Exception {
-        String s1 = bridge.objectToString( new BigInteger( "10" ) );
-        String s2 = bridge.objectToString( new BigInteger( "999999999999999" ) );
-        String s3 = bridge.objectToString( new BigInteger( "1000000000000000" ) );
-        String s4 = bridge.objectToString( new BigInteger( "-999999999999999" ) );
-        String s5 = bridge.objectToString( new BigInteger( "-1000000000000000" ) );
+        String s1 = serializer.objectToString( new BigInteger( "10" ) );
+        String s2 = serializer.objectToString( new BigInteger( "999999999999999" ) );
+        String s3 = serializer.objectToString( new BigInteger( "1000000000000000" ) );
+        String s4 = serializer.objectToString( new BigInteger( "-999999999999999" ) );
+        String s5 = serializer.objectToString( new BigInteger( "-1000000000000000" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -76,15 +70,15 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeBigDecimal() throws Exception {
-        String s1 = bridge.objectToString( new BigDecimal( "10" ) );
-        String s2 = bridge.objectToString( new BigDecimal( "999999999999999" ) );
-        String s3 = bridge.objectToString( new BigDecimal( "1000000000000000" ) );
-        String s4 = bridge.objectToString( new BigDecimal( "99999999999.9999" ) );
-        String s5 = bridge.objectToString( new BigDecimal( "100000000000.1234" ) );
-        String s6 = bridge.objectToString( new BigDecimal( "-999999999999999" ) );
-        String s7 = bridge.objectToString( new BigDecimal( "-1000000000000000" ) );
-        String s8 = bridge.objectToString( new BigDecimal( "-99999999999.9999" ) );
-        String s9 = bridge.objectToString( new BigDecimal( "-100000000000.1234" ) );
+        String s1 = serializer.objectToString( new BigDecimal( "10" ) );
+        String s2 = serializer.objectToString( new BigDecimal( "999999999999999" ) );
+        String s3 = serializer.objectToString( new BigDecimal( "1000000000000000" ) );
+        String s4 = serializer.objectToString( new BigDecimal( "99999999999.9999" ) );
+        String s5 = serializer.objectToString( new BigDecimal( "100000000000.1234" ) );
+        String s6 = serializer.objectToString( new BigDecimal( "-999999999999999" ) );
+        String s7 = serializer.objectToString( new BigDecimal( "-1000000000000000" ) );
+        String s8 = serializer.objectToString( new BigDecimal( "-99999999999.9999" ) );
+        String s9 = serializer.objectToString( new BigDecimal( "-100000000000.1234" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -101,21 +95,21 @@ public class JsonBridge_Test {
 
     @Test
     public void testSerializeInteger() throws Exception {
-        String s = bridge.objectToString( new Integer( 10 ) );
+        String s = serializer.objectToString( new Integer( 10 ) );
         Assert.assertEquals( "10", s );
     }
 
     @Test
     public void testSerializeObject() throws Exception {
-        String s = bridge.objectToString( new TestLongClass() );
-        TestLongClass tlc = bridge.parseObject( s, TestLongClass.class );
+        String s = serializer.objectToString( new TestLongClass() );
+        TestLongClass tlc = serializer.parseObject( s, TestLongClass.class );
         Assert.assertNotNull( tlc );
     }
 
     @Test
     public void testObjectToValue() throws Exception {
         TestLongClass tlc = new TestLongClass();
-        ValueMap v = bridge.objectToValue( tlc ).getMap();
+        ValueMap v = serializer.objectToValue( tlc ).getMap();
 
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
@@ -124,7 +118,7 @@ public class JsonBridge_Test {
     @Test
     public void testObjectToValuePrimitive() throws Exception {
 
-        Value v = bridge.objectToValue( "Test" );
+        Value v = serializer.objectToValue( "Test" );
         Assert.assertEquals( v, Value.of( "Test" ) );
 
     }
@@ -136,14 +130,14 @@ public class JsonBridge_Test {
     public void testLocale() throws Exception {
         Locale original = new Locale( "fr", "CA" );
 
-        Value value1 = bridge.objectToValue( original );
-        Locale copy1 = bridge.parseObject( value1, Locale.class );
+        Value value1 = serializer.objectToValue( original );
+        Locale copy1 = serializer.parseObject( value1, Locale.class );
 
-        String string1 = bridge.objectToString( original );
-        Locale copy2 = bridge.parseObject( string1, Locale.class );
+        String string1 = serializer.objectToString( original );
+        Locale copy2 = serializer.parseObject( string1, Locale.class );
 
         // Read the json untyped.
-        Value untypedValue = bridge.parseValue( string1 );
+        Value untypedValue = serializer.parseValue( string1 );
 
         Assert.assertEquals( Value.of( "fr_CA" ), untypedValue );
         Assert.assertEquals( original, copy1 );
@@ -159,14 +153,14 @@ public class JsonBridge_Test {
         MapOfLocaleAsKey original = new MapOfLocaleAsKey();
         original.put( new Locale( "fr", "CA" ), "test" );
 
-        Value value1 = bridge.objectToValue( original );
-        MapOfLocaleAsKey copy1 = bridge.parseObject( value1, MapOfLocaleAsKey.class );
+        Value value1 = serializer.objectToValue( original );
+        MapOfLocaleAsKey copy1 = serializer.parseObject( value1, MapOfLocaleAsKey.class );
 
-        String string1 = bridge.objectToString( original );
-        MapOfLocaleAsKey copy2 = bridge.parseObject( string1, MapOfLocaleAsKey.class );
+        String string1 = serializer.objectToString( original );
+        MapOfLocaleAsKey copy2 = serializer.parseObject( string1, MapOfLocaleAsKey.class );
 
         // Read the json untyped.
-        Value untypedValue = bridge.parseValue( string1 );
+        Value untypedValue = serializer.parseValue( string1 );
 
         Assert.assertEquals( ValueMap.newBuilder().put( "fr_CA", "test" ).build(), untypedValue );
         Assert.assertEquals( original, copy1 );
@@ -176,7 +170,7 @@ public class JsonBridge_Test {
 
     @Test
     public void testDeserilizeList() throws Exception {
-        ValueList list = bridge.parseObject( "[1,2,3,4]", ValueList.class );
+        ValueList list = serializer.parseObject( "[1,2,3,4]", ValueList.class );
 
         Assert.assertEquals( 4, list.size() );
         Assert.assertTrue( list.contains( Value.of( 1 ) ) );
@@ -187,7 +181,7 @@ public class JsonBridge_Test {
 
     @Test
     public void testDeserilizeMap() throws Exception {
-        ValueMap map = bridge.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
+        ValueMap map = serializer.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
 
         Assert.assertEquals( 4, map.size() );
         Assert.assertEquals( map.get( "1" ), Value.of( 1 ) );

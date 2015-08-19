@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json.jackson;
+package org.dbrain.data.jackson;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;

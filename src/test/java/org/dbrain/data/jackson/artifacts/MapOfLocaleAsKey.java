@@ -14,22 +14,15 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.json.jackson;
+package org.dbrain.data.jackson.artifacts;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.dbrain.data.ValueList;
-
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
- * Parse a Json value.
+ * Created by epoitras on 5/27/15.
  */
-public class JsonValueListDeserializer extends JsonDeserializer<ValueList> {
-
-    @Override
-    public ValueList deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
-        return JsonValueParser.parseValue( jp ).getList();
+public class MapOfLocaleAsKey extends HashMap<Locale, String> {
+    public MapOfLocaleAsKey() {
     }
 }

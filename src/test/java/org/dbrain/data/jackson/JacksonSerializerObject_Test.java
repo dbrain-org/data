@@ -14,9 +14,13 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.jackson;
 
-import org.dbrain.data.json.JsonBridge;
+import org.dbrain.data.Serializer;
+import org.dbrain.data.Value;
+import org.dbrain.data.ValueList;
+import org.dbrain.data.ValueMap;
+import org.dbrain.data.jackson.JacksonJsonSerializer;
 import org.dbrain.data.text.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,39 +32,40 @@ import java.util.HashMap;
 /**
  * Created by epoitras on 30/06/14.
  */
-public class Value_ofJson_Test {
+public class JacksonSerializerObject_Test {
+
+    Serializer serializer = new JacksonJsonSerializer();
 
     @Test
     public void testEmptyStream() throws Exception {
-        Assert.assertNull( JsonBridge.get().parseValue( "" ) );
+        Assert.assertNull( serializer.parseValue( "" ) );
     }
 
     @Test
     public void test_object_1() throws Exception {
-        ValueMap map = JsonBridge.get().parseValue( "{}" ).getMap();
+        ValueMap map = serializer.parseValue( "{}" ).getMap();
         Assert.assertEquals( 0, map.size() );
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_1() throws Exception {
-        JsonBridge.get().parseValue( "{" ).getMap();
+        serializer.parseValue( "{" ).getMap();
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_2() throws Exception {
-        JsonBridge.get().parseValue( "{} {" ).getMap();
+        serializer.parseValue( "{} {" ).getMap();
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_3() throws Exception {
-        JsonBridge.get().parseValue( "{}  [" ).getMap();
+        serializer.parseValue( "{}  [" ).getMap();
     }
 
     @Test
     public void test_object_2() throws Exception {
-        ValueMap map = JsonBridge.get()
-                                 .parseValue(
-                                         "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
+        ValueMap map = serializer.parseValue(
+                "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
                                  .getMap();
         Assert.assertEquals( 8, map.size() );
         Assert.assertEquals( Boolean.TRUE.toString(), map.getString( "boolean_true" ) );
@@ -75,13 +80,13 @@ public class Value_ofJson_Test {
 
     @Test
     public void test_array_1() throws Exception {
-        ValueList list = JsonBridge.get().parseValue( "[]" ).getList();
+        ValueList list = serializer.parseValue( "[]" ).getList();
         Assert.assertEquals( 0, list.size() );
     }
 
     @Test
     public void test_array_2() throws Exception {
-        ValueList list = JsonBridge.get().parseValue( "[\"test\", 123, true, null]" ).getList();
+        ValueList list = serializer.parseValue( "[\"test\", 123, true, null]" ).getList();
         Assert.assertEquals( 4, list.size() );
         Assert.assertEquals( "test", list.getString( 0 ) );
         Assert.assertEquals( new Double( 123.0 ), list.getDouble( 1 ) );
@@ -91,7 +96,7 @@ public class Value_ofJson_Test {
 
     @Test
     public void testPaseJsonFile() throws Exception {
-        Value value = JsonBridge.get()
+        Value value = serializer
                                 .parseValue( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ) );
     }
 
@@ -100,12 +105,12 @@ public class Value_ofJson_Test {
 
         Person test = new Person( "Hey", "bob" );
         test.setFriend( new Person( "Bob", "Marley" ) );
-        String s = JsonBridge.get().objectToString( test );
+        String s = serializer.objectToString( test );
 
-        Value vPerson = JsonBridge.get().parseValue( s );
+        Value vPerson = serializer.parseValue( s );
         System.out.println( vPerson );
 
-        Person test2 = JsonBridge.get().parseObject( s, Person.class );
+        Person test2 = serializer.parseObject( s, Person.class );
         Assert.assertEquals( test2.getName(), "Hey" );
         Assert.assertEquals( test2.getLastName(), "bob" );
 
