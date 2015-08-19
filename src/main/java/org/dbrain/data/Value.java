@@ -164,10 +164,6 @@ public interface Value extends FieldAccessors {
         }
     }
 
-    static Object unwrap( Object value ) {
-        return value instanceof Value ? unwrap( value ) : value;
-    }
-
     ValueMap getMap();
 
     ValueList getList();

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.json.artefacts;
+package org.dbrain.data.json.artifacts;
 
 import java.util.HashMap;
 import java.util.Locale;

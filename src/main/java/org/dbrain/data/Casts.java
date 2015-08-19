@@ -423,6 +423,9 @@ public class Casts {
     }
 
 
+    /**
+     * Convert a string to a date supporting blank values as null date.
+     */
     public static java.util.Date toDate( DateFormat format, String value ) {
         if ( !Strings.isBlank( value ) ) {
             try {
@@ -435,6 +438,9 @@ public class Casts {
         }
     }
 
+    /**
+     * Convert a string to a sql date supporting blank values as null date.
+     */
     public static java.sql.Date toSqlDate( DateFormat format, String value ) {
         return toSqlDate( toDate( format, value ) );
     }
