@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.json;
+package org.dbrain.data.json.artifacts;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
