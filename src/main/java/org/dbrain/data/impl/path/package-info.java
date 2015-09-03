@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 /**
- * Implementation of Fully Qualified Name.
+ * Implementation of Paths.
  *
  * You should not access directly classes of this package since it contains implementations.
  */
-package org.dbrain.data.impl.fqn;
+package org.dbrain.data.impl.path;

@@ -94,8 +94,6 @@ public class Fqn_Test {
         Assert.assertEquals( Fqn.of( "test" ), Fqn.newBuilder().segment( "test" ).build() );
         Assert.assertEquals( Fqn.of( "test" ), Fqn.fromSegment( "test" ).build() );
         Assert.assertEquals( Fqn.of( "test.test2" ), Fqn.newBuilder().segment( "test" ).segment( "test2" ).build() );
-        Assert.assertEquals( Fqn.of( "test.test2" ),
-                             Fqn.newBuilder().optSegment( null ).segment( "test" ).segment( "test2" ).build() );
         Assert.assertEquals( Fqn.of( "test.test2" ), Fqn.fromSegment( "test" ).segment( "test2" ).build() );
         Assert.assertEquals( Fqn.of( "test.test2.test3" ),
                              Fqn.from( Fqn.of( "test.test2" ) ).segment( "test3" ).build() );

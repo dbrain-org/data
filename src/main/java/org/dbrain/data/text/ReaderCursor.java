@@ -32,7 +32,8 @@ public class ReaderCursor implements AutoCloseable {
     // Linked reader
     private Reader reader;
 
-    private Integer peeked;
+    private boolean loaded;
+    private int current;
 
     // Position in the stream.
     private int index  = 1;
@@ -54,6 +55,9 @@ public class ReaderCursor implements AutoCloseable {
         this( new StringReader( s ) );
     }
 
+    /**
+     * @return Read a codepoint from the stream.
+     */
     private int readCodePoint() {
         try {
             int firstChar = reader.read();
@@ -78,7 +82,7 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * An exception with the specified message.
+     * @return A parse exception with the specified message.
      *
      * @param message The message.
      */
@@ -87,7 +91,7 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * An exception with the specified message.
+     * @return A parse exception with the specified message.
      *
      * @param message The message.
      */
@@ -103,45 +107,56 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @return Get at the character at the current cursor position.
+     * @return The character at the current cursor position.
      *
-     * Note: If the current character is consumed. The next one is loaded from
+     * Note: If the current character is consumed, then one is loaded from
      * the underlying reader.
      */
-    public int get() {
-        if ( peeked == null ) {
-            peeked = readCodePoint();
+    public int current() {
+        if ( !loaded ) {
+            current = readCodePoint();
+            loaded = true;
         }
-        return peeked;
+        return current;
+    }
+
+    private void flush() {
+        if ( current >= 0 && loaded ) {
+
+            // Move position
+            if ( current >= 0 ) {
+                index += current <= 0xFFFF ? 1 : 2;
+                if ( current == 10 ) {
+                    line++;
+                    column = 1;
+                } else if ( current == 9 ) {
+                    column += 4;
+                } else if ( current >= ' ' ) {
+                    column++;
+                }
+            }
+            // Unload the thing.
+            loaded = false;
+        }
     }
 
     /**
-     * Move cursor forward one position and get the character.
+     * Move cursor forward one position and get the character. If the cursor has never red a character before, this method will
+     * return the first character.
      *
      * @return The next available character or -1 if none.
      */
-    public int getNext() {
-        read();
-        return get();
+    public int next() {
+        flush();
+        return current();
     }
 
     /**
      * @return The current character and move the cursor forward.
      */
     public int read() {
-        int result = get();
-        if ( result >= 0 ) {
-            peeked = null;
-            index += result <= 0xFFFF ? 1 : 2;
-            if ( result == 10 ) {
-                line++;
-                column = 1;
-            } else if ( result == 9 ) {
-                column += 4;
-            } else if ( result >= ' ' ) {
-                column++;
-            }
-        }
+        int result = current();
+        flush();
         return result;
     }
 
@@ -176,9 +191,9 @@ public class ReaderCursor implements AutoCloseable {
         sb.append( "ReaderCursor index=" );
         sb.append( Integer.toString( index ) );
         sb.append( " char=[" );
-        int peeked = get();
+        int peeked = current();
         if ( peeked >= 0 ) {
-            sb.appendCodePoint( get() );
+            sb.appendCodePoint( current() );
         } else {
             sb.append( "eof" );
         }

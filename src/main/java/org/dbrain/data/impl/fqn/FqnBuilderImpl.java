@@ -30,18 +30,6 @@ public class FqnBuilderImpl implements Fqn.Builder {
     private List<String> segments;
 
     @Override
-    public FqnBuilderImpl optSegment( String segment ) {
-        if ( segment != null ) {
-            if ( segments == null ) {
-                segments = new ArrayList<>();
-            }
-            segments.add( segment );
-        }
-        return this;
-    }
-
-
-    @Override
     public FqnBuilderImpl segment( String segment ) {
         Objects.requireNonNull( segment );
         if ( segments == null ) {

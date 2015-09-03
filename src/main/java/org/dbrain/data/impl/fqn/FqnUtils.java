@@ -45,10 +45,10 @@ public final class FqnUtils {
         skipWhitespace( c );
 
         // Parse the name
-        if ( isFqnStart( c.get() ) ) {
+        if ( isFqnStart( c.current() ) ) {
             List<String> segments = new ArrayList<>();
             segments.add( readSegment( c ) );
-            while ( c.get() == '.' ) {
+            while ( c.current() == '.' ) {
                 c.read();
                 segments.add( readSegment( c ) );
             }
@@ -73,7 +73,7 @@ public final class FqnUtils {
         skipWhitespace( c );
 
         // Expect EOF
-        if ( c.get() >= 0 ) {
+        if ( c.current() >= 0 ) {
             throw c.error( "Expecting end of string" );
         }
 
@@ -89,10 +89,10 @@ public final class FqnUtils {
         skipWhitespace( c );
 
         // Parse the name
-        if ( isFqnPatternStart( c.get() ) ) {
+        if ( isFqnPatternStart( c.current() ) ) {
             FqnPatternBuilderImpl builder = new FqnPatternBuilderImpl();
             readPatternSegment( c, builder );
-            while ( c.get() == '.' ) {
+            while ( c.current() == '.' ) {
                 c.read();
                 readPatternSegment( c, builder );
             }
@@ -118,7 +118,7 @@ public final class FqnUtils {
         skipWhitespace( c );
 
         // Expect EOF
-        if ( c.get() >= 0 ) {
+        if ( c.current() >= 0 ) {
             throw c.error( "Expecting end of string" );
         }
 
@@ -128,7 +128,7 @@ public final class FqnUtils {
 
     // Skip consecutive white spaces
     private static void skipWhitespace( ReaderCursor c ) {
-        while ( ParserUtils.isSpace( c.get() ) ) {
+        while ( ParserUtils.isSpace( c.current() ) ) {
             c.read();
         }
     }
@@ -176,7 +176,7 @@ public final class FqnUtils {
         do {
             int current = c.read();
             if ( current == quote ) {
-                if ( c.get() == quote ) {
+                if ( c.current() == quote ) {
                     sb.appendCodePoint( c.read() );
                 } else {
                     break;
@@ -193,7 +193,7 @@ public final class FqnUtils {
     // Read an unquoted segment.
     private static String readUnquotedSegment( ReaderCursor cursor ) {
         StringBuilder sb = new StringBuilder();
-        while ( isUnquotedSegment( cursor.get() ) ) {
+        while ( isUnquotedSegment( cursor.current() ) ) {
             sb.appendCodePoint( cursor.read() );
         }
         return sb.toString();
@@ -201,7 +201,7 @@ public final class FqnUtils {
 
     // Read a segment.
     private static String readSegment( ReaderCursor c ) {
-        if ( isQuote( c.get() ) ) {
+        if ( isQuote( c.current() ) ) {
             return readQuotedSegment( c );
         } else {
             return readUnquotedSegment( c );
@@ -210,7 +210,7 @@ public final class FqnUtils {
 
     // Read a wildcard segment
     private static void readWildcardSegment( ReaderCursor c, FqnPattern.Builder to ) {
-        if ( isWildcard( c.getNext() ) ) {
+        if ( isWildcard( c.next() ) ) {
             to.any();
             c.read();
         } else {
@@ -220,7 +220,7 @@ public final class FqnUtils {
 
     // Read a segment.
     private static void readPatternSegment( ReaderCursor c, FqnPattern.Builder to ) {
-        int cur = c.get();
+        int cur = c.current();
         if ( isQuote( cur ) ) {
             to.segment( readQuotedSegment( c ) );
         } else if ( isWildcard( cur ) ) {
