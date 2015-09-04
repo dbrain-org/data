@@ -19,6 +19,7 @@ package org.dbrain.data.text;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.function.IntPredicate;
 
 /**
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
@@ -33,7 +34,7 @@ public class ReaderCursor implements AutoCloseable {
     private Reader reader;
 
     private boolean loaded;
-    private int current;
+    private int     current;
 
     // Position in the stream.
     private int index  = 1;
@@ -82,18 +83,18 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @return A parse exception with the specified message.
-     *
      * @param message The message.
+     *
+     * @return A parse exception with the specified message.
      */
     public ParseException error( String message, Throwable e ) {
         return new ParseException( String.format( "%s at %s.", message, position() ), e );
     }
 
     /**
-     * @return A parse exception with the specified message.
-     *
      * @param message The message.
+     *
+     * @return A parse exception with the specified message.
      */
     public ParseException error( String message ) {
         return error( message, null );
@@ -107,7 +108,7 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @return The character at the current cursor position.
+     * @return The codepoint at the current cursor position.
      *
      * Note: If the current character is consumed, then one is loaded from
      * the underlying reader.
@@ -138,6 +139,21 @@ public class ReaderCursor implements AutoCloseable {
             // Unload the thing.
             loaded = false;
         }
+    }
+
+    /**
+     * @return true if the current character test true with the predicate.
+     */
+    public boolean is( IntPredicate predicate ) {
+        return predicate.test( current() );
+    }
+
+    /**
+     * @return true if the current character is one of the character in the string.
+     */
+    public boolean is( String chars ) {
+        int cur = current();
+        return cur >= 0 && chars.indexOf( cur ) >= 0;
     }
 
     /**
@@ -175,6 +191,25 @@ public class ReaderCursor implements AutoCloseable {
 
         }
         return sb.toString();
+    }
+
+    /**
+     * Skip a character if it is contained into the passed string.
+     * @param which
+     */
+    public void skip( String which ) {
+        if ( is( which ) ) {
+            flush();
+        } else {
+            throw error( "expecting " + which );
+        }
+    }
+
+    /**
+     * @return true if at end of file.
+     */
+    public boolean eof() {
+        return current() < 0;
     }
 
     /**

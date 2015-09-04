@@ -18,7 +18,6 @@ package org.dbrain.data.csv;
 
 
 import org.dbrain.data.access.ForwardCursor;
-import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.io.Reader;
@@ -72,10 +71,31 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     }
 
     /**
+     * The character represent a end of file as returned by cursor.
+     */
+    private boolean isEOF( int c ) {
+        return c < 0;
+    }
+
+    /**
+     * Return true if the specified character is an end of line character.
+     */
+    private boolean isEOL( int c ) {
+        return c == 13 || c == 10 || isEOF( c );
+    }
+
+    /**
      * Return true if the specified character is an end of column character.
      */
     private boolean isEOC( int c ) {
-        return c == separator || ParserUtils.isEOL( c );
+        return c == separator || isEOL( c );
+    }
+
+    /**
+     * Return true if the specified character is a space character.
+     */
+    private boolean isLineSpace( int c ) {
+        return Character.isWhitespace( c ) && !isEOL( c );
     }
 
     /**
@@ -83,7 +103,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
      */
     private String readSpace() {
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.current(); ParserUtils.isSpace( cur ); cur = cursor.next() ) {
+        for ( int cur = cursor.current(); isLineSpace( cur ); cur = cursor.next() ) {
             sb.appendCodePoint( cur );
         }
         return sb.toString();
@@ -101,7 +121,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
 
         // Read string content
         StringBuilder sb = new StringBuilder();
-        for ( int cur = cursor.current(); !ParserUtils.isEOL( cur ); cur = cursor.next() ) {
+        for ( int cur = cursor.current(); !isEOL( cur ); cur = cursor.next() ) {
             if ( cur == quote ) {
                 cur = cursor.next();
                 if ( cur != quote ) {
@@ -145,15 +165,15 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
     private List<String> readLine() {
         List<String> result = new ArrayList<>();
 
-        while ( !ParserUtils.isEOL( cursor.current() ) ) {
+        while ( !isEOL( cursor.current() ) ) {
             result.add( readString() );
-            if ( isEOC( cursor.current() ) && !ParserUtils.isEOL( cursor.current() ) ) {
+            if ( isEOC( cursor.current() ) && !isEOL( cursor.current() ) ) {
                 cursor.read();
             }
         }
 
         // Skip all EOL characters
-        for ( int cur = cursor.current(); ParserUtils.isEOL( cur ) && !ParserUtils.isEOF( cur ); cur = cursor.next() ) ;
+        for ( int cur = cursor.current(); isEOL( cur ) && !isEOF( cur ); cur = cursor.next() ) ;
 
         return result;
     }
@@ -186,7 +206,7 @@ public class CsvCursor implements ForwardCursor, AutoCloseable {
         if ( bof ) {
             bof = false;
         }
-        if ( ParserUtils.isEOF( cursor.current() ) ) {
+        if ( isEOF( cursor.current() ) ) {
             fieldValues = null;
         } else {
             fieldValues = readLine();

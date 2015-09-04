@@ -17,6 +17,7 @@
 package org.dbrain.data.impl.path;
 
 import org.dbrain.data.PathPattern;
+import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.io.StringReader;
@@ -28,9 +29,10 @@ public class PathPatternParser {
 
     // Read a wildcard segment
     private static void readWildcardNode( ReaderCursor c, PathPattern.Builder to ) {
-        if ( isWildcard( c.next() ) ) {
+        c.skip( "*" );
+        if ( c.is( "*" ) ) {
             to.any();
-            c.read();
+            c.next();
         } else {
             to.one();
         }
@@ -38,12 +40,11 @@ public class PathPatternParser {
 
     // Read a segment.
     private static void readPatternNode( ReaderCursor c, PathPattern.Builder to ) {
-        int cur = c.current();
-        if ( PathParser.isAttributeStart( cur ) ) {
+        if ( c.is( Character::isJavaIdentifierStart ) ) {
             to.attr( PathParser.readAttribute( c ) );
-        } else if ( PathParser.isBracketOpen( cur ) ) {
+        } else if ( c.is( "[" ) ) {
             readBracketContent( c, to );
-        } else if ( isWildcard( cur ) ) {
+        } else if ( c.is( "*" ) ) {
             readWildcardNode( c, to );
         } else {
             c.error( "Expecting an attribute or an index" );
@@ -56,19 +57,17 @@ public class PathPatternParser {
     public static PathPattern parsePathPattern( ReaderCursor c ) {
 
         // Skip whitespace
-        PathParser.skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Parse the name
-        if ( isPathPatternStart( c.current() ) ) {
+        if ( c.is( Character::isJavaIdentifierStart ) || c.is( "[*" ) ) {
             PathPatternBuilderImpl builder = new PathPatternBuilderImpl();
             readPatternNode( c, builder );
-            int cur = c.current();
-            while ( PathParser.isAttributeAccessor( cur ) || PathParser.isBracketOpen( cur ) ) {
-                if ( PathParser.isAttributeAccessor( cur ) ) {
+            while ( c.is( "[." ) ) {
+                if ( c.is( "." ) ) {
                     c.next();
                 }
                 readPatternNode( c, builder );
-                cur = c.current();
             }
             return builder.build();
         }
@@ -89,7 +88,7 @@ public class PathPatternParser {
         PathPattern result = parsePathPattern( c );
 
         // Skip trailing whitespace
-        PathParser.skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Expect EOF
         if ( c.current() >= 0 ) {
@@ -99,37 +98,24 @@ public class PathPatternParser {
         return result;
     }
 
-    // True if the current character is a wildcard
-    private static boolean isWildcard( int cur ) {
-        return cur == '*';
-    }
-
-    // True if the character is a possible path pattern start.
-    private static boolean isPathPatternStart( int cur ) {
-        return PathParser.isPathStart( cur ) || isWildcard( cur );
-    }
-
     // Read an index.
     private static void readBracketContent( ReaderCursor c, PathPattern.Builder to ) {
-        c.next(); // Skip Index start
+        c.skip( "[" ); // Skip start
 
         // skip leading whitespaces
-        PathParser.skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
-        int cur = c.current();
-        if ( PathParser.isDigit( cur ) ) {
+        if ( c.is( ParserUtils::isDigit ) ) {
             to.index( PathParser.readLong( c ) );
-        } else if ( PathParser.isQuote( cur ) ) {
-            to.attr( PathParser.readQuotedAttribute( c ) );
+        } else if ( c.is( "\'" ) ) {
+            to.attr( ParserUtils.readQuotedString( c ) );
         } else {
             throw c.error( "Expecting quoted string or numerical index" );
         }
 
         // skip trailing whitespaces
-        PathParser.skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
-        if ( !PathParser.isBracketClose( c.read() ) ) {
-            throw c.error( "Expecting ]" );
-        }
+        c.skip( "]" );
     }
 }

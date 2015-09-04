@@ -33,23 +33,21 @@ public final class PathParser {
     public static Path parsePath( ReaderCursor c ) {
 
         // Skip whitespace
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Parse the name
-        if ( isPathStart( c.current() ) ) {
+        if ( c.is( Character::isJavaIdentifierStart ) || c.is( "[" ) ) {
             Path.Builder builder = Path.newBuilder();
             readPathNode( c, builder );
-            int current = c.current();
             while ( true ) {
-                if ( isBracketOpen( current ) ) {
-                    readBracketContent( c, builder );
-                } else if ( isAttributeAccessor( current ) ) {
+                if ( c.is( "[" ) ) {
+                    readIndex( c, builder );
+                } else if ( c.is( "." ) ) {
                     c.next(); // Skip accessor
                     builder.attr( readAttribute( c ) );
                 } else {
                     break;
                 }
-                current = c.current();
             }
             return builder.build();
         }
@@ -69,7 +67,7 @@ public final class PathParser {
         Path result = parsePath( c );
 
         // Skip trailing whitespace
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Expect EOF
         if ( c.current() >= 0 ) {
@@ -79,81 +77,11 @@ public final class PathParser {
         return result;
     }
 
-
-    // Skip consecutive white spaces
-    public static void skipWhitespace( ReaderCursor c ) {
-        while ( ParserUtils.isSpace( c.current() ) ) {
-            c.read();
-        }
-    }
-
-    // True if the character is a quote.
-    public static boolean isQuote( int cur ) {
-        return cur == '\'';
-    }
-
-    // True if the character is an openning bracket.
-    public static boolean isBracketOpen( int cur ) {
-        return cur == '[';
-    }
-
-    // True if the character is an closing bracket.
-    public static boolean isBracketClose( int cur ) {
-        return cur == ']';
-    }
-
-    public static boolean isAttributeAccessor( int cur ) {
-        return cur == '.';
-    }
-
-
-    // True if the character is a possible path node.
-    public static boolean isPathStart( int cur ) {
-        return isAttributeStart( cur ) || isBracketOpen( cur );
-    }
-
-    // True if the character is an unreserved attribute character.
-    public static boolean isAttributeStart( int cur ) {
-        return Character.isJavaIdentifierStart( cur );
-    }
-
-    // True if the character is an unreserved attribute character.
-    private static boolean isAttributePart( int cur ) {
-        return Character.isJavaIdentifierPart( cur );
-    }
-
-    // True if the character is a digit.
-    public static boolean isDigit( int cur ) {
-        return cur >= '0' && cur <= '9';
-    }
-
-
-    // Read a quoted attribute.
-    public static String readQuotedAttribute( ReaderCursor c ) {
-        int quote = c.read();
-        StringBuilder sb = new StringBuilder();
-        do {
-            int current = c.read();
-            if ( current == quote ) {
-                if ( c.current() == quote ) {
-                    sb.appendCodePoint( c.read() );
-                } else {
-                    break;
-                }
-            } else if ( current < 0 ) {
-                throw c.error( "Unexpected eof" );
-            } else {
-                sb.appendCodePoint( current );
-            }
-        } while ( true );
-        return sb.toString();
-    }
-
     // Read an attribute.
     public static String readAttribute( ReaderCursor c ) {
         // Should be called where current = isAttributeStart
         StringBuilder sb = new StringBuilder();
-        for ( int cur = c.current(); isAttributePart( cur ); cur = c.next() ) {
+        for ( int cur = c.current(); Character.isJavaIdentifierPart( cur ); cur = c.next() ) {
             sb.appendCodePoint( cur );
         }
         return sb.toString();
@@ -161,42 +89,42 @@ public final class PathParser {
 
     public static long readLong( ReaderCursor c ) {
         long index = 0;
-        for ( int cur = c.current(); isDigit( cur ); cur = c.next() ) {
+        for ( int cur = c.current(); ParserUtils.isDigit( cur ); cur = c.next() ) {
             index = index * 10 + cur - '0';
         }
         return index;
     }
 
     // Read an index.
-    private static void readBracketContent( ReaderCursor c, Path.Builder to ) {
+    private static void readIndex( ReaderCursor c, Path.Builder to ) {
         c.next(); // Skip Index start
 
         // skip leading whitespaces
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
-        int cur = c.current();
-        if ( isDigit( cur ) ) {
+        if ( c.is( ParserUtils::isDigit ) ) {
             to.index( readLong( c ) );
-        } else if ( isQuote( cur ) ) {
-            to.attr( readQuotedAttribute( c ) );
+        } else if ( c.is( "\'" ) ) {
+            to.attr( ParserUtils.readQuotedString( c ) );
         } else {
             throw c.error( "Expecting quoted string or numerical index" );
         }
 
         // skip trailing whitespaces
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
-        if ( !isBracketClose( c.read() ) ) {
+        if ( c.is( "]" ) ) {
+            c.next();
+        } else {
             throw c.error( "Expecting ]" );
         }
     }
 
     // Read a node.
     private static void readPathNode( ReaderCursor c, Path.Builder to ) {
-        int cur = c.current();
-        if ( isBracketOpen( cur ) ) {
-            readBracketContent( c, to );
-        } else if ( isAttributeStart( cur ) ) {
+        if ( c.is( "[" ) ) {
+            readIndex( c, to );
+        } else if ( c.is( Character::isJavaIdentifierStart ) ) {
             to.attr( readAttribute( c ) );
         } else {
             throw c.error( "Expected attribute or [" );
@@ -215,7 +143,7 @@ public final class PathParser {
         StringBuilder sb = null;
         for ( int i = 0; i < attr.length(); i++ ) {
             Character c = attr.charAt( i );
-            if ( ( i > 0 && isAttributePart( c ) ) || ( i == 0 && isAttributeStart( c ) ) ) {
+            if ( ( i > 0 && Character.isJavaIdentifierPart( c ) ) || ( i == 0 && Character.isJavaIdentifierStart( c ) ) ) {
                 if ( sb != null ) {
                     sb.append( c );
                 }

@@ -18,7 +18,6 @@ package org.dbrain.data.impl.fqn;
 
 import org.dbrain.data.Fqn;
 import org.dbrain.data.FqnPattern;
-import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.io.StringReader;
@@ -128,7 +127,7 @@ public final class FqnUtils {
 
     // Skip consecutive white spaces
     private static void skipWhitespace( ReaderCursor c ) {
-        while ( ParserUtils.isSpace( c.current() ) ) {
+        while ( c.is( Character::isWhitespace ) ) {
             c.read();
         }
     }
