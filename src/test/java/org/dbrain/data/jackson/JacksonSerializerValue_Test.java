@@ -36,75 +36,6 @@ public class JacksonSerializerValue_Test {
 
     Serializer serializer = new JacksonJsonSerializer();
 
-    @Test
-    public void testSerializeLong() throws Exception {
-        String s1 = serializer.objectToString( new Long( 10 ) );
-        String s2 = serializer.objectToString( new Long( 999999999999999l ) );
-        String s3 = serializer.objectToString( new Long( 1000000000000000l ) );
-        String s4 = serializer.objectToString( new Long( -999999999999999l ) );
-        String s5 = serializer.objectToString( new Long( -1000000000000000l ) );
-
-        Assert.assertEquals( "10", s1 );
-        Assert.assertEquals( "999999999999999", s2 );
-        Assert.assertEquals( "\"1000000000000000\"", s3 );
-        Assert.assertEquals( "-999999999999999", s4 );
-        Assert.assertEquals( "\"-1000000000000000\"", s5 );
-
-    }
-
-    @Test
-    public void testSerializeBigInteger() throws Exception {
-        String s1 = serializer.objectToString( new BigInteger( "10" ) );
-        String s2 = serializer.objectToString( new BigInteger( "999999999999999" ) );
-        String s3 = serializer.objectToString( new BigInteger( "1000000000000000" ) );
-        String s4 = serializer.objectToString( new BigInteger( "-999999999999999" ) );
-        String s5 = serializer.objectToString( new BigInteger( "-1000000000000000" ) );
-
-        Assert.assertEquals( "10", s1 );
-        Assert.assertEquals( "999999999999999", s2 );
-        Assert.assertEquals( "\"1000000000000000\"", s3 );
-        Assert.assertEquals( "-999999999999999", s4 );
-        Assert.assertEquals( "\"-1000000000000000\"", s5 );
-
-    }
-
-    @Test
-    public void testSerializeBigDecimal() throws Exception {
-        String s1 = serializer.objectToString( new BigDecimal( "10" ) );
-        String s2 = serializer.objectToString( new BigDecimal( "999999999999999" ) );
-        String s3 = serializer.objectToString( new BigDecimal( "1000000000000000" ) );
-        String s4 = serializer.objectToString( new BigDecimal( "99999999999.9999" ) );
-        String s5 = serializer.objectToString( new BigDecimal( "100000000000.1234" ) );
-        String s6 = serializer.objectToString( new BigDecimal( "-999999999999999" ) );
-        String s7 = serializer.objectToString( new BigDecimal( "-1000000000000000" ) );
-        String s8 = serializer.objectToString( new BigDecimal( "-99999999999.9999" ) );
-        String s9 = serializer.objectToString( new BigDecimal( "-100000000000.1234" ) );
-
-        Assert.assertEquals( "10", s1 );
-        Assert.assertEquals( "999999999999999", s2 );
-        Assert.assertEquals( "\"1000000000000000\"", s3 );
-        Assert.assertEquals( "99999999999.9999", s4 );
-        Assert.assertEquals( "\"100000000000.1234\"", s5 );
-        Assert.assertEquals( "-999999999999999", s6 );
-        Assert.assertEquals( "\"-1000000000000000\"", s7 );
-        Assert.assertEquals( "-99999999999.9999", s8 );
-        Assert.assertEquals( "\"-100000000000.1234\"", s9 );
-
-    }
-
-
-    @Test
-    public void testSerializeInteger() throws Exception {
-        String s = serializer.objectToString( new Integer( 10 ) );
-        Assert.assertEquals( "10", s );
-    }
-
-    @Test
-    public void testSerializeObject() throws Exception {
-        String s = serializer.objectToString( new TestLongClass() );
-        TestLongClass tlc = serializer.parseObject( s, TestLongClass.class );
-        Assert.assertNotNull( tlc );
-    }
 
     @Test
     public void testObjectToValue() throws Exception {
@@ -122,6 +53,8 @@ public class JacksonSerializerValue_Test {
         Assert.assertEquals( v, Value.of( "Test" ) );
 
     }
+
+
 
     /**
      * Test serialization and deserialization of java's Locale.
@@ -188,6 +121,13 @@ public class JacksonSerializerValue_Test {
         Assert.assertEquals( map.get( "2" ), Value.of( 2 ) );
         Assert.assertEquals( map.get( "3" ), Value.of( 3 ) );
         Assert.assertEquals( map.get( "4" ), Value.of( 4 ) );
+    }
+
+    @Test
+    public void testValueToString() throws Exception {
+        ValueMap map = ValueMap.newInstance();
+        map.put( "test", Value.of( 123L ) );
+        Assert.assertEquals( serializer.valueToString( map ), "{\"test\":123}" );
     }
 
 }

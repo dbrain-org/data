@@ -34,6 +34,11 @@ public interface Serializer {
     Value parseValue( Reader r );
 
     /**
+     * Stream Object to Value.
+     */
+    Value objectToValue( Object o );
+
+    /**
      * Parse a String to the specific class.
      */
     <T> T parseObject( String r, Class<T> clazz );
@@ -44,9 +49,9 @@ public interface Serializer {
     <T> T parseObject( Value v, Class<T> clazz );
 
     /**
-     * Stream Object to Value.
+     * Stream Value to String.
      */
-    Value objectToValue( Object o );
+    String valueToString( Value v );
 
     /**
      * Stream Object to String.
