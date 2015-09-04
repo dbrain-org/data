@@ -16,6 +16,8 @@
 
 package org.dbrain.data.text;
 
+import java.util.function.IntConsumer;
+
 /**
  * Created by epoitras on 06/11/14.
  */
@@ -52,5 +54,29 @@ public class ParserUtils {
             }
         } while ( true );
         return sb.toString();
+    }
+
+    public static boolean isJavaIdentifier( String s ) {
+        if ( s == null || s.length() == 0 ) {
+            return false;
+        }
+        if ( !Character.isJavaIdentifierStart( s.codePointAt( 0 ) ) ) {
+            return false;
+        }
+        return s.substring( 1 ).codePoints().allMatch( Character::isJavaIdentifierPart );
+    }
+
+    // Read an unquoted segment.
+    public static String readJavaIdentifier( ReaderCursor c ) {
+        if ( c.is( Character::isJavaIdentifierStart ) ) {
+            StringBuilder sb = new StringBuilder();
+            sb.appendCodePoint( c.read() );
+            for ( int cur = c.current(); Character.isJavaIdentifierPart( cur ); cur = c.next() ) {
+                sb.appendCodePoint( cur );
+            }
+            return sb.toString();
+        } else {
+            return null;
+        }
     }
 }

@@ -18,6 +18,7 @@ package org.dbrain.data.impl.fqn;
 
 import org.dbrain.data.Fqn;
 import org.dbrain.data.FqnPattern;
+import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.io.StringReader;
@@ -29,26 +30,20 @@ import java.util.List;
  */
 public final class FqnUtils {
 
-    // Fqn reserved characters
-    public static final String FQN_PATTERN_RESERVED_CHARS = "\'\"?!@#%&()[]{}.,;+-/\\^ ";
-
-    // Fqn reserved characters
-    public static final String FQN_RESERVED_CHARS = "*" + FQN_PATTERN_RESERVED_CHARS;
-
     /**
      * Create a fully qualified name from a ReaderCursor.
      */
     public static Fqn parseFqn( ReaderCursor c ) {
 
         // Skip whitespace
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Parse the name
-        if ( isFqnStart( c.current() ) ) {
+        if ( c.is( Character::isJavaIdentifierStart ) || c.is( "'") ) {
             List<String> segments = new ArrayList<>();
             segments.add( readSegment( c ) );
-            while ( c.current() == '.' ) {
-                c.read();
+            while ( c.is( "." ) ) {
+                c.next();
                 segments.add( readSegment( c ) );
             }
             return new FqnImpl( segments );
@@ -69,10 +64,10 @@ public final class FqnUtils {
         Fqn result = parseFqn( c );
 
         // Skip trailing whitespace
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Expect EOF
-        if ( c.current() >= 0 ) {
+        if ( !c.eof() ) {
             throw c.error( "Expecting end of string" );
         }
 
@@ -85,13 +80,13 @@ public final class FqnUtils {
     public static FqnPattern parseFqnPattern( ReaderCursor c ) {
 
         // Skip whitespace
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Parse the name
-        if ( isFqnPatternStart( c.current() ) ) {
+        if ( c.is( "'*" ) || c.is( Character::isJavaIdentifierStart ) ) {
             FqnPatternBuilderImpl builder = new FqnPatternBuilderImpl();
             readPatternSegment( c, builder );
-            while ( c.current() == '.' ) {
+            while ( c.is( "." ) ) {
                 c.read();
                 readPatternSegment( c, builder );
             }
@@ -114,58 +109,14 @@ public final class FqnUtils {
         FqnPattern result = parseFqnPattern( c );
 
         // Skip trailing whitespace
-        skipWhitespace( c );
+        ParserUtils.skipWhitespaces( c );
 
         // Expect EOF
-        if ( c.current() >= 0 ) {
+        if ( !c.eof() ) {
             throw c.error( "Expecting end of string" );
         }
 
         return result;
-    }
-
-
-    // Skip consecutive white spaces
-    private static void skipWhitespace( ReaderCursor c ) {
-        while ( c.is( Character::isWhitespace ) ) {
-            c.read();
-        }
-    }
-
-    // True if the character is a reserved one and therefore cannot be in a unquoted segment.
-    private static boolean isNotFqnReserved( int cur ) {
-        return FQN_RESERVED_CHARS.indexOf( cur ) < 0;
-    }
-
-    // True if the character is a reserved one and therefore cannot be in a unquoted segment.
-    private static boolean isNotFqnPatternReserved( int cur ) {
-        return FQN_PATTERN_RESERVED_CHARS.indexOf( cur ) < 0;
-    }
-
-    // True if the character is a quote.
-    private static boolean isQuote( int cur ) {
-        return cur == '\'';
-    }
-
-    // True if the current character is a wildcard
-    private static boolean isWildcard( int cur ) {
-        return cur == '*';
-    }
-
-    // True if the character is a possible fully qualified name start.
-    private static boolean isFqnStart( int cur ) {
-        return cur >= 0 && ( isQuote( cur ) || isNotFqnReserved( cur ) );
-    }
-
-    // True if the character is a possible fully qualified name start.
-    private static boolean isFqnPatternStart( int cur ) {
-        return cur >= 0 && ( isQuote( cur ) || isNotFqnPatternReserved( cur ) );
-    }
-
-
-    // True if the character is a unquoted segment character.
-    private static boolean isUnquotedSegment( int cur ) {
-        return cur >= 0 && isNotFqnReserved( cur );
     }
 
     // Read a quoted segment.
@@ -189,29 +140,21 @@ public final class FqnUtils {
         return sb.toString();
     }
 
-    // Read an unquoted segment.
-    private static String readUnquotedSegment( ReaderCursor cursor ) {
-        StringBuilder sb = new StringBuilder();
-        while ( isUnquotedSegment( cursor.current() ) ) {
-            sb.appendCodePoint( cursor.read() );
-        }
-        return sb.toString();
-    }
-
     // Read a segment.
     private static String readSegment( ReaderCursor c ) {
-        if ( isQuote( c.current() ) ) {
-            return readQuotedSegment( c );
+        if ( c.is( "\'" ) ) {
+            return ParserUtils.readQuotedString( c );
         } else {
-            return readUnquotedSegment( c );
+            return ParserUtils.readJavaIdentifier( c );
         }
     }
 
     // Read a wildcard segment
     private static void readWildcardSegment( ReaderCursor c, FqnPattern.Builder to ) {
-        if ( isWildcard( c.next() ) ) {
+        c.skip( "*" );
+        if ( c.is( "*" ) ) {
             to.any();
-            c.read();
+            c.next();
         } else {
             to.one();
         }
@@ -219,13 +162,14 @@ public final class FqnUtils {
 
     // Read a segment.
     private static void readPatternSegment( ReaderCursor c, FqnPattern.Builder to ) {
-        int cur = c.current();
-        if ( isQuote( cur ) ) {
-            to.segment( readQuotedSegment( c ) );
-        } else if ( isWildcard( cur ) ) {
+        if ( c.is( "'" ) ) {
+            to.segment( ParserUtils.readQuotedString( c ) );
+        } else if ( c.is( "*" ) ) {
             readWildcardSegment( c, to );
+        } else if ( c.is( Character::isJavaIdentifierStart ) ) {
+            to.segment( ParserUtils.readJavaIdentifier( c ) );
         } else {
-            to.segment( readUnquotedSegment( c ) );
+            throw c.error( "Expected Fqn pattern segment" );
         }
     }
 
@@ -236,33 +180,10 @@ public final class FqnUtils {
         if ( segment.length() == 0 ) {
             return "''";
         }
-        StringBuilder sb = null;
-        for ( int i = 0; i < segment.length(); i++ ) {
-            Character c = segment.charAt( i );
-            if ( FQN_RESERVED_CHARS.indexOf( c ) >= 0 ) {
-                if ( sb == null ) {
-                    sb = new StringBuilder( segment.length() + 12 );
-                    sb.append( "'" );
-                    sb.append( segment.substring( 0, i ) );
-                }
-                if ( c == '\'' ) {
-                    sb.append( "''" );
-                } else {
-                    sb.append( c );
-                }
-            } else {
-                if ( sb != null ) {
-                    sb.append( c );
-                }
-            }
-        }
-
-        // Close the string as we escaped it.
-        if ( sb != null ) {
-            sb.append( "\'" );
-            return sb.toString();
-        } else {
+        if ( ParserUtils.isJavaIdentifier( segment ) ) {
             return segment;
+        } else {
+            return "'" + segment.replaceAll( "'", "''" ) + "'";
         }
     }
 }
