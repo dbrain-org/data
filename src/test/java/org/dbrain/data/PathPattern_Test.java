@@ -30,7 +30,7 @@ public class PathPattern_Test {
 
         Assert.assertEquals( "test.*.**", PathPattern.newBuilder().attr( "test" ).one().any().build().toString() );
         Assert.assertEquals( "", PathPattern.newBuilder().build().toString() );
-        Assert.assertEquals( "''", PathPattern.newBuilder().attr( "" ).build().toString() );
+        Assert.assertEquals( "['']", PathPattern.newBuilder().attr( "" ).build().toString() );
 
     }
 
@@ -241,10 +241,10 @@ public class PathPattern_Test {
         Assert.assertEquals( "", PathPattern.of( " " ).toString() );
         Assert.assertEquals( "test", PathPattern.of( "test" ).toString() );
         Assert.assertEquals( "test", PathPattern.of( " test " ).toString() );
-        Assert.assertEquals( "'test*'", PathPattern.of( "'test*'" ).toString() );
-        Assert.assertEquals( "'test'''", PathPattern.of( "'test'''" ).toString() );
-        Assert.assertEquals( "'test.'", PathPattern.of( "'test.'" ).toString() );
-        Assert.assertEquals( "'test.'.''.'''123'.'123'''", PathPattern.of( "'test.'.''.'''123'.'123'''" ).toString() );
+        Assert.assertEquals( "['test*']", PathPattern.of( "['test*']" ).toString() );
+        Assert.assertEquals( "['test''']", PathPattern.of( "['test''']" ).toString() );
+        Assert.assertEquals( "['test.']", PathPattern.of( "['test.']" ).toString() );
+        Assert.assertEquals( "['test.']['']['''123']['123''']", PathPattern.of( "['test.']['']['''123']['123''']" ).toString() );
         Assert.assertEquals( "test.*", PathPattern.of( "test.*" ).toString() );
         Assert.assertEquals( "test.**", PathPattern.of( "test.**" ).toString() );
         Assert.assertEquals( "test.*", PathPattern.of( " test.* " ).toString() );

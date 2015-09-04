@@ -76,13 +76,11 @@ public class PathPatternImpl implements PathPattern {
 
     @Override
     public String toString() {
+        int i = 0;
         Node node = root;
         StringBuilder sb = new StringBuilder();
         while ( node != null ) {
-            sb.append( node.toString() );
-            if ( node.getNext() != null ) {
-                sb.append( "." );
-            }
+            sb.append( node.toString( i++ ) );
             node = node.getNext();
         }
         return sb.toString();
@@ -182,6 +180,14 @@ public class PathPatternImpl implements PathPattern {
         void setNext( Node next ) {
             this.next = next;
         }
+
+        abstract String toString( int index );
+
+        @Override
+        public String toString() {
+            return toString( 0 );
+        }
+
     }
 
     public static class SpecificAttribute extends Node {
@@ -212,9 +218,10 @@ public class PathPatternImpl implements PathPattern {
         }
 
         @Override
-        public String toString() {
-            return PathUtils.encodeAttribute( attr );
+        protected String toString( int pos ) {
+            return PathParser.encodeAttribute( attr, pos == 0 );
         }
+
     }
 
     public static class SpecificIndex extends Node {
@@ -244,7 +251,7 @@ public class PathPatternImpl implements PathPattern {
         }
 
         @Override
-        public String toString() {
+        public String toString( int pos ) {
             return "[" + index + "]";
         }
     }
@@ -277,8 +284,8 @@ public class PathPatternImpl implements PathPattern {
         }
 
         @Override
-        public String toString() {
-            return "*";
+        public String toString( int pos ) {
+            return pos == 0 ? "*" : ".*";
         }
     }
 
@@ -316,8 +323,8 @@ public class PathPatternImpl implements PathPattern {
         }
 
         @Override
-        public String toString() {
-            return "**";
+        public String toString( int pos ) {
+            return pos == 0 ? "**" : ".**";
         }
 
     }

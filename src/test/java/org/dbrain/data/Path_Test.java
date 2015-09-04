@@ -70,13 +70,13 @@ public class Path_Test {
         Assert.assertEquals( "[0][1]", Path.of( "[0][ 1]" ).toString() );
         Assert.assertEquals( "[0][1][2][3]", Path.of( "[0][ 1][2 ][ 3 ]" ).toString() );
         Assert.assertEquals( "[0].toto", Path.of( "[0].toto" ).toString() );
-        Assert.assertEquals( "test[0]", Path.of( "'test'[0]" ).toString() );
+        Assert.assertEquals( "test[0]", Path.of( "['test'][0]" ).toString() );
         Assert.assertEquals( "test", Path.of( "test" ).toString() );
         Assert.assertEquals( "test", Path.of( " test " ).toString() );
-        Assert.assertEquals( "'test*'", Path.of( "'test*'" ).toString() );
-        Assert.assertEquals( "'test'''", Path.of( "'test'''" ).toString() );
-        Assert.assertEquals( "'test.'", Path.of( "'test.'" ).toString() );
-        Assert.assertEquals( "'test.'.''.'''123'.'123'''", Path.of( "'test.'.''.'''123'.'123'''" ).toString() );
+        Assert.assertEquals( "['test*']", Path.of( "['test*']" ).toString() );
+        Assert.assertEquals( "['test''']", Path.of( "['test''']" ).toString() );
+        Assert.assertEquals( "['test.']", Path.of( "['test.']" ).toString() );
+        Assert.assertEquals( "['test.']['']['''123']['123''']", Path.of( "['test.']['']['''123']['123''']" ).toString() );
     }
 
     /**
@@ -85,9 +85,9 @@ public class Path_Test {
     @Test
     public void testOfSegment() throws Exception {
         Assert.assertEquals( "", Path.ofAttr( null ).toString() );
-        Assert.assertEquals( "''", Path.ofAttr( "" ).toString() );
+        Assert.assertEquals( "['']", Path.ofAttr( "" ).toString() );
         Assert.assertEquals( "test", Path.ofAttr( "test" ).toString() );
-        Assert.assertEquals( "'test.toto'", Path.ofAttr( "test.toto" ).toString() );
+        Assert.assertEquals( "['test.toto']", Path.ofAttr( "test.toto" ).toString() );
     }
 
     /**
@@ -105,7 +105,7 @@ public class Path_Test {
         Assert.assertEquals( Path.of( "test" ), Path.from( null ).attr( "test" ).build() );
         Assert.assertEquals( Path.of( "test.test2.test3" ),
                              Path.newBuilder().attr( "test" ).append( Path.of( "test2.test3" ) ).build() );
-        Assert.assertEquals( Path.of( "test" ), Path.newBuilder().attr( "test" ).append( (Path)null ).build() );
+        Assert.assertEquals( Path.of( "test" ), Path.newBuilder().attr( "test" ).append( (Path) null ).build() );
     }
 
     /**
@@ -131,9 +131,9 @@ public class Path_Test {
      */
     @Test
     public void testSize() throws Exception {
-        Assert.assertEquals( 1, Path.of( "''" ).size() );
-        Assert.assertEquals( 2, Path.of( "'test*'.''" ).size() );
-        Assert.assertEquals( 3, Path.of( "'test'''.'*'.'**'" ).size() );
+        Assert.assertEquals( 1, Path.of( "['']" ).size() );
+        Assert.assertEquals( 2, Path.of( "['test*']['']" ).size() );
+        Assert.assertEquals( 3, Path.of( "['test''']['*']['**']" ).size() );
         Assert.assertEquals( 4, Path.of( "a1.a2.a3.a4" ).size() );
 
         Assert.assertEquals( 1, Path.of( "[0]" ).size() );
@@ -149,9 +149,9 @@ public class Path_Test {
     @Test
     public void testAttr() throws Exception {
         Assert.assertEquals( "test", Path.of( "test" ).attr( 0 ) );
-        Assert.assertEquals( "", Path.of( "''" ).attr( 0 ) );
-        Assert.assertEquals( "*", Path.of( "test.'*'" ).attr( 1 ) );
-        Assert.assertEquals( "", Path.of( "test.''" ).attr( 1 ) );
+        Assert.assertEquals( "", Path.of( "['']" ).attr( 0 ) );
+        Assert.assertEquals( "*", Path.of( "test['*']" ).attr( 1 ) );
+        Assert.assertEquals( "", Path.of( "test['']" ).attr( 1 ) );
     }
 
     /**
@@ -161,7 +161,7 @@ public class Path_Test {
     public void testIndex() throws Exception {
         Assert.assertEquals( 1L, Path.of( "test[1]" ).index( 1 ) );
         Assert.assertEquals( 2L, Path.of( "[2]" ).index( 0 ) );
-        Assert.assertEquals( 3L, Path.of( "test.'*'[3]" ).index( 2 ) );
+        Assert.assertEquals( 3L, Path.of( "test['*'][3]" ).index( 2 ) );
     }
 
     @Test

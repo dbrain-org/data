@@ -17,7 +17,7 @@
 package org.dbrain.data;
 
 import org.dbrain.data.impl.path.PathPatternBuilderImpl;
-import org.dbrain.data.impl.path.PathUtils;
+import org.dbrain.data.impl.path.PathPatternParser;
 
 /**
  * Pattern to match a Path.
@@ -36,7 +36,7 @@ public interface PathPattern {
      * Expect to works with the output of toString.
      */
     static PathPattern of( String path ) {
-        return PathUtils.parsePathPattern( path );
+        return PathPatternParser.parsePathPattern( path );
     }
 
     /**

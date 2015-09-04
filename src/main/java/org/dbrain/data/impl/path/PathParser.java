@@ -17,18 +17,15 @@
 package org.dbrain.data.impl.path;
 
 import org.dbrain.data.Path;
-import org.dbrain.data.PathPattern;
 import org.dbrain.data.text.ParserUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Implements parsing of Path and Patterns.
+ * Implements parsing of Paths.
  */
-public final class PathUtils {
+public final class PathParser {
 
     /**
      * Create a fully qualified name from a ReaderCursor.
@@ -40,21 +37,21 @@ public final class PathUtils {
 
         // Parse the name
         if ( isPathStart( c.current() ) ) {
-            List<Object> nodes = new ArrayList<>();
-            nodes.add( readNode( c ) );
+            Path.Builder builder = Path.newBuilder();
+            readPathNode( c, builder );
             int current = c.current();
             while ( true ) {
-                if ( isIndexOpen( current ) ) {
-                    nodes.add( readBracketContent( c ) );
+                if ( isBracketOpen( current ) ) {
+                    readBracketContent( c, builder );
                 } else if ( isAttributeAccessor( current ) ) {
                     c.next(); // Skip accessor
-                    nodes.add( readAttribute( c ) );
+                    builder.attr( readAttribute( c ) );
                 } else {
                     break;
                 }
                 current = c.current();
             }
-            return new PathImpl( nodes );
+            return builder.build();
         }
         return PathImpl.EMPTY_PATH;
     }
@@ -82,138 +79,57 @@ public final class PathUtils {
         return result;
     }
 
-    // Read a wildcard segment
-    private static void readWildcardNode( ReaderCursor c, PathPattern.Builder to ) {
-        if ( isWildcard( c.next() ) ) {
-            to.any();
-            c.read();
-        } else {
-            to.one();
-        }
-    }
-
-
-    // Read a segment.
-    private static void readPatternNode( ReaderCursor c, PathPattern.Builder to ) {
-        int cur = c.current();
-        if ( isAttributeStart( cur ) ) {
-            to.attr( readAttribute( c ) );
-        } else if ( isIndexOpen( cur ) ) {
-            readBracketContent( c, to );
-        } else if ( isWildcard( cur ) ) {
-            readWildcardNode( c, to );
-        } else {
-            c.error( "Expecting an attribute or an index" );
-        }
-    }
-
-
-    /**
-     * Create a fully qualified name pattern from a ReaderCursor.
-     */
-    public static PathPattern parsePathPattern( ReaderCursor c ) {
-
-        // Skip whitespace
-        skipWhitespace( c );
-
-        // Parse the name
-        if ( isPathPatternNode( c.current() ) ) {
-            PathPatternBuilderImpl builder = new PathPatternBuilderImpl();
-            readPatternNode( c, builder );
-            while ( c.current() == '.' ) {
-                c.read();
-                readPatternNode( c, builder );
-            }
-            return builder.build();
-        }
-        return new PathPatternBuilderImpl().build();
-
-    }
-
-    /**
-     * Create a new Fully Qualified Name from a String. Compatible with toString.
-     */
-    public static PathPattern parsePathPattern( String fqn ) {
-        if ( fqn == null ) {
-            return PathPatternImpl.EMPTY_PATTERN;
-        }
-        ReaderCursor c = new ReaderCursor( new StringReader( fqn ) );
-
-        // Parse the name
-        PathPattern result = parsePathPattern( c );
-
-        // Skip trailing whitespace
-        skipWhitespace( c );
-
-        // Expect EOF
-        if ( c.current() >= 0 ) {
-            throw c.error( "Expecting end of string" );
-        }
-
-        return result;
-    }
-
 
     // Skip consecutive white spaces
-    private static void skipWhitespace( ReaderCursor c ) {
+    public static void skipWhitespace( ReaderCursor c ) {
         while ( ParserUtils.isSpace( c.current() ) ) {
             c.read();
         }
     }
 
     // True if the character is a quote.
-    private static boolean isQuote( int cur ) {
+    public static boolean isQuote( int cur ) {
         return cur == '\'';
     }
 
     // True if the character is an openning bracket.
-    private static boolean isIndexOpen( int cur ) {
+    public static boolean isBracketOpen( int cur ) {
         return cur == '[';
     }
 
     // True if the character is an closing bracket.
-    private static boolean isIndexClose( int cur ) {
+    public static boolean isBracketClose( int cur ) {
         return cur == ']';
     }
 
-    private static boolean isAttributeAccessor( int cur ) {
+    public static boolean isAttributeAccessor( int cur ) {
         return cur == '.';
     }
 
 
-    // True if the current character is a wildcard
-    private static boolean isWildcard( int cur ) {
-        return cur == '*';
-    }
-
     // True if the character is a possible path node.
-    private static boolean isPathStart( int cur ) {
-        return cur >= 0 && ( isAttributeStart( cur ) || isIndexOpen( cur ) );
-    }
-
-    // True if the character is a possible fully qualified name start.
-    private static boolean isPathPatternNode( int cur ) {
-        return isPathStart( cur ) || isWildcard( cur );
+    public static boolean isPathStart( int cur ) {
+        return isAttributeStart( cur ) || isBracketOpen( cur );
     }
 
     // True if the character is an unreserved attribute character.
-    private static boolean isAttributeStart( int cur ) {
-        return cur >= 0 && Character.isJavaIdentifierStart( cur );
+    public static boolean isAttributeStart( int cur ) {
+        return Character.isJavaIdentifierStart( cur );
     }
 
     // True if the character is an unreserved attribute character.
     private static boolean isAttributePart( int cur ) {
-        return cur >= 0 && Character.isJavaIdentifierPart( cur );
+        return Character.isJavaIdentifierPart( cur );
     }
 
     // True if the character is a digit.
-    private static boolean isDigit( int cur ) {
+    public static boolean isDigit( int cur ) {
         return cur >= '0' && cur <= '9';
     }
 
 
     // Read a quoted attribute.
-    private static String readQuotedAttribute( ReaderCursor c ) {
+    public static String readQuotedAttribute( ReaderCursor c ) {
         int quote = c.read();
         StringBuilder sb = new StringBuilder();
         do {
@@ -234,16 +150,16 @@ public final class PathUtils {
     }
 
     // Read an attribute.
-    private static String readAttribute( ReaderCursor c ) {
+    public static String readAttribute( ReaderCursor c ) {
         // Should be called where current = isAttributeStart
         StringBuilder sb = new StringBuilder();
-        for (int cur = c.current(); isAttributePart( cur ); cur = c.next() ) {
+        for ( int cur = c.current(); isAttributePart( cur ); cur = c.next() ) {
             sb.appendCodePoint( cur );
         }
         return sb.toString();
     }
 
-    private static long readLong( ReaderCursor c ) {
+    public static long readLong( ReaderCursor c ) {
         long index = 0;
         for ( int cur = c.current(); isDigit( cur ); cur = c.next() ) {
             index = index * 10 + cur - '0';
@@ -270,55 +186,29 @@ public final class PathUtils {
         // skip trailing whitespaces
         skipWhitespace( c );
 
-        if ( !isIndexClose( c.read() ) ) {
-            throw c.error( "Expecting ]" );
-        }
-    }
-
-    // Read an index.
-    private static void readBracketContent( ReaderCursor c, PathPattern.Builder to ) {
-        c.next(); // Skip Index start
-
-        // skip leading whitespaces
-        skipWhitespace( c );
-
-        int cur = c.current();
-        if ( isDigit( cur ) ) {
-            to.index( readLong( c ) );
-        } else if ( isQuote( cur ) ) {
-            to.attr( readQuotedAttribute( c ) );
-        } else {
-            throw c.error( "Expecting quoted string or numerical index" );
-        }
-
-        // skip trailing whitespaces
-        skipWhitespace( c );
-
-        if ( !isIndexClose( c.read() ) ) {
+        if ( !isBracketClose( c.read() ) ) {
             throw c.error( "Expecting ]" );
         }
     }
 
     // Read a node.
-    private static Object readNode( ReaderCursor c ) {
+    private static void readPathNode( ReaderCursor c, Path.Builder to ) {
         int cur = c.current();
-        if ( isQuote( cur ) ) {
-            return readQuotedAttribute( c );
+        if ( isBracketOpen( cur ) ) {
+            readBracketContent( c, to );
         } else if ( isAttributeStart( cur ) ) {
-            return readAttribute( c );
-        } else if ( isIndexOpen( cur ) ) {
-            return readBracketContent( c );
+            to.attr( readAttribute( c ) );
         } else {
-            throw c.error( "Expected path node" );
+            throw c.error( "Expected attribute or [" );
         }
     }
 
     /**
      * Encode a path attribute.
      */
-    static String encodeAttribute( String attr ) {
+    static String encodeAttribute( String attr, boolean first ) {
         if ( attr.length() == 0 ) {
-            return "''";
+            return "['']";
         }
 
         // We will allocate the string builder only if we escape the attribute.
@@ -332,7 +222,7 @@ public final class PathUtils {
             } else {
                 if ( sb == null ) {
                     sb = new StringBuilder( attr.length() + 12 );
-                    sb.append( "'" );
+                    sb.append( "['" );
                     sb.append( attr.substring( 0, i ) );
                 }
                 if ( c == '\'' ) {
@@ -345,10 +235,10 @@ public final class PathUtils {
 
         // Close the string as we escaped it.
         if ( sb != null ) {
-            sb.append( "\'" );
+            sb.append( "\']" );
             return sb.toString();
         } else {
-            return attr;
+            return first ? attr : "." + attr;
         }
     }
 }
