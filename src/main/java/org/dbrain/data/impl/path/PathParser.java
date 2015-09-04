@@ -138,35 +138,10 @@ public final class PathParser {
         if ( attr.length() == 0 ) {
             return "['']";
         }
-
-        // We will allocate the string builder only if we escape the attribute.
-        StringBuilder sb = null;
-        for ( int i = 0; i < attr.length(); i++ ) {
-            Character c = attr.charAt( i );
-            if ( ( i > 0 && Character.isJavaIdentifierPart( c ) ) || ( i == 0 && Character.isJavaIdentifierStart( c ) ) ) {
-                if ( sb != null ) {
-                    sb.append( c );
-                }
-            } else {
-                if ( sb == null ) {
-                    sb = new StringBuilder( attr.length() + 12 );
-                    sb.append( "['" );
-                    sb.append( attr.substring( 0, i ) );
-                }
-                if ( c == '\'' ) {
-                    sb.append( "''" );
-                } else {
-                    sb.append( c );
-                }
-            }
-        }
-
-        // Close the string as we escaped it.
-        if ( sb != null ) {
-            sb.append( "\']" );
-            return sb.toString();
-        } else {
+        if ( ParserUtils.isJavaIdentifier( attr ) ) {
             return first ? attr : "." + attr;
+        } else {
+            return "['" + attr.replaceAll( "'", "''" ) + "']";
         }
     }
 }
