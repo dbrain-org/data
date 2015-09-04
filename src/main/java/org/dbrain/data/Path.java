@@ -18,7 +18,7 @@ package org.dbrain.data;
 
 import org.dbrain.data.impl.path.PathBuilderImpl;
 import org.dbrain.data.impl.path.PathImpl;
-import org.dbrain.data.impl.path.PathParser;
+import org.dbrain.data.impl.path.PathParseUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public interface Path {
      * Create a path from a ReaderCursor.
      */
     static Path of( ReaderCursor c ) {
-        return PathParser.parsePath( c );
+        return PathParseUtils.parsePath( c );
     }
 
     /**
@@ -47,7 +47,7 @@ public interface Path {
      * Expect to works with the output of toString.
      */
     static Path of( String path ) {
-         return PathParser.parsePath( path );
+         return PathParseUtils.parsePath( path );
     }
 
     /**

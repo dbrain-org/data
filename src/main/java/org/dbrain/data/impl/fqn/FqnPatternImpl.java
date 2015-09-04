@@ -205,7 +205,7 @@ public class FqnPatternImpl implements FqnPattern {
 
         @Override
         public String toString() {
-            return FqnUtils.encodeSegment( segment );
+            return FqnParseUtils.encodeSegment( segment );
         }
     }
 

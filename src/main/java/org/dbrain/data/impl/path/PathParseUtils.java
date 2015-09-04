@@ -25,7 +25,7 @@ import java.io.StringReader;
 /**
  * Implements parsing of Paths.
  */
-public final class PathParser {
+public final class PathParseUtils {
 
     /**
      * Create a fully qualified name from a ReaderCursor.

@@ -219,7 +219,7 @@ public class PathPatternImpl implements PathPattern {
 
         @Override
         protected String toString( int pos ) {
-            return PathParser.encodeAttribute( attr, pos == 0 );
+            return PathParseUtils.encodeAttribute( attr, pos == 0 );
         }
 
     }

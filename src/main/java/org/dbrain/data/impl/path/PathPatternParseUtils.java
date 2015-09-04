@@ -25,7 +25,7 @@ import java.io.StringReader;
 /**
  * Created by epoitras on 9/3/15.
  */
-public class PathPatternParser {
+public class PathPatternParseUtils {
 
     // Read a wildcard segment
     private static void readWildcardNode( ReaderCursor c, PathPattern.Builder to ) {
@@ -41,7 +41,7 @@ public class PathPatternParser {
     // Read a segment.
     private static void readPatternNode( ReaderCursor c, PathPattern.Builder to ) {
         if ( c.is( Character::isJavaIdentifierStart ) ) {
-            to.attr( PathParser.readAttribute( c ) );
+            to.attr( PathParseUtils.readAttribute( c ) );
         } else if ( c.is( "[" ) ) {
             readBracketContent( c, to );
         } else if ( c.is( "*" ) ) {
@@ -106,7 +106,7 @@ public class PathPatternParser {
         ParserUtils.skipWhitespaces( c );
 
         if ( c.is( ParserUtils::isDigit ) ) {
-            to.index( PathParser.readLong( c ) );
+            to.index( PathParseUtils.readLong( c ) );
         } else if ( c.is( "\'" ) ) {
             to.attr( ParserUtils.readQuotedString( c ) );
         } else {

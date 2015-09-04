@@ -148,7 +148,7 @@ public final class FqnImpl implements Fqn {
             return "";
         } else {
             if ( size == 1 ) {
-                return FqnUtils.encodeSegment( segment( 0 ) );
+                return FqnParseUtils.encodeSegment( segment( 0 ) );
             } else {
                 StringBuilder sb = null;
                 for ( int i = 0; i < size; i++ ) {
@@ -158,7 +158,7 @@ public final class FqnImpl implements Fqn {
                     } else {
                         sb.append( "." );
                     }
-                    sb.append( FqnUtils.encodeSegment( s ) );
+                    sb.append( FqnParseUtils.encodeSegment( s ) );
                 }
                 return sb != null ? sb.toString() : "";
             }

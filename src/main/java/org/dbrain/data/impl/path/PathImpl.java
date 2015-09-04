@@ -176,7 +176,7 @@ public final class PathImpl implements Path {
             for ( int i = 0; i < size; i++ ) {
                 switch ( nodeType( i ) ) {
                     case ATTRIBUTE:
-                        sb.append( PathParser.encodeAttribute( attr( i ), i == 0 ) );
+                        sb.append( PathParseUtils.encodeAttribute( attr( i ), i == 0 ) );
                         break;
                     case INDEX:
                         sb.append( "[" );

@@ -17,7 +17,7 @@
 package org.dbrain.data;
 
 import org.dbrain.data.impl.fqn.FqnPatternBuilderImpl;
-import org.dbrain.data.impl.fqn.FqnUtils;
+import org.dbrain.data.impl.fqn.FqnParseUtils;
 
 /**
  * Pattern to match a Fqn.
@@ -36,7 +36,7 @@ public interface FqnPattern {
      * Expect to works with the output of toString.
      */
     static FqnPattern of( String fqn ) {
-        return FqnUtils.parseFqnPattern( fqn );
+        return FqnParseUtils.parseFqnPattern( fqn );
     }
 
     /**
