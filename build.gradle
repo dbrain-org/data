@@ -48,7 +48,43 @@ signing {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file://localhost/tmp/myRepo/")
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'dbrain-data'
+                packaging 'jar'
+                description 'Defines concepts and classes that are at the core of data manipulation and definition.'
+                url 'http://dbrain.org'
+
+                scm {
+                    connection 'scm:git:git@github.com:dbrain-org/dbrain-data.git'
+                    developerConnection 'scm:git:git@github.com:dbrain-org/dbrain-data.git'
+                    url 'https://github.com/dbrain-org/dbrain-data'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'eric.poitras'
+                        name 'Eric Poitras'
+                        email 'eric.poitras@gmail.com'
+                    }
+                }
+            }
         }
     }
 }
