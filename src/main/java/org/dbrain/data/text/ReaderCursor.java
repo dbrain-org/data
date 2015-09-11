@@ -19,6 +19,7 @@ package org.dbrain.data.text;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.function.IntPredicate;
 
 /**
  * Helper class to build recursive parsing routines. This class holds the "current" character in a buffer that
@@ -32,7 +33,8 @@ public class ReaderCursor implements AutoCloseable {
     // Linked reader
     private Reader reader;
 
-    private Integer peeked;
+    private boolean loaded;
+    private int     current;
 
     // Position in the stream.
     private int index  = 1;
@@ -54,6 +56,9 @@ public class ReaderCursor implements AutoCloseable {
         this( new StringReader( s ) );
     }
 
+    /**
+     * @return Read a codepoint from the stream.
+     */
     private int readCodePoint() {
         try {
             int firstChar = reader.read();
@@ -78,18 +83,18 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * An exception with the specified message.
-     *
      * @param message The message.
+     *
+     * @return A parse exception with the specified message.
      */
     public ParseException error( String message, Throwable e ) {
         return new ParseException( String.format( "%s at %s.", message, position() ), e );
     }
 
     /**
-     * An exception with the specified message.
-     *
      * @param message The message.
+     *
+     * @return A parse exception with the specified message.
      */
     public ParseException error( String message ) {
         return error( message, null );
@@ -103,45 +108,71 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
-     * @return Get at the character at the current cursor position.
+     * @return The codepoint at the current cursor position.
      *
-     * Note: If the current character is consumed. The next one is loaded from
+     * Note: If the current character is consumed, then one is loaded from
      * the underlying reader.
      */
-    public int get() {
-        if ( peeked == null ) {
-            peeked = readCodePoint();
+    public int current() {
+        if ( !loaded ) {
+            current = readCodePoint();
+            loaded = true;
         }
-        return peeked;
+        return current;
+    }
+
+    private void flush() {
+        if ( current >= 0 && loaded ) {
+
+            // Move position
+            if ( current >= 0 ) {
+                index += current <= 0xFFFF ? 1 : 2;
+                if ( current == 10 ) {
+                    line++;
+                    column = 1;
+                } else if ( current == 9 ) {
+                    column += 4;
+                } else if ( current >= ' ' ) {
+                    column++;
+                }
+            }
+            // Unload the thing.
+            loaded = false;
+        }
     }
 
     /**
-     * Move cursor forward one position and get the character.
+     * @return true if the current character test true with the predicate.
+     */
+    public boolean is( IntPredicate predicate ) {
+        return predicate.test( current() );
+    }
+
+    /**
+     * @return true if the current character is one of the character in the string.
+     */
+    public boolean is( String chars ) {
+        int cur = current();
+        return cur >= 0 && chars.indexOf( cur ) >= 0;
+    }
+
+    /**
+     * Move cursor forward one position and get the character. If the cursor has never red a character before, this method will
+     * return the first character.
      *
      * @return The next available character or -1 if none.
      */
-    public int getNext() {
-        read();
-        return get();
+    public int next() {
+        flush();
+        return current();
     }
 
     /**
      * @return The current character and move the cursor forward.
      */
     public int read() {
-        int result = get();
-        if ( result >= 0 ) {
-            peeked = null;
-            index += result <= 0xFFFF ? 1 : 2;
-            if ( result == 10 ) {
-                line++;
-                column = 1;
-            } else if ( result == 9 ) {
-                column += 4;
-            } else if ( result >= ' ' ) {
-                column++;
-            }
-        }
+        int result = current();
+        flush();
         return result;
     }
 
@@ -163,6 +194,25 @@ public class ReaderCursor implements AutoCloseable {
     }
 
     /**
+     * Skip a character if it is contained into the passed string.
+     * @param which
+     */
+    public void skip( String which ) {
+        if ( is( which ) ) {
+            flush();
+        } else {
+            throw error( "expecting " + which );
+        }
+    }
+
+    /**
+     * @return true if at end of file.
+     */
+    public boolean eof() {
+        return current() < 0;
+    }
+
+    /**
      * Close the underlying reader.
      */
     @Override
@@ -176,9 +226,9 @@ public class ReaderCursor implements AutoCloseable {
         sb.append( "ReaderCursor index=" );
         sb.append( Integer.toString( index ) );
         sb.append( " char=[" );
-        int peeked = get();
+        int peeked = current();
         if ( peeked >= 0 ) {
-            sb.appendCodePoint( get() );
+            sb.appendCodePoint( current() );
         } else {
             sb.append( "eof" );
         }

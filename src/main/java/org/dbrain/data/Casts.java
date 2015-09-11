@@ -41,15 +41,6 @@ public class Casts {
     private static Pattern NUMBER_PATTERN = Pattern.compile( "\\d+(\\.\\d+)?" );
 
     /**
-     * @param o
-     * @param <T>
-     * @return
-     */
-    public static <T> T identity( T o ) {
-        return o;
-    }
-
-    /**
      * Cast string to BigDecimal.
      */
     public static BigDecimal toBigDecimal( String o ) {

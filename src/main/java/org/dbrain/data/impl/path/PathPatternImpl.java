@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -14,39 +14,39 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.impl.fqn;
+package org.dbrain.data.impl.path;
 
-import org.dbrain.data.Fqn;
-import org.dbrain.data.FqnPattern;
+import org.dbrain.data.Path;
+import org.dbrain.data.PathPattern;
 
 /**
- * Implementation of the Fqn Pattern.
+ * Implementation of the Path Pattern.
  */
-public class FqnPatternImpl implements FqnPattern {
+public class PathPatternImpl implements PathPattern {
 
     // Empty pattern singleton.
-    public static final FqnPattern EMPTY_PATTERN = new FqnPatternImpl( null, 0 );
+    public static final PathPattern EMPTY_PATTERN = new PathPatternImpl( null, 0 );
 
     private Node  root;
     private int   partCount;
     private Specs specs;
 
-    public FqnPatternImpl( Node root, int partCount ) {
+    public PathPatternImpl( Node root, int partCount ) {
         this.root = root;
         this.partCount = partCount;
     }
 
     @Override
-    public MatchResult match( Fqn fqn ) {
+    public MatchResult match( Path path ) {
         if ( root == null ) {
-            if ( fqn == null || fqn.size() == 0 ) {
+            if ( path == null || path.size() == 0 ) {
                 return new MatchResultImpl( true, partCount );
             } else {
                 return new MatchResultImpl( false, partCount );
             }
         }
         MatchResultImpl result = new MatchResultImpl( false, partCount );
-        root.match( fqn, 0, result );
+        root.match( path, 0, result );
         return result;
     }
 
@@ -54,12 +54,19 @@ public class FqnPatternImpl implements FqnPattern {
     public Specs getSpecs() {
         if ( specs == null ) {
             if ( root == null ) {
-                specs = new SpecsImpl( Type.EXACT_MATCH, FqnImpl.EMPTY_NAME );
+                specs = new SpecsImpl( Type.EXACT_MATCH, Path.empty() );
             }
-            Fqn.Builder scope = Fqn.newBuilder();
+            Path.Builder scope = Path.newBuilder();
             Node node = root;
-            while ( node != null && node instanceof SpecificNode ) {
-                scope.segment( ( (SpecificNode) node ).getSegment() );
+            while ( node != null ) {
+                if ( node instanceof SpecificAttribute ) {
+                    scope.attr( ( (SpecificAttribute) node ).getAttr() );
+                } else if ( node instanceof SpecificIndex ) {
+                    scope.index( ( (SpecificIndex) node ).getIndex() );
+                } else {
+                    break;
+                }
+
                 node = node.getNext();
             }
             specs = new SpecsImpl( node != null ? Type.PARTIAL : Type.EXACT_MATCH, scope.build() );
@@ -69,13 +76,11 @@ public class FqnPatternImpl implements FqnPattern {
 
     @Override
     public String toString() {
+        int i = 0;
         Node node = root;
         StringBuilder sb = new StringBuilder();
         while ( node != null ) {
-            sb.append( node.toString() );
-            if ( node.getNext() != null ) {
-                sb.append( "." );
-            }
+            sb.append( node.toString( i++ ) );
             node = node.getNext();
         }
         return sb.toString();
@@ -97,7 +102,7 @@ public class FqnPatternImpl implements FqnPattern {
 
         private boolean matched;
         private int     partCount;
-        private Fqn[]   parts;
+        private Path[]  parts;
 
         public MatchResultImpl( boolean matched, int partCount ) {
             this.matched = matched;
@@ -115,7 +120,7 @@ public class FqnPatternImpl implements FqnPattern {
         }
 
         @Override
-        public Fqn getPart( int idx ) {
+        public Path getPart( int idx ) {
             if ( parts != null ) {
                 return parts[idx];
             } else {
@@ -132,9 +137,9 @@ public class FqnPatternImpl implements FqnPattern {
             return value;
         }
 
-        void setPart( int idx, Fqn part ) {
+        void setPart( int idx, Path part ) {
             if ( parts == null ) {
-                parts = new Fqn[partCount];
+                parts = new Path[partCount];
             }
             parts[idx] = part;
         }
@@ -144,9 +149,9 @@ public class FqnPatternImpl implements FqnPattern {
     static class SpecsImpl implements Specs {
 
         private final Type type;
-        private final Fqn  scope;
+        private final Path scope;
 
-        public SpecsImpl( Type type, Fqn scope ) {
+        public SpecsImpl( Type type, Path scope ) {
             this.type = type;
             this.scope = scope;
         }
@@ -157,7 +162,7 @@ public class FqnPatternImpl implements FqnPattern {
         }
 
         @Override
-        public Fqn scope() {
+        public Path scope() {
             return scope;
         }
     }
@@ -166,7 +171,7 @@ public class FqnPatternImpl implements FqnPattern {
 
         protected Node next;
 
-        abstract boolean match( Fqn fqn, int i, MatchResultImpl mr );
+        abstract boolean match( Path fqn, int i, MatchResultImpl mr );
 
         Node getNext() {
             return next;
@@ -175,57 +180,100 @@ public class FqnPatternImpl implements FqnPattern {
         void setNext( Node next ) {
             this.next = next;
         }
-    }
 
-    public static class SpecificNode extends Node {
+        abstract String toString( int index );
 
-        private String segment;
-
-        public SpecificNode( String segment ) {
-            this.segment = segment;
+        @Override
+        public String toString() {
+            return toString( 0 );
         }
 
-        public String getSegment() {
-            return segment;
+    }
+
+    public static class SpecificAttribute extends Node {
+
+        private String attr;
+
+        public SpecificAttribute( String attr ) {
+            this.attr = attr;
+        }
+
+        public String getAttr() {
+            return attr;
         }
 
         @Override
-        boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
-            if ( i >= fqn.size() || !fqn.segment( i ).equals( segment ) ) {
+        boolean match( Path path, int i, MatchResultImpl mr ) {
+            if ( i >= path.size() || !( path.nodeType( i ) == Path.NodeType.ATTRIBUTE && path.attr( i )
+                                                                                             .equals( attr ) ) ) {
                 return mr.answer( false );
             }
             boolean result;
             if ( next != null ) {
-                result = next.match( fqn, i + 1, mr );
+                result = next.match( path, i + 1, mr );
             } else {
-                result = i == fqn.size() - 1;
+                result = i == path.size() - 1;
             }
             return mr.answer( result );
         }
 
         @Override
-        public String toString() {
-            return FqnParseUtils.encodeSegment( segment );
+        protected String toString( int pos ) {
+            return PathParseUtils.encodeAttribute( attr, pos == 0 );
+        }
+
+    }
+
+    public static class SpecificIndex extends Node {
+
+        private long index;
+
+        public SpecificIndex( long index ) {
+            this.index = index;
+        }
+
+        public long getIndex() {
+            return index;
+        }
+
+        @Override
+        boolean match( Path path, int i, MatchResultImpl mr ) {
+            if ( i >= path.size() || !( path.nodeType( i ) == Path.NodeType.INDEX && path.index( i ) == index ) ) {
+                return mr.answer( false );
+            }
+            boolean result;
+            if ( next != null ) {
+                result = next.match( path, i + 1, mr );
+            } else {
+                result = i == path.size() - 1;
+            }
+            return mr.answer( result );
+        }
+
+        @Override
+        public String toString( int pos ) {
+            return "[" + index + "]";
         }
     }
+
 
     public static class OneNode extends Node implements PartMatchingNode {
 
         int partIdx;
 
         @Override
-        boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
-            if ( i >= fqn.size() ) {
+        boolean match( Path path, int i, MatchResultImpl mr ) {
+            if ( i >= path.size() ) {
                 return mr.answer( false );
             }
             boolean result;
             if ( next != null ) {
-                result = next.match( fqn, i + 1, mr );
+                result = next.match( path, i + 1, mr );
             } else {
-                result = i == fqn.size() - 1;
+                result = i == path.size() - 1;
             }
             if ( result ) {
-                mr.setPart( partIdx, Fqn.fromSegment( fqn.segment( i ) ).build() );
+                mr.setPart( partIdx, Path.from( path, i, i + 1 ).build() );
             }
             return mr.answer( result );
         }
@@ -236,8 +284,8 @@ public class FqnPatternImpl implements FqnPattern {
         }
 
         @Override
-        public String toString() {
-            return "*";
+        public String toString( int pos ) {
+            return pos == 0 ? "*" : ".*";
         }
     }
 
@@ -246,23 +294,23 @@ public class FqnPatternImpl implements FqnPattern {
         private int partIdx;
 
         @Override
-        boolean match( Fqn fqn, int i, MatchResultImpl mr ) {
-            if ( i > fqn.size() ) {
+        boolean match( Path path, int i, MatchResultImpl mr ) {
+            if ( i > path.size() ) {
                 return mr.answer( false );
             }
-            int j = fqn.size();
+            int j = path.size();
             if ( next != null ) {
                 for (; j >= i; j-- ) {
-                    if ( next.match( fqn, j, mr ) ) {
+                    if ( next.match( path, j, mr ) ) {
                         break;
                     }
                 }
             }
             boolean result = j >= i;
             if ( result ) {
-                Fqn.Builder part = Fqn.newBuilder();
+                Path.Builder part = Path.newBuilder();
                 for ( int x = i; x < j; x++ ) {
-                    part.segment( fqn.segment( x ) );
+                    part.append( path, x, x + 1 );
                 }
                 mr.setPart( partIdx, part.build() );
             }
@@ -275,8 +323,8 @@ public class FqnPatternImpl implements FqnPattern {
         }
 
         @Override
-        public String toString() {
-            return "**";
+        public String toString( int pos ) {
+            return pos == 0 ? "**" : ".**";
         }
 
     }

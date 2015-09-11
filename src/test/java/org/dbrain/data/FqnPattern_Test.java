@@ -63,7 +63,7 @@ public class FqnPattern_Test {
         Assert.assertTrue( matchResult.matched() );
         Assert.assertEquals( 0, matchResult.partCount() );
 
-        matchResult = pattern.match( Fqn.of( "test.123" ) );
+        matchResult = pattern.match( Fqn.of( "test.a123" ) );
         Assert.assertFalse( matchResult.matched() );
         Assert.assertEquals( 0, matchResult.partCount() );
 

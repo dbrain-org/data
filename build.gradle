@@ -5,7 +5,7 @@ apply plugin: 'signing'
 
 group = "org.dbrain"
 archivesBaseName = "dbrain-data"
-version = '0.11'
+version = '0.13-SNAPSHOT'
 
 repositories {
     mavenCentral()

@@ -1,5 +1,5 @@
 /*
- * Copyright [2014] [Eric Poitras]
+ * Copyright [2015] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -16,27 +16,27 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.impl.fqn.FqnPatternBuilderImpl;
-import org.dbrain.data.impl.fqn.FqnParseUtils;
+import org.dbrain.data.impl.path.PathPatternBuilderImpl;
+import org.dbrain.data.impl.path.PathPatternParseUtils;
 
 /**
- * Pattern to match a Fqn.
+ * Pattern to match a Path.
  */
-public interface FqnPattern {
+public interface PathPattern {
 
     /**
      * @return A new builder instance.
      */
     static Builder newBuilder() {
-        return new FqnPatternBuilderImpl();
+        return new PathPatternBuilderImpl();
     }
 
     /**
-     * Create a new Fully Qualified Name Pattern from a String.
+     * Create a new Path Pattern from a String.
      * Expect to works with the output of toString.
      */
-    static FqnPattern of( String fqn ) {
-        return FqnParseUtils.parseFqnPattern( fqn );
+    static PathPattern of( String path ) {
+        return PathPatternParseUtils.parsePathPattern( path );
     }
 
     /**
@@ -44,7 +44,7 @@ public interface FqnPattern {
      *
      * @return The match result.
      */
-    MatchResult match( Fqn fqn );
+    MatchResult match( Path path );
 
     /**
      * @return The specifications of this pattern.
@@ -80,7 +80,7 @@ public interface FqnPattern {
 
         int partCount();
 
-        Fqn getPart( int idx );
+        Path getPart( int idx );
 
     }
 
@@ -98,35 +98,40 @@ public interface FqnPattern {
          * Return the contextual name of this pattern. This value is the leading static nodes
          * of this pattern, if any.
          */
-        Fqn scope();
+        Path scope();
 
 
     }
 
     /**
-     * Allows to build Fqn Patterns.
+     * Allows to build Path Patterns.
      */
     interface Builder {
 
         /**
-         * Match a specific segment.
+         * Match a specific attribute.
          */
-        Builder segment( String segment );
+        Builder attr( String attr );
 
         /**
-         * Match exactly one segment, capture a part.
+         * Match a specific index.
+         */
+        Builder index( long index );
+
+        /**
+         * Match exactly one node, capture a part.
          */
         Builder one();
 
         /**
-         * Match 0 to n segments, caturing a part.
+         * Match 0 to n nodes, caturing a part.
          */
         Builder any();
 
         /**
          * Build the pattern.
          */
-        FqnPattern build();
+        PathPattern build();
 
     }
 }

@@ -16,29 +16,67 @@
 
 package org.dbrain.data.text;
 
+import java.util.function.IntConsumer;
+
 /**
  * Created by epoitras on 06/11/14.
  */
 public class ParserUtils {
 
-    /**
-     * The character represent a end of file as returned by cursor.
-     */
-    public static boolean isEOF( int c ) {
-        return c < 0;
+    // Skip consecutive white spaces
+    public static void skipWhitespaces( ReaderCursor c ) {
+        while ( c.is( Character::isWhitespace ) ) {
+            c.next();
+        }
     }
 
-    /**
-     * Return true if the specified character is an end of line character.
-     */
-    public static boolean isEOL( int c ) {
-        return c == 13 || c == 10 || isEOF( c );
+    // True if the character is a digit.
+    public static boolean isDigit( int cur ) {
+        return cur >= '0' && cur <= '9';
     }
 
-    /**
-     * Return true if the specified character is a space character.
-     */
-    public static boolean isSpace( int c ) {
-        return c >= 0 && c <= ' ' && !isEOL( c );
+    // Read a quoted attribute.
+    public static String readQuotedString( ReaderCursor c ) {
+        int quote = c.read();
+        StringBuilder sb = new StringBuilder();
+        do {
+            int current = c.read();
+            if ( current == quote ) {
+                if ( c.current() == quote ) {
+                    sb.appendCodePoint( c.read() );
+                } else {
+                    break;
+                }
+            } else if ( current < 0 ) {
+                throw c.error( "Unexpected eof" );
+            } else {
+                sb.appendCodePoint( current );
+            }
+        } while ( true );
+        return sb.toString();
+    }
+
+    public static boolean isJavaIdentifier( String s ) {
+        if ( s == null || s.length() == 0 ) {
+            return false;
+        }
+        if ( !Character.isJavaIdentifierStart( s.codePointAt( 0 ) ) ) {
+            return false;
+        }
+        return s.substring( 1 ).codePoints().allMatch( Character::isJavaIdentifierPart );
+    }
+
+    // Read an unquoted segment.
+    public static String readJavaIdentifier( ReaderCursor c ) {
+        if ( c.is( Character::isJavaIdentifierStart ) ) {
+            StringBuilder sb = new StringBuilder();
+            sb.appendCodePoint( c.read() );
+            for ( int cur = c.current(); Character.isJavaIdentifierPart( cur ); cur = c.next() ) {
+                sb.appendCodePoint( cur );
+            }
+            return sb.toString();
+        } else {
+            return null;
+        }
     }
 }

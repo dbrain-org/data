@@ -40,20 +40,20 @@ public class LineCursor {
      */
     private void load() {
         if ( currentLine == null && !eof ) {
-            int current = cursor.get();
+            int current = cursor.current();
             if ( current >= 0 ) {
                 StringBuilder sb = new StringBuilder();
                 while ( current >= 0 && current != 13 && current != 10 ) {
                     sb.append( (char) current );
-                    current = cursor.getNext();
+                    current = cursor.next();
                 }
                 if ( current == 13 ) {
-                    if ( cursor.getNext() == 10 ) {
+                    if ( cursor.next() == 10 ) {
                         cursor.read();
                     }
                 }
                 if ( current == 10 ) {
-                    if ( cursor.getNext() == 13 ) {
+                    if ( cursor.next() == 13 ) {
                         cursor.read();
                     }
                 }

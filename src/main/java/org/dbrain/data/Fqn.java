@@ -18,7 +18,7 @@ package org.dbrain.data;
 
 import org.dbrain.data.impl.fqn.FqnBuilderImpl;
 import org.dbrain.data.impl.fqn.FqnImpl;
-import org.dbrain.data.impl.fqn.FqnUtils;
+import org.dbrain.data.impl.fqn.FqnParseUtils;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.util.Arrays;
@@ -47,7 +47,7 @@ public interface Fqn {
      * Create a fully qualified name from a ReaderCursor.
      */
     static Fqn of( ReaderCursor c ) {
-        return FqnUtils.parseFqn( c );
+        return FqnParseUtils.parseFqn( c );
     }
 
     /**
@@ -55,7 +55,7 @@ public interface Fqn {
      * Expect to works with the output of toString.
      */
     static Fqn of( String fqn ) {
-        return FqnUtils.parseFqn( fqn );
+        return FqnParseUtils.parseFqn( fqn );
     }
 
     static Fqn ofSegment( String segment ) {
@@ -133,13 +133,6 @@ public interface Fqn {
      * Builder interface for the Fqn.
      */
     interface Builder {
-
-        /**
-         * Add a segment to the fqn.
-         *
-         * @param segment The segment. If null is provided, no segment is added.
-         */
-        Builder optSegment( String segment );
 
         /**
          * Add a segment to the fqn.

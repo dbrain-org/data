@@ -136,9 +136,15 @@ public class JacksonJsonSerializer implements Serializer {
         }
     }
 
-    /**
-     * Convert an object to Json String.
-     */
+    @Override
+    public String valueToString( Value v ) {
+        try {
+            return objectMapper.writeValueAsString( v );
+        } catch ( Exception e ) {
+            throw new IllegalStateException( e );
+        }
+    }
+
     @Override
     public String objectToString( Object o ) {
         try {

@@ -94,8 +94,6 @@ public class Fqn_Test {
         Assert.assertEquals( Fqn.of( "test" ), Fqn.newBuilder().segment( "test" ).build() );
         Assert.assertEquals( Fqn.of( "test" ), Fqn.fromSegment( "test" ).build() );
         Assert.assertEquals( Fqn.of( "test.test2" ), Fqn.newBuilder().segment( "test" ).segment( "test2" ).build() );
-        Assert.assertEquals( Fqn.of( "test.test2" ),
-                             Fqn.newBuilder().optSegment( null ).segment( "test" ).segment( "test2" ).build() );
         Assert.assertEquals( Fqn.of( "test.test2" ), Fqn.fromSegment( "test" ).segment( "test2" ).build() );
         Assert.assertEquals( Fqn.of( "test.test2.test3" ),
                              Fqn.from( Fqn.of( "test.test2" ) ).segment( "test3" ).build() );
@@ -131,7 +129,7 @@ public class Fqn_Test {
         Assert.assertEquals( 1, Fqn.of( "''" ).size() );
         Assert.assertEquals( 2, Fqn.of( "'test*'.''" ).size() );
         Assert.assertEquals( 3, Fqn.of( "'test'''.'*'.'**'" ).size() );
-        Assert.assertEquals( 4, Fqn.of( "1.2.3.4" ).size() );
+        Assert.assertEquals( 4, Fqn.of( "'1'.'2'.'3'.'4'" ).size() );
     }
 
     /**
@@ -186,18 +184,18 @@ public class Fqn_Test {
     public void testStartsWith() throws Exception {
 
         // Those are true
-        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( Fqn.of( "test" ) ) );
-        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( Fqn.of( "test.123" ) ) );
-        Assert.assertTrue( Fqn.of( "test.123.456" ).startsWith( Fqn.of( "test" ) ) );
-        Assert.assertTrue( Fqn.of( "test.123.456" ).startsWith( Fqn.of( "test.123" ) ) );
-        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( Fqn.of( "" ) ) );
-        Assert.assertTrue( Fqn.of( "test.123" ).startsWith( null ) );
+        Assert.assertTrue( Fqn.of( "test.a123" ).startsWith( Fqn.of( "test" ) ) );
+        Assert.assertTrue( Fqn.of( "test.a123" ).startsWith( Fqn.of( "test.a123" ) ) );
+        Assert.assertTrue( Fqn.of( "test.a123.a456" ).startsWith( Fqn.of( "test" ) ) );
+        Assert.assertTrue( Fqn.of( "test.a123.a456" ).startsWith( Fqn.of( "test.a123" ) ) );
+        Assert.assertTrue( Fqn.of( "test.a123" ).startsWith( Fqn.of( "" ) ) );
+        Assert.assertTrue( Fqn.of( "test.a123" ).startsWith( null ) );
         Assert.assertTrue( Fqn.of( "" ).startsWith( Fqn.of( "" ) ) );
 
         // Those are false
-        Assert.assertFalse( Fqn.of( "test.123" ).startsWith( Fqn.of( "other" ) ) );
-        Assert.assertFalse( Fqn.of( "test" ).startsWith( Fqn.of( "test.123" ) ) );
-        Assert.assertFalse( Fqn.of( "test.123" ).startsWith( Fqn.of( "test.123.456" ) ) );
+        Assert.assertFalse( Fqn.of( "test.a123" ).startsWith( Fqn.of( "other" ) ) );
+        Assert.assertFalse( Fqn.of( "test" ).startsWith( Fqn.of( "test.a123" ) ) );
+        Assert.assertFalse( Fqn.of( "test.a123" ).startsWith( Fqn.of( "test.a123.a456" ) ) );
         Assert.assertFalse( Fqn.of( "" ).startsWith( Fqn.of( "test" ) ) );
 
     }

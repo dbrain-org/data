@@ -20,7 +20,6 @@ import org.dbrain.data.Serializer;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
-import org.dbrain.data.jackson.JacksonJsonSerializer;
 import org.dbrain.data.text.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -100,59 +99,5 @@ public class JacksonSerializerObject_Test {
                                 .parseValue( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ) );
     }
 
-    @Test
-    public void convert_object_to_map_jackson() throws Exception {
-
-        Person test = new Person( "Hey", "bob" );
-        test.setFriend( new Person( "Bob", "Marley" ) );
-        String s = serializer.objectToString( test );
-
-        Value vPerson = serializer.parseValue( s );
-        System.out.println( vPerson );
-
-        Person test2 = serializer.parseObject( s, Person.class );
-        Assert.assertEquals( test2.getName(), "Hey" );
-        Assert.assertEquals( test2.getLastName(), "bob" );
-
-    }
-
-    public static class Person {
-
-        String name;
-        String lastName;
-        Person friend;
-
-        public Person() {
-        }
-
-        public Person( String name, String lastName ) {
-            this.name = name;
-            this.lastName = lastName;
-        }
-
-        public Person getFriend() {
-            return friend;
-        }
-
-        public void setFriend( Person friend ) {
-            this.friend = friend;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName( String name ) {
-            this.name = name;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName( String lastName ) {
-            this.lastName = lastName;
-        }
-    }
 
 }
