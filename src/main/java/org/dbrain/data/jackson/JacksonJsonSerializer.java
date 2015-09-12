@@ -26,6 +26,7 @@ import org.dbrain.data.text.ParseException;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Map;
 
 /**
  * Reader and writer for Value to JSON format.
@@ -124,6 +125,15 @@ public class JacksonJsonSerializer implements Serializer {
         }
     }
 
+    @Override
+    public <T> T parseObject( Map v, Class<T> clazz ) {
+        try {
+            return objectMapper.convertValue( v, clazz );
+        } catch ( Exception e ) {
+            throw new ParseException( e );
+        }
+    }
+
     /**
      * Convert object to value.
      */
@@ -131,6 +141,15 @@ public class JacksonJsonSerializer implements Serializer {
     public Value objectToValue( Object o ) {
         try {
             return objectMapper.convertValue( o, Value.class );
+        } catch ( Exception e ) {
+            throw new ParseException( e );
+        }
+    }
+
+    @Override
+    public Map objectToMap( Object o ) {
+        try {
+            return objectMapper.convertValue( o, Map.class );
         } catch ( Exception e ) {
             throw new ParseException( e );
         }

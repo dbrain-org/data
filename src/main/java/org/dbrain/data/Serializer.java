@@ -17,6 +17,7 @@
 package org.dbrain.data;
 
 import java.io.Reader;
+import java.util.Map;
 
 /**
  * Serializer interface.
@@ -39,6 +40,11 @@ public interface Serializer {
     Value objectToValue( Object o );
 
     /**
+     * Convert an object to a map.
+     */
+    Map objectToMap( Object o );
+
+    /**
      * Parse a String to the specific class.
      */
     <T> T parseObject( String r, Class<T> clazz );
@@ -47,6 +53,12 @@ public interface Serializer {
      * Parse a Value to the specific class.
      */
     <T> T parseObject( Value v, Class<T> clazz );
+
+    /**
+     * Parse a Value to the specific class.
+     */
+    <T> T parseObject( Map v, Class<T> clazz );
+
 
     /**
      * Stream Value to String.

@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
+import org.dbrain.data.Fqn;
+import org.dbrain.data.Path;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
@@ -54,6 +56,8 @@ public class JsonModule extends Module {
         serializers.addSerializer( AtomicLong.class, longSerializer );
         serializers.addSerializer( BigDecimal.class, new JsonBigDecimalSerializer() );
         serializers.addSerializer( BigInteger.class, new JsonBigIntegerSerializer() );
+        serializers.addSerializer( Path.class, new PathSerializer() );
+        serializers.addSerializer( Fqn.class, new FqnSerializer() );
 
         JsonValueSerializer valueSerializer = new JsonValueSerializer();
 
@@ -67,6 +71,8 @@ public class JsonModule extends Module {
         deserializers.addDeserializer( Value.class, new JsonValueDeserializer() );
         deserializers.addDeserializer( ValueMap.class, new JsonValueMapDeserializer() );
         deserializers.addDeserializer( ValueList.class, new JsonValueListDeserializer() );
+        deserializers.addDeserializer( Path.class, new PathDeserializer() );
+        deserializers.addDeserializer( Fqn.class, new FqnDeserializer() );
         context.addDeserializers( deserializers );
 
     }

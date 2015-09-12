@@ -60,7 +60,6 @@ public final class PathImpl implements Path {
      * Retrieve an index at the specified path index.
      *
      * @param i Index of the node to retrieve.
-     *
      * @return A segment.
      */
     @Override
@@ -76,7 +75,6 @@ public final class PathImpl implements Path {
      * Retrieve an attribute at the specified index.
      *
      * @param i Index of the segment to retrieve.
-     *
      * @return A segment.
      */
     @Override
@@ -151,11 +149,22 @@ public final class PathImpl implements Path {
             return false;
         }
         for ( int i = 0; i < size(); i++ ) {
-            if ( !attr( i ).equals( fqn.attr( i ) ) ) {
+            if ( !nodeType( i ).equals( fqn.nodeType( i ) ) ) {
                 return false;
             }
-        }
-        return true;
+            switch ( nodeType( i ) ) {
+                case ATTRIBUTE:
+                    if ( !attr( i ).equals( fqn.attr( i ) ) ) {
+                        return false;
+                    }
+                    break;
+                case INDEX:
+                    if ( index( i ) !=  fqn.index( i ) ) {
+                        return false;
+                    }
+                    break;
+            }
+        } return true;
     }
 
     @Override
