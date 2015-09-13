@@ -16,31 +16,31 @@
 
 package org.dbrain.data.jackson;
 
-import org.dbrain.data.Serializer;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
 import org.dbrain.data.jackson.artifacts.MapOfLocaleAsKey;
+import org.dbrain.data.jackson.artifacts.Person;
 import org.dbrain.data.jackson.artifacts.TestLongClass;
+import org.dbrain.data.text.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by epoitras on 06/01/15.
  */
-public class JacksonSerializerValue_Test {
+public class Jackson_Converter_Test {
 
-    Serializer serializer = new JacksonJsonSerializer();
+    JacksonDataMapper textSerializer = new JacksonDataMapper();
 
 
     @Test
     public void testObjectToValue() throws Exception {
         TestLongClass tlc = new TestLongClass();
-        ValueMap v = serializer.objectToValue( tlc ).getMap();
+        ValueMap v = textSerializer.convert( tlc, ValueMap.class );
 
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
@@ -49,11 +49,10 @@ public class JacksonSerializerValue_Test {
     @Test
     public void testObjectToValuePrimitive() throws Exception {
 
-        Value v = serializer.objectToValue( "Test" );
+        Value v = textSerializer.convert( "Test", Value.class );
         Assert.assertEquals( v, Value.of( "Test" ) );
 
     }
-
 
 
     /**
@@ -63,14 +62,14 @@ public class JacksonSerializerValue_Test {
     public void testLocale() throws Exception {
         Locale original = new Locale( "fr", "CA" );
 
-        Value value1 = serializer.objectToValue( original );
-        Locale copy1 = serializer.parseObject( value1, Locale.class );
+        Value value1 = textSerializer.convert( original, Value.class );
+        Locale copy1 = textSerializer.convert( value1, Locale.class );
 
-        String string1 = serializer.objectToString( original );
-        Locale copy2 = serializer.parseObject( string1, Locale.class );
+        String string1 = textSerializer.writeToString( original );
+        Locale copy2 = textSerializer.read( string1, Locale.class );
 
         // Read the json untyped.
-        Value untypedValue = serializer.parseValue( string1 );
+        Value untypedValue = textSerializer.read( string1, Value.class );
 
         Assert.assertEquals( Value.of( "fr_CA" ), untypedValue );
         Assert.assertEquals( original, copy1 );
@@ -86,14 +85,14 @@ public class JacksonSerializerValue_Test {
         MapOfLocaleAsKey original = new MapOfLocaleAsKey();
         original.put( new Locale( "fr", "CA" ), "test" );
 
-        Value value1 = serializer.objectToValue( original );
-        MapOfLocaleAsKey copy1 = serializer.parseObject( value1, MapOfLocaleAsKey.class );
+        Value value1 = textSerializer.convert( original, Value.class );
+        MapOfLocaleAsKey copy1 = textSerializer.convert( value1, MapOfLocaleAsKey.class );
 
-        String string1 = serializer.objectToString( original );
-        MapOfLocaleAsKey copy2 = serializer.parseObject( string1, MapOfLocaleAsKey.class );
+        String string1 = textSerializer.writeToString( original );
+        MapOfLocaleAsKey copy2 = textSerializer.read( string1, MapOfLocaleAsKey.class );
 
         // Read the json untyped.
-        Value untypedValue = serializer.parseValue( string1 );
+        Value untypedValue = textSerializer.read( string1, Value.class );
 
         Assert.assertEquals( ValueMap.newBuilder().put( "fr_CA", "test" ).build(), untypedValue );
         Assert.assertEquals( original, copy1 );
@@ -103,7 +102,7 @@ public class JacksonSerializerValue_Test {
 
     @Test
     public void testDeserilizeList() throws Exception {
-        ValueList list = serializer.parseObject( "[1,2,3,4]", ValueList.class );
+        ValueList list = textSerializer.read( "[1,2,3,4]", ValueList.class );
 
         Assert.assertEquals( 4, list.size() );
         Assert.assertTrue( list.contains( Value.of( 1 ) ) );
@@ -114,7 +113,7 @@ public class JacksonSerializerValue_Test {
 
     @Test
     public void testDeserilizeMap() throws Exception {
-        ValueMap map = serializer.parseObject( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
+        ValueMap map = textSerializer.read( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
 
         Assert.assertEquals( 4, map.size() );
         Assert.assertEquals( map.get( "1" ), Value.of( 1 ) );
@@ -127,7 +126,34 @@ public class JacksonSerializerValue_Test {
     public void testValueToString() throws Exception {
         ValueMap map = ValueMap.newInstance();
         map.put( "test", Value.of( 123L ) );
-        Assert.assertEquals( serializer.valueToString( map ), "{\"test\":123}" );
+        Assert.assertEquals( textSerializer.writeToString( map ), "{\"test\":123}" );
     }
+
+    @Test
+    public void convertObjectToMapAndBackAgain() throws Exception {
+
+        Person test = new Person( "Hey", "bob" );
+        test.setFriend( new Person( "Bob", "Marley" ) );
+        Map m = textSerializer.convert( test, Map.class );
+
+        Person test2 = textSerializer.convert( m, Person.class );
+        Assert.assertEquals( test2.getName(), "Hey" );
+        Assert.assertEquals( test2.getLastName(), "bob" );
+
+    }
+
+    /**
+     * Json does not support circular references. Check that the framework do test it.
+     * @throws Exception
+     */
+    @Test( expected = ParseException.class )
+    public void convertObjectToMapCircularReferences() throws Exception {
+
+        Person test = new Person( "Hey", "bob" );
+        test.setFriend( test );
+        Map m = textSerializer.convert( test, Map.class );
+
+    }
+
 
 }

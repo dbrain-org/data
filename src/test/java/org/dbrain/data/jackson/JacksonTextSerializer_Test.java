@@ -2,7 +2,7 @@ package org.dbrain.data.jackson;
 
 import org.dbrain.data.Fqn;
 import org.dbrain.data.Path;
-import org.dbrain.data.Serializer;
+import org.dbrain.data.TextSerializer;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
@@ -17,42 +17,40 @@ import java.util.HashMap;
 /**
  * Created by epoitras on 12/09/15.
  */
-public class JacksonSerializer_Test {
+public class JacksonTextSerializer_Test {
 
-    private Serializer serializer = new JacksonJsonSerializer();
+    private TextSerializer textSerializer = new JacksonDataMapper();
 
 
-    @Test
+    @Test( expected = ParseException.class )
     public void testEmptyStream() throws Exception {
-        Assert.assertNull( serializer.parseValue( "" ) );
+        Assert.assertNull( textSerializer.read( "", Value.class ) );
     }
 
     @Test
     public void test_object_1() throws Exception {
-        ValueMap map = serializer.parseValue( "{}" ).getMap();
+        ValueMap map = textSerializer.read( "{}", ValueMap.class );
         Assert.assertEquals( 0, map.size() );
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_1() throws Exception {
-        serializer.parseValue( "{" ).getMap();
+        textSerializer.read( "{", ValueMap.class );
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_2() throws Exception {
-        serializer.parseValue( "{} {" ).getMap();
+        textSerializer.read( "{} {", ValueMap.class );
     }
 
     @Test( expected = ParseException.class )
     public void test_object_fail_3() throws Exception {
-        serializer.parseValue( "{}  [" ).getMap();
+        textSerializer.read( "{}  [", ValueMap.class );
     }
 
     @Test
     public void test_object_2() throws Exception {
-        ValueMap map = serializer.parseValue(
-                "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }" )
-                .getMap();
+        ValueMap map = textSerializer.read( "{ \"boolean_true\" : true, \"boolean_false\" : false, \"null\": null, \"string\": \"string\", \"double\":123.4, \"integer\":123456789,\"array\":[],\"object\":{} }", ValueMap.class );
         Assert.assertEquals( 8, map.size() );
         Assert.assertEquals( Boolean.TRUE.toString(), map.getString( "boolean_true" ) );
         Assert.assertEquals( Boolean.FALSE.toString(), map.getString( "boolean_false" ) );
@@ -66,13 +64,13 @@ public class JacksonSerializer_Test {
 
     @Test
     public void test_array_1() throws Exception {
-        ValueList list = serializer.parseValue( "[]" ).getList();
+        ValueList list = textSerializer.read( "[]", ValueList.class );
         Assert.assertEquals( 0, list.size() );
     }
 
     @Test
     public void test_array_2() throws Exception {
-        ValueList list = serializer.parseValue( "[\"test\", 123, true, null]" ).getList();
+        ValueList list = textSerializer.read( "[\"test\", 123, true, null]", ValueList.class );
         Assert.assertEquals( 4, list.size() );
         Assert.assertEquals( "test", list.getString( 0 ) );
         Assert.assertEquals( new Double( 123.0 ), list.getDouble( 1 ) );
@@ -82,16 +80,16 @@ public class JacksonSerializer_Test {
 
     @Test
     public void testPaseJsonFile() throws Exception {
-        Value value = serializer
-                .parseValue( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ) );
+        Value value = textSerializer
+                .read( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ), Value.class );
     }
 
     @Test
     public void testPathSerializer() throws Exception {
 
         Path p1 = Path.of( "a123[45]" );
-        String str = serializer.objectToString( p1 );
-        Path p2 = serializer.parseObject( str, Path.class );
+        String str = textSerializer.writeToString( p1 );
+        Path p2 = textSerializer.read( str, Path.class );
 
         Assert.assertEquals( p1, p2 );
     }
@@ -100,8 +98,8 @@ public class JacksonSerializer_Test {
     public void testPathSerializerNull() throws Exception {
 
         Path p1 = null;
-        String str = serializer.objectToString( p1 );
-        Path p2 = serializer.parseObject( str, Path.class );
+        String str = textSerializer.writeToString( p1 );
+        Path p2 = textSerializer.read( str, Path.class );
 
         Assert.assertEquals( p1, p2 );
     }
@@ -110,8 +108,8 @@ public class JacksonSerializer_Test {
     public void testFqnSerializer() throws Exception {
 
         Fqn p1 = Fqn.of( "a123.a45" );
-        String str = serializer.objectToString( p1 );
-        Fqn p2 = serializer.parseObject( str, Fqn.class );
+        String str = textSerializer.writeToString( p1 );
+        Fqn p2 = textSerializer.read( str, Fqn.class );
 
         Assert.assertEquals( p1, p2 );
     }
@@ -120,8 +118,8 @@ public class JacksonSerializer_Test {
     public void testFqnSerializerNull() throws Exception {
 
         Fqn p1 = null;
-        String str = serializer.objectToString( p1 );
-        Fqn p2 = serializer.parseObject( str, Fqn.class );
+        String str = textSerializer.writeToString( p1 );
+        Fqn p2 = textSerializer.read( str, Fqn.class );
 
         Assert.assertEquals( p1, p2 );
     }

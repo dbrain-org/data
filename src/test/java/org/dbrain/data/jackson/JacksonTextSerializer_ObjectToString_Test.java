@@ -16,29 +16,40 @@
 
 package org.dbrain.data.jackson;
 
-import org.dbrain.data.Serializer;
+import org.dbrain.data.TextSerializer;
 import org.dbrain.data.Value;
 import org.dbrain.data.jackson.artifacts.Person;
 import org.dbrain.data.jackson.artifacts.TestLongClass;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.StringWriter;
 import java.math.BigDecimal;
 
 /**
  * Created by epoitras on 30/06/14.
  */
-public class JacksonSerializer_ObjectToString_Test {
+public class JacksonTextSerializer_ObjectToString_Test {
 
-    Serializer serializer = new JacksonJsonSerializer();
+    TextSerializer textSerializer = new JacksonDataMapper();
 
     @Test
-    public void testObjectToString() throws Exception {
-        String s1 = serializer.objectToString( new Long( 10 ) );
-        String s2 = serializer.objectToString( new Long( 999999999999999l ) );
-        String s3 = serializer.objectToString( new Long( 1000000000000000l ) );
-        String s4 = serializer.objectToString( new Long( -999999999999999l ) );
-        String s5 = serializer.objectToString( new Long( -1000000000000000l ) );
+    public void testWrite() throws Exception {
+        StringWriter sw = new StringWriter();
+
+        textSerializer.write( sw, new Long( 10 ) );
+        Assert.assertEquals( "10", sw.toString() );
+
+    }
+
+
+    @Test
+    public void testLongSpecialEncoding() throws Exception {
+        String s1 = textSerializer.writeToString( new Long( 10 ) );
+        String s2 = textSerializer.writeToString( new Long( 999999999999999l ) );
+        String s3 = textSerializer.writeToString( new Long( 1000000000000000l ) );
+        String s4 = textSerializer.writeToString( new Long( -999999999999999l ) );
+        String s5 = textSerializer.writeToString( new Long( -1000000000000000l ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -50,15 +61,15 @@ public class JacksonSerializer_ObjectToString_Test {
 
     @Test
     public void testSerializeBigDecimal() throws Exception {
-        String s1 = serializer.objectToString( new BigDecimal( "10" ) );
-        String s2 = serializer.objectToString( new BigDecimal( "999999999999999" ) );
-        String s3 = serializer.objectToString( new BigDecimal( "1000000000000000" ) );
-        String s4 = serializer.objectToString( new BigDecimal( "99999999999.9999" ) );
-        String s5 = serializer.objectToString( new BigDecimal( "100000000000.1234" ) );
-        String s6 = serializer.objectToString( new BigDecimal( "-999999999999999" ) );
-        String s7 = serializer.objectToString( new BigDecimal( "-1000000000000000" ) );
-        String s8 = serializer.objectToString( new BigDecimal( "-99999999999.9999" ) );
-        String s9 = serializer.objectToString( new BigDecimal( "-100000000000.1234" ) );
+        String s1 = textSerializer.writeToString( new BigDecimal( "10" ) );
+        String s2 = textSerializer.writeToString( new BigDecimal( "999999999999999" ) );
+        String s3 = textSerializer.writeToString( new BigDecimal( "1000000000000000" ) );
+        String s4 = textSerializer.writeToString( new BigDecimal( "99999999999.9999" ) );
+        String s5 = textSerializer.writeToString( new BigDecimal( "100000000000.1234" ) );
+        String s6 = textSerializer.writeToString( new BigDecimal( "-999999999999999" ) );
+        String s7 = textSerializer.writeToString( new BigDecimal( "-1000000000000000" ) );
+        String s8 = textSerializer.writeToString( new BigDecimal( "-99999999999.9999" ) );
+        String s9 = textSerializer.writeToString( new BigDecimal( "-100000000000.1234" ) );
 
         Assert.assertEquals( "10", s1 );
         Assert.assertEquals( "999999999999999", s2 );
@@ -75,14 +86,14 @@ public class JacksonSerializer_ObjectToString_Test {
 
     @Test
     public void testSerializeInteger() throws Exception {
-        String s = serializer.objectToString( new Integer( 10 ) );
+        String s = textSerializer.writeToString( new Integer( 10 ) );
         Assert.assertEquals( "10", s );
     }
 
     @Test
     public void testSerializeObject() throws Exception {
-        String s = serializer.objectToString( new TestLongClass() );
-        TestLongClass tlc = serializer.parseObject( s, TestLongClass.class );
+        String s = textSerializer.writeToString( new TestLongClass() );
+        TestLongClass tlc = textSerializer.read( s, TestLongClass.class );
         Assert.assertNotNull( tlc );
     }
 
@@ -92,12 +103,12 @@ public class JacksonSerializer_ObjectToString_Test {
 
         Person test = new Person( "Hey", "bob" );
         test.setFriend( new Person( "Bob", "Marley" ) );
-        String s = serializer.objectToString( test );
+        String s = textSerializer.writeToString( test );
 
-        Value vPerson = serializer.parseValue( s );
+        Value vPerson = textSerializer.read( s, Value.class );
         System.out.println( vPerson );
 
-        Person test2 = serializer.parseObject( s, Person.class );
+        Person test2 = textSerializer.read( s, Person.class );
         Assert.assertEquals( test2.getName(), "Hey" );
         Assert.assertEquals( test2.getLastName(), "bob" );
 

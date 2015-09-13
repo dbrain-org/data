@@ -14,31 +14,30 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.jackson;
+package org.dbrain.data.jackson.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
- * Serialize BigDecimal with more than 15 significant digits to String literal.
+ * Serialize long with more that 15 digits to String literal.
+ *
+ * This class is generic "number" as we want to use it for AtomicLong as well.
  */
-class JsonBigDecimalSerializer extends JsonSerializer<BigDecimal> {
+public class JsonLongSerializer extends JsonSerializer<Number> {
 
-    private BigInteger MAX_VALUE = new BigInteger( "999999999999999" );
-    private BigInteger MIN_VALUE = new BigInteger( "-999999999999999" );
+    private long MAX_VALUE = 999999999999999l;
+    private long MIN_VALUE = -999999999999999l;
 
     @Override
-    public void serialize( BigDecimal value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
+    public void serialize( Number value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
         if ( value != null ) {
-            // Does it have more that 15 significant digits ?
-            BigInteger unscaled = value.unscaledValue();
-            if ( unscaled.compareTo( MIN_VALUE ) >= 0 && unscaled.compareTo( MAX_VALUE ) <= 0 ) {
-                jgen.writeNumber( value );
+            long longValue = value.longValue();
+            if ( longValue >= MIN_VALUE && longValue <= MAX_VALUE ) {
+                jgen.writeNumber( longValue );
             } else {
                 jgen.writeString( value.toString() );
             }

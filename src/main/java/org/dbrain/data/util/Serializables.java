@@ -35,7 +35,7 @@ public class Serializables {
      * Retrieve a hash getValue for the provided Serializable type. The hashing algorithm is provided
      * by the hashType parameter and can be anything supported by the java security api.
      *
-     * @param o        The object to serialize.
+     * @param o        The object to write.
      * @param hashType The type of hash requested.
      *
      * @return the hash getValue.

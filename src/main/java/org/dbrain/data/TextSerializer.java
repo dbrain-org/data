@@ -17,57 +17,36 @@
 package org.dbrain.data;
 
 import java.io.Reader;
-import java.util.Map;
+import java.io.Writer;
 
 /**
- * Serializer interface.
+ * TextSerializer interface.
  */
-public interface Serializer {
+public interface TextSerializer {
 
     /**
-     * Parse a String to Value.
+     * Convert an object to another format by serializing and deserializing it.
      */
-    Value parseValue( String r );
-
-    /**
-     * Parse a Reader to Value.
-     */
-    Value parseValue( Reader r );
-
-    /**
-     * Stream Object to Value.
-     */
-    Value objectToValue( Object o );
-
-    /**
-     * Convert an object to a map.
-     */
-    Map objectToMap( Object o );
+    <T> T convert( Object o, Class<T> clazz );
 
     /**
      * Parse a String to the specific class.
      */
-    <T> T parseObject( String r, Class<T> clazz );
+    <T> T read( String from, Class<T> clazz );
 
     /**
      * Parse a Value to the specific class.
      */
-    <T> T parseObject( Value v, Class<T> clazz );
+    <T> T read( Reader from, Class<T> clazz );
 
     /**
-     * Parse a Value to the specific class.
+     * Serialize an object to a writer.
      */
-    <T> T parseObject( Map v, Class<T> clazz );
-
+    void write( Writer to, Object o );
 
     /**
      * Stream Value to String.
      */
-    String valueToString( Value v );
-
-    /**
-     * Stream Object to String.
-     */
-    String objectToString( Object o );
+    String writeToString( Object o );
 
 }

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.jackson;
+package org.dbrain.data.jackson.modules;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
@@ -25,6 +25,17 @@ import org.dbrain.data.Path;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
+import org.dbrain.data.jackson.serializers.FqnDeserializer;
+import org.dbrain.data.jackson.serializers.FqnSerializer;
+import org.dbrain.data.jackson.serializers.JsonBigDecimalSerializer;
+import org.dbrain.data.jackson.serializers.JsonBigIntegerSerializer;
+import org.dbrain.data.jackson.serializers.JsonLongSerializer;
+import org.dbrain.data.jackson.serializers.JsonValueDeserializer;
+import org.dbrain.data.jackson.serializers.JsonValueListDeserializer;
+import org.dbrain.data.jackson.serializers.JsonValueMapDeserializer;
+import org.dbrain.data.jackson.serializers.JsonValueSerializer;
+import org.dbrain.data.jackson.serializers.PathDeserializer;
+import org.dbrain.data.jackson.serializers.PathSerializer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

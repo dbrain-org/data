@@ -16,8 +16,6 @@
 
 package org.dbrain.data.jackson.artifacts;
 
-import org.dbrain.data.jackson.JacksonSerializer_ObjectToString_Test;
-
 /**
  * Created by epoitras on 9/4/15.
  */
