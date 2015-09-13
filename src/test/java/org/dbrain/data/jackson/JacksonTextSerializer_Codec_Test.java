@@ -32,7 +32,7 @@ import java.math.BigDecimal;
  */
 public class JacksonTextSerializer_Codec_Test {
 
-    TextSerializer textSerializer = new JacksonDataMapper();
+    TextSerializer textSerializer = new JacksonSerializer();
 
     @Test
     public void testWrite() throws Exception {
@@ -45,7 +45,7 @@ public class JacksonTextSerializer_Codec_Test {
 
     @Test
     public void testPath() throws Exception {
-        Path p = Path.of( "testpath");
+        Path p = Path.of( "testpath" );
 
         String w = textSerializer.writeToString( p );
         Path p2 = textSerializer.read( w, Path.class );

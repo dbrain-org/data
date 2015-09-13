@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class JacksonTextSerializer_Test {
 
-    private TextSerializer textSerializer = new JacksonDataMapper();
+    private TextSerializer textSerializer = new JacksonSerializer();
 
 
     @Test( expected = ParseException.class )

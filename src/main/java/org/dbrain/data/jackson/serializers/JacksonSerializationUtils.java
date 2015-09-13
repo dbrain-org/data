@@ -29,14 +29,25 @@ import java.io.IOException;
 /**
  * Created by epoitras on 08/01/15.
  */
-public class JsonValueParser {
+public class JacksonSerializationUtils {
 
-    public static JsonToken nextToker( JsonParser parser ) throws IOException {
+    /**
+     * Helper method to ensure to get the current token.
+     */
+    public static JsonToken getToken( JsonParser parser ) throws IOException {
+        return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextToken();
+    }
+
+
+    /**
+     * Helper method to ensure to get the current token.
+     */
+    public static JsonToken currentToken( JsonParser parser ) throws IOException {
         return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextValue();
     }
 
     public static Value parseValue( JsonParser parser ) throws IOException {
-        JsonToken token = nextToker( parser );
+        JsonToken token = getToken( parser );
         if ( token != null ) {
             Value result;
             switch ( token ) {
@@ -67,7 +78,7 @@ public class JsonValueParser {
                 case START_OBJECT: {
                     parser.clearCurrentToken();
                     ValueMap values = ValueMap.newInstance();
-                    while ( nextToker( parser ) != JsonToken.END_OBJECT ) {
+                    while ( currentToken( parser ) != JsonToken.END_OBJECT ) {
                         String key = parser.getCurrentName();
                         Value v = parseValue( parser );
                         if ( v == null ) {
@@ -75,7 +86,7 @@ public class JsonValueParser {
                         }
                         values.put( key, v );
                     }
-                    if ( nextToker( parser ) == JsonToken.END_OBJECT ) {
+                    if ( currentToken( parser ) == JsonToken.END_OBJECT ) {
                         parser.clearCurrentToken();
                     } else {
                         throw new JsonParseException( "Expected end of object.", parser.getCurrentLocation() );
@@ -86,14 +97,14 @@ public class JsonValueParser {
                 case START_ARRAY: {
                     parser.clearCurrentToken();
                     ValueList values = ValueList.newInstance();
-                    while ( nextToker( parser ) != JsonToken.END_ARRAY ) {
+                    while ( currentToken( parser ) != JsonToken.END_ARRAY ) {
                         Value v = parseValue( parser );
                         if ( v == null ) {
                             throw new JsonParseException( "Expected value.", parser.getCurrentLocation() );
                         }
                         values.add( v );
                     }
-                    if ( nextToker( parser ) == JsonToken.END_ARRAY ) {
+                    if ( currentToken( parser ) == JsonToken.END_ARRAY ) {
                         parser.clearCurrentToken();
                     } else {
                         throw new JsonParseException( "Expected end of array.", parser.getCurrentLocation() );

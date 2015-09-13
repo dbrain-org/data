@@ -31,7 +31,7 @@ import java.io.Writer;
 /**
  * Reader and writer for Value to JSON format.
  */
-public class JacksonDataMapper implements TextSerializer {
+public class JacksonSerializer implements TextSerializer {
 
     private ObjectMapper objectMapper = new ObjectMapper() //
             .configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true ) //

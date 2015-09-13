@@ -16,9 +16,10 @@ public class FqnDeserializer extends JsonDeserializer<Fqn> {
 
     @Override
     public Fqn deserialize( JsonParser jsonParser, DeserializationContext deserializationContext ) throws IOException, JsonProcessingException {
-        if ( jsonParser.getCurrentToken() == JsonToken.VALUE_NULL ) {
+        JsonToken t = JacksonSerializationUtils.getToken( jsonParser );
+        if ( t == JsonToken.VALUE_NULL ) {
             return null;
-        } else if ( jsonParser.getCurrentToken() == JsonToken.VALUE_STRING ) {
+        } else if ( t == JsonToken.VALUE_STRING ) {
             return Fqn.of( jsonParser.getText() );
         } else {
             throw deserializationContext.wrongTokenException( jsonParser, JsonToken.VALUE_STRING, "" );

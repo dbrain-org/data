@@ -30,6 +30,6 @@ public class JsonValueListDeserializer extends JsonDeserializer<ValueList> {
 
     @Override
     public ValueList deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
-        return JsonValueParser.parseValue( jp ).getList();
+        return JacksonSerializationUtils.parseValue( jp ).getList();
     }
 }

@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class Jackson_Converter_Test {
 
-    JacksonDataMapper textSerializer = new JacksonDataMapper();
+    JacksonSerializer textSerializer = new JacksonSerializer();
 
 
     @Test
