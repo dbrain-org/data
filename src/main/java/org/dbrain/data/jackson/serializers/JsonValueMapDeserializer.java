@@ -30,6 +30,6 @@ public class JsonValueMapDeserializer extends JsonDeserializer<ValueMap> {
 
     @Override
     public ValueMap deserialize( JsonParser jp, DeserializationContext ctxt ) throws IOException {
-        return JacksonSerializationUtils.parseValue( jp ).getMap();
+        return JacksonSerializationUtils.parseValue( jp, ctxt ).getMap();
     }
 }

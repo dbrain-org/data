@@ -19,6 +19,7 @@ package org.dbrain.data.jackson.serializers;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import org.dbrain.data.Value;
 import org.dbrain.data.ValueList;
 import org.dbrain.data.ValueMap;
@@ -38,82 +39,67 @@ public class JacksonSerializationUtils {
         return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextToken();
     }
 
-
-    /**
-     * Helper method to ensure to get the current token.
-     */
-    public static JsonToken currentToken( JsonParser parser ) throws IOException {
-        return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextValue();
-    }
-
-    public static Value parseValue( JsonParser parser ) throws IOException {
+    public static Value parseValue( JsonParser parser, DeserializationContext ctxt  ) throws IOException {
         JsonToken token = getToken( parser );
         if ( token != null ) {
             Value result;
             switch ( token ) {
                 case VALUE_STRING:
                     result = Value.of( parser.getValueAsString() );
-                    parser.clearCurrentToken();
                     break;
                 case VALUE_NUMBER_FLOAT:
                     result = Value.of( parser.getDoubleValue() );
-                    parser.clearCurrentToken();
                     break;
                 case VALUE_NUMBER_INT:
                     result = Value.of( parser.getBigIntegerValue() );
-                    parser.clearCurrentToken();
                     break;
                 case VALUE_NULL:
                     result = NullValueImpl.NULL;
-                    parser.clearCurrentToken();
                     break;
                 case VALUE_TRUE:
                     result = Value.of( Boolean.TRUE );
-                    parser.clearCurrentToken();
                     break;
                 case VALUE_FALSE:
                     result = Value.of( Boolean.FALSE );
-                    parser.clearCurrentToken();
                     break;
                 case START_OBJECT: {
-                    parser.clearCurrentToken();
                     ValueMap values = ValueMap.newInstance();
-                    while ( currentToken( parser ) != JsonToken.END_OBJECT ) {
+                    while ( parser.nextToken() == JsonToken.FIELD_NAME ) {
                         String key = parser.getCurrentName();
-                        Value v = parseValue( parser );
+                        parser.nextToken();
+                        Value v = parseValue( parser, ctxt );
                         if ( v == null ) {
-                            throw new JsonParseException( "Expected JSON value.", parser.getCurrentLocation() );
+                            throw ctxt.wrongTokenException( parser, JsonToken.START_OBJECT, "Expected Value" );
                         }
                         values.put( key, v );
                     }
-                    if ( currentToken( parser ) == JsonToken.END_OBJECT ) {
+                    if ( getToken( parser ) == JsonToken.END_OBJECT ) {
                         parser.clearCurrentToken();
                     } else {
-                        throw new JsonParseException( "Expected end of object.", parser.getCurrentLocation() );
+                        throw ctxt.wrongTokenException( parser, JsonToken.END_OBJECT, null );
                     }
                     result = values;
                 }
                 break;
                 case START_ARRAY: {
-                    parser.clearCurrentToken();
                     ValueList values = ValueList.newInstance();
-                    while ( currentToken( parser ) != JsonToken.END_ARRAY ) {
-                        Value v = parseValue( parser );
+                    while ( parser.nextToken() != JsonToken.END_ARRAY ) {
+                        Value v = parseValue( parser, ctxt );
                         if ( v == null ) {
-                            throw new JsonParseException( "Expected value.", parser.getCurrentLocation() );
+                            throw ctxt.wrongTokenException( parser, JsonToken.START_OBJECT, "Expected Value" );
                         }
                         values.add( v );
                     }
-                    if ( currentToken( parser ) == JsonToken.END_ARRAY ) {
+                    if ( getToken( parser ) == JsonToken.END_ARRAY ) {
                         parser.clearCurrentToken();
                     } else {
-                        throw new JsonParseException( "Expected end of array.", parser.getCurrentLocation() );
+                        throw ctxt.wrongTokenException( parser, JsonToken.END_ARRAY, null );
                     }
                     result = values;
                 }
                 break;
                 default:
-                    throw new JsonParseException( "Expected value.", parser.getCurrentLocation() );
+                    throw ctxt.wrongTokenException( parser, JsonToken.START_OBJECT, "Expected Value" );
             }
             return result;
         } else {
