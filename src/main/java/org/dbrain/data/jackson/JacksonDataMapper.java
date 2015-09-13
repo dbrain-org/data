@@ -42,8 +42,8 @@ public class JacksonDataMapper implements TextSerializer {
      */
     private void checkEof( JsonParser parser ) throws IOException {
         JsonToken token = parser.nextToken();
-        if ( parser.getCurrentToken() != null ) {
-            throw new ParseException( "Unexpected json token: " + token.name() );
+        if ( token != null ) {
+            throw new ParseException( "Unexpected json token: " /** + token.name() **/);
         }
     }
 

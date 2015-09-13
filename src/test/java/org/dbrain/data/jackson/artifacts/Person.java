@@ -16,14 +16,19 @@
 
 package org.dbrain.data.jackson.artifacts;
 
+import org.dbrain.data.Fqn;
+import org.dbrain.data.Path;
+
 /**
  * Created by epoitras on 9/4/15.
  */
 public class Person {
 
+    Fqn id = Fqn.of( "id" );
     String name;
     String lastName;
     Person friend;
+    Path address = Path.of( "address" );
 
     public Person() {
     }
@@ -31,6 +36,14 @@ public class Person {
     public Person( String name, String lastName ) {
         this.name = name;
         this.lastName = lastName;
+    }
+
+    public Fqn getId() {
+        return id;
+    }
+
+    public void setId( Fqn id ) {
+        this.id = id;
     }
 
     public Person getFriend() {
@@ -56,4 +69,13 @@ public class Person {
     public void setLastName( String lastName ) {
         this.lastName = lastName;
     }
+
+    public Path getAddress() {
+        return address;
+    }
+
+    public void setAddress( Path address ) {
+        this.address = address;
+    }
+
 }

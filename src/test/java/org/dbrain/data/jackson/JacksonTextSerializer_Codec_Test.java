@@ -16,6 +16,7 @@
 
 package org.dbrain.data.jackson;
 
+import org.dbrain.data.Path;
 import org.dbrain.data.TextSerializer;
 import org.dbrain.data.Value;
 import org.dbrain.data.jackson.artifacts.Person;
@@ -29,7 +30,7 @@ import java.math.BigDecimal;
 /**
  * Created by epoitras on 30/06/14.
  */
-public class JacksonTextSerializer_ObjectToString_Test {
+public class JacksonTextSerializer_Codec_Test {
 
     TextSerializer textSerializer = new JacksonDataMapper();
 
@@ -39,6 +40,17 @@ public class JacksonTextSerializer_ObjectToString_Test {
 
         textSerializer.write( sw, new Long( 10 ) );
         Assert.assertEquals( "10", sw.toString() );
+
+    }
+
+    @Test
+    public void testPath() throws Exception {
+        Path p = Path.of( "testpath");
+
+        String w = textSerializer.writeToString( p );
+        Path p2 = textSerializer.read( w, Path.class );
+
+        Assert.assertEquals( p, p2 );
 
     }
 
