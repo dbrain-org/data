@@ -18,7 +18,7 @@
 	<groupId>org.dbrain</groupId>
 	<artifactId>dbrain-data</artifactId>
 	<packaging>jar</packaging>
-	<version>0.17-SNAPSHOT</version>
+	<version>0.18-SNAPSHOT</version>
 	<name>dbrain-data</name>
 	<description>Defines concepts and classes that are at the core of data manipulation and definition.</description>
 	<url>dbrain.org</url>
