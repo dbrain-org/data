@@ -140,6 +140,22 @@ public final class PathImpl implements Path {
     }
 
     @Override
+    public Path append( Path toAppend ) {
+        if ( toAppend == null || toAppend.size() == 0 ) {
+            return this;
+        }
+        return Path.from( this ).append( toAppend ).build();
+    }
+
+    @Override
+    public Path append( String toAppend ) {
+        if ( toAppend == null ) {
+            return this;
+        }
+        return append( Path.of( toAppend ) );
+    }
+
+    @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
