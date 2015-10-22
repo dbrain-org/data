@@ -32,10 +32,9 @@ import java.util.Map;
 /**
  * Created by epoitras on 06/01/15.
  */
-public class Jackson_Converter_Test {
+public class JacksonSerializer_Converter_Test {
 
-    JacksonSerializer textSerializer = new JacksonSerializer();
-
+    JacksonSerializer textSerializer = JacksonSerializer.newBuilder().build();
 
     @Test
     public void testObjectToValue() throws Exception {

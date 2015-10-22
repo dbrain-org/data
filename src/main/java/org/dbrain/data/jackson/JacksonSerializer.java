@@ -21,7 +21,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbrain.data.TextSerializer;
-import org.dbrain.data.jackson.modules.JsonModule;
+import org.dbrain.data.jackson.modules.StandardModule;
 import org.dbrain.data.text.ParseException;
 
 import java.io.IOException;
@@ -33,9 +33,31 @@ import java.io.Writer;
  */
 public class JacksonSerializer implements TextSerializer {
 
-    private ObjectMapper objectMapper = new ObjectMapper() //
-            .configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true ) //
-            .registerModule( new JsonModule() );
+    /**
+     * @return A new builder with already some good defaults setup.
+     */
+    public static JacksonSerializerBuilder newBuilder() {
+        JacksonSerializerBuilder builder = new JacksonSerializerBuilder();
+        builder.withModule( new StandardModule() );
+        builder.configureObjectMapper( (om) -> om.configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true ) );
+        return builder;
+    }
+
+    /**
+     * @return A new builder with no default setup.
+     */
+    public static JacksonSerializerBuilder newEmptyBuilder() {
+        return new JacksonSerializerBuilder();
+    }
+
+    private final ObjectMapper objectMapper ;
+
+    /**
+     * Constructor of the Jackson Serializer from an object mapper.
+     */
+    public JacksonSerializer( ObjectMapper objectMapper ) {
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * Check that there is no more token on the wire.
@@ -43,7 +65,7 @@ public class JacksonSerializer implements TextSerializer {
     private void checkEof( JsonParser parser ) throws IOException {
         JsonToken token = parser.nextToken();
         if ( token != null ) {
-            throw new ParseException( "Unexpected json token: " /** + token.name() **/);
+            throw new ParseException( "Unexpected json token: "  + token.name() );
         }
     }
 

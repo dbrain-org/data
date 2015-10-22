@@ -17,9 +17,9 @@ import java.util.HashMap;
 /**
  * Created by epoitras on 12/09/15.
  */
-public class JacksonTextSerializer_Test {
+public class JacksonSerializer_Test {
 
-    private TextSerializer textSerializer = new JacksonSerializer();
+    private TextSerializer textSerializer = JacksonSerializer.newBuilder().build();
 
 
     @Test( expected = ParseException.class )

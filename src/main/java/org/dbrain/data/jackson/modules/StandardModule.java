@@ -42,9 +42,9 @@ import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Created by epoitras on 07/01/15.
+ * Module to register standard serializer.
  */
-public class JsonModule extends Module {
+public class StandardModule extends Module {
 
     @Override
     public String getModuleName() {
@@ -61,7 +61,6 @@ public class JsonModule extends Module {
         SimpleSerializers serializers = new SimpleSerializers();
 
         JsonLongSerializer longSerializer = new JsonLongSerializer();
-
         serializers.addSerializer( Long.class, longSerializer );
         serializers.addSerializer( Long.TYPE, longSerializer );
         serializers.addSerializer( AtomicLong.class, longSerializer );
@@ -69,13 +68,7 @@ public class JsonModule extends Module {
         serializers.addSerializer( BigInteger.class, new JsonBigIntegerSerializer() );
         serializers.addSerializer( Path.class, new PathSerializer() );
         serializers.addSerializer( Fqn.class, new FqnSerializer() );
-
-        JsonValueSerializer valueSerializer = new JsonValueSerializer();
-
-        serializers.addSerializer( Value.class, valueSerializer );
-        serializers.addSerializer( ValueMap.class, valueSerializer );
-        serializers.addSerializer( ValueList.class, valueSerializer );
-
+        serializers.addSerializer( Value.class, new JsonValueSerializer() );
         context.addSerializers( serializers );
 
         SimpleDeserializers deserializers = new SimpleDeserializers();
