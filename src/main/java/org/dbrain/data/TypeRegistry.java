@@ -88,7 +88,7 @@ public class TypeRegistry {
             if ( !baseClass.isAssignableFrom( clazz ) ) {
                 throw new IllegalStateException( clazz.getName() + " not a subclass of " + baseClass.getName() );
             }
-            if ( !classMap.containsValue( baseClass ) ) {
+            if ( !classMap.containsValue( clazz ) ) {
                 String name = getClassNameFunc.apply( clazz );
                 if ( classMap.containsKey( name ) ) {
                     throw new IllegalStateException( "Duplicate name " + name + " for class " + classMap.get( name ).getName() + " and class " + clazz.getName() );

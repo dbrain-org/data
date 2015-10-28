@@ -46,10 +46,4 @@ public class JacksonSerializer_CustomTyping {
         } );
     } ).build();
 
-    @Test
-    public void testName() throws Exception {
-        serializer.writeToString( new Object() );
-
-
-    }
 }

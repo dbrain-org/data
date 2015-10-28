@@ -59,4 +59,22 @@ public class TypeRegistry_Test {
     public void testIllegalClass() throws Exception {
         TypeRegistry.newInstance( Number.class, p -> p.getSimpleName() ).registerType( String.class ).build();
     }
+
+    @Test( expected = IllegalStateException.class )
+    public void testDupClass() throws Exception {
+        TypeRegistry.newInstance( p -> p.getSimpleName() )
+                    .registerType( Path.class )
+                    .registerType( java.nio.file.Path.class )
+                    .build();
+    }
+
+    @Test
+    public void testTwiceSameClassOk() throws Exception {
+        TypeRegistry.newInstance( p -> p.getSimpleName() )
+                    .registerType( Path.class )
+                    .registerType( Path.class )
+                    .build();
+    }
+
+
 }
