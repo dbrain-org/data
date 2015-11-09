@@ -142,6 +142,16 @@ public interface Path {
     boolean startsWith( Path other );
 
     /**
+     * @return @return A path containing the current path with another appended.
+     */
+    Path append( Path toAppend );
+
+    /**
+     * @return @return A path containing the current path with another appended.
+     */
+    Path append( String toAppend );
+
+    /**
      * Describe the node type.
      */
     enum NodeType {

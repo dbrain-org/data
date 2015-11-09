@@ -221,5 +221,23 @@ public class Path_Test {
 
     }
 
+    @Test
+    public void testAppend() throws Exception {
+
+        // Those are true
+        Assert.assertEquals( Path.of( "test.a123" ).append( Path.of( "xyz" ) ), Path.of( "test.a123.xyz" ) );
+        Assert.assertEquals( Path.of( "test.a123" ).append( Path.of( "xyz.abc" ) ), Path.of( "test.a123.xyz.abc" ) );
+        Assert.assertEquals( Path.of( "test.a123" ).append( Path.of( "" ) ), Path.of( "test.a123" ) );
+        Assert.assertEquals( Path.of( "test.a123" ).append( (Path)null ), Path.of( "test.a123" ) );
+
+        // Those are true
+        Assert.assertEquals( Path.of( "test.a123" ).append( "xyz" ), Path.of( "test.a123.xyz" ) );
+        Assert.assertEquals( Path.of( "test.a123" ).append( "xyz.abc" ), Path.of( "test.a123.xyz.abc" ) );
+        Assert.assertEquals( Path.of( "test.a123" ).append( "" ), Path.of( "test.a123" ) );
+        Assert.assertEquals( Path.of( "test.a123" ).append( (String)null ), Path.of( "test.a123" ) );
+
+    }
+
+
 
 }
