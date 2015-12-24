@@ -39,7 +39,8 @@ public class JacksonSerializer implements TextSerializer {
     public static JacksonSerializerBuilder newBuilder() {
         JacksonSerializerBuilder builder = new JacksonSerializerBuilder();
         builder.withModule( new StandardModule() );
-        builder.configureObjectMapper( (om) -> om.configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true ) );
+        builder.withConfigurator( ( om ) -> om.configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
+                                                          true ) );
         return builder;
     }
 

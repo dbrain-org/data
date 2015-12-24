@@ -24,29 +24,29 @@ import org.junit.Test;
  */
 public class TypeRegistry_Test {
 
-    TypeRegistry r = TypeRegistry.newInstance( c -> c.getSimpleName() )
-                                 .registerType( StringBuilder.class )
-                                 .registerType( StringBuffer.class )
-                                 .build();
+    TypeRegistry<Object> r = TypeRegistry.from( Object.class, c -> c.getSimpleName() )
+                                         .registerType( StringBuilder.class )
+                                         .registerType( StringBuffer.class )
+                                         .build();
 
-    TypeRegistry n = TypeRegistry.newInstance( Number.class, c -> c.getSimpleName() )
-                                 .registerType( Long.class )
-                                 .registerType( Double.class )
-                                 .build();
+    TypeRegistry<Number> n = TypeRegistry.from( Number.class, c -> c.getSimpleName() )
+                                         .registerType( Long.class )
+                                         .registerType( Double.class )
+                                         .build();
 
 
     @Test
     public void testGetClass() throws Exception {
-        Assert.assertEquals( r.getClass( StringBuffer.class.getSimpleName() ), StringBuffer.class );
-        Assert.assertEquals( r.getClass( StringBuilder.class.getSimpleName() ), StringBuilder.class );
-        Assert.assertNull( r.getClass( String.class.getSimpleName() ) );
+        Assert.assertEquals( r.getTypeByName( StringBuffer.class.getSimpleName() ), StringBuffer.class );
+        Assert.assertEquals( r.getTypeByName( StringBuilder.class.getSimpleName() ), StringBuilder.class );
+        Assert.assertNull( r.getTypeByName( String.class.getSimpleName() ) );
     }
 
     @Test
     public void testGetName() throws Exception {
-        Assert.assertEquals( r.getName( StringBuffer.class ), StringBuffer.class.getSimpleName() );
-        Assert.assertEquals( r.getName( StringBuilder.class ), StringBuilder.class.getSimpleName() );
-        Assert.assertNull( r.getName( String.class ) );
+        Assert.assertEquals( r.getNameByType( StringBuffer.class ), StringBuffer.class.getSimpleName() );
+        Assert.assertEquals( r.getNameByType( StringBuilder.class ), StringBuilder.class.getSimpleName() );
+        Assert.assertNull( r.getNameByType( String.class ) );
     }
 
     @Test
@@ -57,12 +57,12 @@ public class TypeRegistry_Test {
 
     @Test( expected = IllegalStateException.class )
     public void testIllegalClass() throws Exception {
-        TypeRegistry.newInstance( Number.class, p -> p.getSimpleName() ).registerType( String.class ).build();
+        TypeRegistry.from( Number.class, p -> p.getSimpleName() ).registerType( String.class ).build();
     }
 
     @Test( expected = IllegalStateException.class )
     public void testDupClass() throws Exception {
-        TypeRegistry.newInstance( p -> p.getSimpleName() )
+        TypeRegistry.from( Object.class, p -> p.getSimpleName() )
                     .registerType( Path.class )
                     .registerType( java.nio.file.Path.class )
                     .build();
@@ -70,7 +70,7 @@ public class TypeRegistry_Test {
 
     @Test
     public void testTwiceSameClassOk() throws Exception {
-        TypeRegistry.newInstance( p -> p.getSimpleName() )
+        TypeRegistry.from( Object.class, p -> p.getSimpleName() )
                     .registerType( Path.class )
                     .registerType( Path.class )
                     .build();

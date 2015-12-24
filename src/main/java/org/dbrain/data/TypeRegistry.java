@@ -1,19 +1,3 @@
-/*
- * Copyright [2015] [Eric Poitras]
- *
- *     Licensed under the Apache License, Version 2.0 (the "License");
- *     you may not use this file except in compliance with the License.
- *     You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *     Unless required by applicable law or agreed to in writing, software
- *     distributed under the License is distributed on an "AS IS" BASIS,
- *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *     See the License for the specific language governing permissions and
- *     limitations under the License.
- */
-
 package org.dbrain.data;
 
 import java.util.HashMap;
@@ -22,89 +6,104 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * A registry of association of ids and types.
+ * A type registry is used to map classes to names and names to classes in Serialization use cases.
  */
-public class TypeRegistry {
+public class TypeRegistry<T> {
 
     /**
-     * Start building a instance from the specific name function.
+     * Start building a registry from the specific baseclass and name provider.
+     * @param nameFunc The function responsible of extracting a type name from a class.
      */
-    public static Builder newInstance( Function<Class<?>, String> nameFunc ) {
-        return new Builder( Object.class, nameFunc );
-    }
-
-    /**
-     * Start building a instance from the specific name function.
-     */
-    public static Builder newInstance( Class<?> baseClass, Function<Class<?>, String> nameFunc ) {
+    public static final Builder from( Class<?> baseClass, Function<Class<?>, String> nameFunc ) {
         return new Builder( baseClass, nameFunc );
     }
 
 
-    private final Class<?>              baseClass;
-    private final Map<String, Class<?>> classMap;
-    private final Map<Class<?>, String> nameMap;
+    private final Class<T> baseClass;
+    private final Map<String, Class<? extends T>> classMap;
+    private final Map<Class<? extends T>, String> nameMap;
 
-    private TypeRegistry( Class<?> baseClass, Map<String, Class<?>> classMap, Map<Class<?>, String> nameMap ) {
+    TypeRegistry( Class<T> baseClass, Map<String, Class<? extends T>> classMap, Map<Class<? extends T>, String> nameMap ) {
         this.baseClass = baseClass;
         this.classMap = classMap;
         this.nameMap = nameMap;
     }
 
-    public Class<?> getBaseClass() {
+    /**
+     * @return The base type for this registry.
+     */
+    public Class<T> getBaseClass() {
         return baseClass;
     }
 
-    public Class<?> getClass( String name ) {
+    /**
+     * @return The type having the name, or null if this name is not registered.
+     */
+    public Class<? extends T> getTypeByName( String name ) {
+        Objects.requireNonNull( name );
         return classMap.get( name );
     }
 
-    public String getName( Class<?> clazz ) {
+    /**
+     * @return The name for the type.
+     */
+    public String getNameByType( Class<?> clazz ) {
+        Objects.requireNonNull( clazz );
         return nameMap.get( clazz );
     }
 
+
     /**
-     * Builder for a type registry.
+     * Utility class to build new TypeRegistry instance.
+     *
+     * Note: This type registry builder should not be reused to build multiple TypeRegistry instance. Use individual instance for each required registry.
      */
-    public static class Builder {
+    public static class Builder<T> {
 
-        private final Class<?>                   baseClass;
-        private final Function<Class<?>, String> getClassNameFunc;
-        private final Map<String, Class<?>> classMap = new HashMap<>();
-        private final Map<Class<?>, String> nameMap  = new HashMap<>();
+        private final Class<T>                   baseClass;
+        private final Function<Class<?>, String> nameFunc;
+        private Map<String, Class<? extends T>> classById = new HashMap<>();
+        private Map<Class<? extends T>, String> idByClass = new HashMap<>();
 
-        public Builder( Class<?> baseClass, Function<Class<?>, String> getClassNameFunc ) {
-            Objects.requireNonNull( baseClass );
-            Objects.requireNonNull( getClassNameFunc );
+        /**
+         * Build a new type registry with only subclasses of the specific Base Class.
+         */
+        Builder( Class<T> baseClass, Function<Class<?>, String> nameFunc ) {
             this.baseClass = baseClass;
-            this.getClassNameFunc = getClassNameFunc;
+            this.nameFunc = nameFunc;
         }
 
         /**
-         * Register a new type in the registry.
+         * Register a new type for serialization and deserialization.
          */
-        public Builder registerType( Class<?> clazz ) {
+        public Builder<T> registerType( Class<? extends T> clazz ) {
             Objects.requireNonNull( clazz );
-            if ( !baseClass.isAssignableFrom( clazz ) ) {
-                throw new IllegalStateException( clazz.getName() + " not a subclass of " + baseClass.getName() );
-            }
-            if ( !classMap.containsValue( clazz ) ) {
-                String name = getClassNameFunc.apply( clazz );
-                if ( classMap.containsKey( name ) ) {
-                    throw new IllegalStateException( "Duplicate name " + name + " for class " + classMap.get( name ).getName() + " and class " + clazz.getName() );
+            if ( !idByClass.containsKey( clazz ) ) {
+                String name = nameFunc.apply( clazz );
+                if ( name == null ) {
+                    throw new IllegalStateException( "Class does not provide any type information: " + clazz.getName() );
+                } else if ( classById.containsKey( name ) ) {
+                    throw new IllegalStateException( "Two classes has same name: " + classById.get( name )
+                                                                                              .getName() + " and " + clazz
+                            .getName() );
+                } else if ( !baseClass.isAssignableFrom( clazz ) ) {
+                    throw new IllegalStateException( clazz.getName() + " is not a subclass of the registry's base class: " + baseClass
+                            .getName() );
                 }
 
-                classMap.put( name, clazz );
-                nameMap.put( clazz, name );
+                idByClass.put( clazz, name );
+                classById.put( name, clazz );
             }
             return this;
         }
 
         /**
-         * @return Build a new TypeRegistry.
+         * @return A new type registry.
          */
-        public TypeRegistry build() {
-            return new TypeRegistry( baseClass, classMap, nameMap );
+        public TypeRegistry<T> build() {
+            return new TypeRegistry( baseClass, classById, idByClass );
         }
+
     }
+
 }

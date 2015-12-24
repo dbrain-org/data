@@ -20,19 +20,18 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
-import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import org.dbrain.data.jackson.artifacts.Person;
-import org.junit.Test;
 
 import java.util.Collection;
 
 /**
  * Created by epoitras on 10/27/15.
  */
-public class JacksonSerializer_CustomTyping {
 
-    JacksonSerializer serializer = JacksonSerializer.newEmptyBuilder().configureObjectMapper( om -> {
+public class JacksonSerializer_CustomTyping_Test {
+
+    JacksonSerializer serializer = JacksonSerializer.newEmptyBuilder().withConfigurator( om -> {
         om.registerSubtypes( Person.class );
         om.setDefaultTyping( new StdTypeResolverBuilder() {
             @Override

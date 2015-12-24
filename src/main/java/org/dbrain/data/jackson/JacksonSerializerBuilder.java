@@ -18,6 +18,7 @@ package org.dbrain.data.jackson;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class JacksonSerializerBuilder {
 
     private final List<Module>                 modules   = new ArrayList<>();
     private final List<Consumer<ObjectMapper>> omConfigs = new ArrayList<>();
+    private TypeResolverBuilder<?> typing;
 
     JacksonSerializerBuilder() {
     }
@@ -51,10 +53,20 @@ public class JacksonSerializerBuilder {
         return this;
     }
 
-    public JacksonSerializerBuilder configureObjectMapper( Consumer<ObjectMapper> omConfig ) {
-        if ( omConfig != null ) {
-            omConfigs.add( omConfig );
+    public JacksonSerializerBuilder withConfigurator( Consumer<ObjectMapper> configurator ) {
+        if ( configurator != null ) {
+            omConfigs.add( configurator );
         }
+        return this;
+    }
+
+    /**
+     * Configure type resolution.
+     * @param typing
+     * @return
+     */
+    public JacksonSerializerBuilder withTyping( TypeResolverBuilder<?> typing ) {
+        this.typing = typing;
         return this;
     }
 
@@ -64,16 +76,18 @@ public class JacksonSerializerBuilder {
         // Register Modules
         om.registerModules( modules );
 
+        // Configure type resolution.
+        if ( typing != null ) {
+            om.setDefaultTyping( typing );
+        }
+
         // Customize the Object Mapper
-        for ( Consumer<ObjectMapper> omConfig: omConfigs ) {
+        for ( Consumer<ObjectMapper> omConfig : omConfigs ) {
             omConfig.accept( om );
         }
 
         return new JacksonSerializer( om );
     }
-
-
-
 
 
 }
