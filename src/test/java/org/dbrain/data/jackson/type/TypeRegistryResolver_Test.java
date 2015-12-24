@@ -28,31 +28,45 @@ import org.junit.Test;
 import java.util.Map;
 
 /**
- * Created by epoitras on 12/23/15.
  */
 public class TypeRegistryResolver_Test {
 
-    @Test
-    public void testCustomTypes() throws Exception {
-        TypeRegistry<Root> rootTypeRegistry = TypeRegistry.from( Root.class, c -> c.getSimpleName() )
-                                                          .registerType( Root.class )
-                                                          .registerType( Ext1.class )
-                                                          .registerType( Ext2.class )
-                                                          .build();
-        TypeRegistryResolver typing = TypeRegistryResolver.of( rootTypeRegistry, "@type" );
-        JacksonSerializer serializer = JacksonSerializer
-                .newBuilder()
-                .withTyping( typing )
-                .withConfigurator( om -> om.disable( SerializationFeature.FAIL_ON_EMPTY_BEANS ) )
-                .build();
+    TypeRegistry<Root> rootTypeRegistry = TypeRegistry.from( Root.class, c -> c.getSimpleName() )
+                                                      .registerType( Root.class )
+                                                      .registerType( Ext1.class )
+                                                      .registerType( Ext2.class )
+                                                      .build();
+    TypeRegistryResolver typing = TypeRegistryResolver.of( rootTypeRegistry, "@type" );
+    JacksonSerializer serializer = JacksonSerializer
+            .newBuilder()
+            .withTyping( typing )
+            .withConfigurator( om -> om.disable( SerializationFeature.FAIL_ON_EMPTY_BEANS ) )
+            .build();
 
+    @Test
+    public void testObjectWithNoFields() throws Exception {
+
+        // test "complex" object
+        Map object = serializer.convert( new Ext2(), Map.class );
+        String typeInfo = (String) object.get( "@type" );
+        Assert.assertEquals( typeInfo, "Ext2" );
+
+        Ext2 ext2 = serializer.convert( object, Ext2.class );
+        Assert.assertNotNull( ext2 );
+
+    }
+
+    @Test
+    public void testObjectWithFields() throws Exception {
+
+        // test "complex" object
         Map object = serializer.convert( new Ext1( "test1" ), Map.class );
-        Map object2 = serializer.convert( new Ext2( ), Map.class );
         String typeInfo = (String) object.get( "@type" );
         Assert.assertEquals( typeInfo, "Ext1" );
 
         Ext1 ext1 = serializer.convert( object, Ext1.class );
         Assert.assertNotNull( ext1 );
+        Assert.assertEquals( ext1.getTest(), "test1" );
 
     }
 }
