@@ -79,7 +79,24 @@ public class JacksonSerializer_Test {
     }
 
     @Test
-    public void testPaseJsonFile() throws Exception {
+    public void test_array_3() throws Exception {
+        ValueList list = textSerializer.read( "[]", Value.class ).getList();
+        Assert.assertEquals( 0, list.size() );
+    }
+
+    @Test
+    public void test_array_4() throws Exception {
+        ValueList list = textSerializer.read( "[\"test\", 123, true, null]", Value.class ).getList();
+        Assert.assertEquals( 4, list.size() );
+        Assert.assertEquals( "test", list.getString( 0 ) );
+        Assert.assertEquals( new Double( 123.0 ), list.getDouble( 1 ) );
+        Assert.assertTrue( list.getBoolean( 2 ) );
+        Assert.assertTrue( list.get( 3 ).isNull() );
+    }
+
+
+    @Test
+    public void testParseJsonFile() throws Exception {
         Value value = textSerializer
                 .read( new InputStreamReader( getClass().getResourceAsStream( "/SampleJson.json" ) ), Value.class );
     }
