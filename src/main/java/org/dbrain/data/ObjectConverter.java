@@ -1,5 +1,5 @@
 /*
- * Copyright [2015] [Eric Poitras]
+ * Copyright [2016] [Eric Poitras]
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -16,32 +16,15 @@
 
 package org.dbrain.data;
 
-import java.io.Reader;
-import java.io.Writer;
-
 /**
- * TextSerializer interface.
+ * Converter interface.
  */
-public interface TextSerializer {
+public interface ObjectConverter {
 
     /**
-     * Parse a String to the specific class.
+     * Convert an object to another format.
      */
-    <T> T read( String from, Class<T> clazz );
+    <T> T convert( Object o, Class<T> clazz );
 
-    /**
-     * Parse a Value to the specific class.
-     */
-    <T> T read( Reader from, Class<T> clazz );
-
-    /**
-     * Serialize an object to a writer.
-     */
-    void write( Writer to, Object o );
-
-    /**
-     * Stream Value to String.
-     */
-    String writeToString( Object o );
 
 }

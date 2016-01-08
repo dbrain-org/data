@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
+import org.dbrain.data.ObjectConverter;
 import org.dbrain.data.TextSerializer;
 import org.dbrain.data.jackson.modules.StandardModule;
 import org.dbrain.data.text.ParseException;
@@ -36,7 +37,7 @@ import java.util.function.Consumer;
 /**
  * Reader and writer for Value to JSON format.
  */
-public class JacksonSerializer implements TextSerializer {
+public class JacksonSerializer implements TextSerializer, ObjectConverter {
 
     /**
      * @return A new builder with already some good defaults setup.
