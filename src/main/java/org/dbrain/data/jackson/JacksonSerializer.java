@@ -19,7 +19,9 @@ package org.dbrain.data.jackson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import org.dbrain.data.TextSerializer;
 import org.dbrain.data.jackson.modules.StandardModule;
 import org.dbrain.data.text.ParseException;
@@ -27,6 +29,9 @@ import org.dbrain.data.text.ParseException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Reader and writer for Value to JSON format.
@@ -36,8 +41,8 @@ public class JacksonSerializer implements TextSerializer {
     /**
      * @return A new builder with already some good defaults setup.
      */
-    public static JacksonSerializerBuilder newBuilder() {
-        JacksonSerializerBuilder builder = new JacksonSerializerBuilder();
+    public static Builder newBuilder() {
+        Builder builder = new Builder();
         builder.withModule( new StandardModule() );
         builder.withConfigurator( ( om ) -> om.configure( DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
                                                           true ) );
@@ -47,8 +52,8 @@ public class JacksonSerializer implements TextSerializer {
     /**
      * @return A new builder with no default setup.
      */
-    public static JacksonSerializerBuilder newEmptyBuilder() {
-        return new JacksonSerializerBuilder();
+    public static Builder newEmptyBuilder() {
+        return new Builder();
     }
 
     private final ObjectMapper objectMapper ;
@@ -141,4 +146,71 @@ public class JacksonSerializer implements TextSerializer {
         }
     }
 
+    /**
+     * Created by epoitras on 10/16/15.
+     */
+    public static class Builder {
+
+        private final List<Module>                 modules   = new ArrayList<>();
+        private final List<Consumer<ObjectMapper>> omConfigs = new ArrayList<>();
+        private TypeResolverBuilder<?> typing;
+
+        Builder() {
+        }
+
+
+        public Builder withModule( Module module ) {
+            if ( module != null ) {
+                modules.add( module );
+            }
+            return this;
+        }
+
+        public Builder withModules( Module... modules ) {
+            if ( modules != null ) {
+                for ( Module m : modules ) {
+                    withModule( m );
+                }
+            }
+            return this;
+        }
+
+        public Builder withConfigurator( Consumer<ObjectMapper> configurator ) {
+            if ( configurator != null ) {
+                omConfigs.add( configurator );
+            }
+            return this;
+        }
+
+        /**
+         * Configure type resolution.
+         * @param typing
+         * @return
+         */
+        public Builder withTyping( TypeResolverBuilder<?> typing ) {
+            this.typing = typing;
+            return this;
+        }
+
+        public JacksonSerializer build() {
+            ObjectMapper om = new ObjectMapper();
+
+            // Register Modules
+            om.registerModules( modules );
+
+            // Configure type resolution.
+            if ( typing != null ) {
+                om.setDefaultTyping( typing );
+            }
+
+            // Customize the Object Mapper
+            for ( Consumer<ObjectMapper> omConfig : omConfigs ) {
+                omConfig.accept( om );
+            }
+
+            return new JacksonSerializer( om );
+        }
+
+
+    }
 }
