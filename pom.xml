@@ -18,7 +18,7 @@
 	<groupId>org.dbrain</groupId>
 	<artifactId>dbrain-data</artifactId>
 	<packaging>jar</packaging>
-	<version>0.20</version>
+	<version>0.21-SNAPSHOT</version>
 	<name>dbrain-data</name>
 	<description>Defines concepts and classes that are at the core of data manipulation and definition.</description>
 	<url>dbrain.org</url>
@@ -169,6 +169,6 @@
 		<connection>scm:git:git@github.com:dbrain-org/dbrain-data.git</connection>
 		<developerConnection>scm:git:git@github.com:dbrain-org/dbrain-data.git</developerConnection>
 		<url>https://github.com/dbrain-org/dbrain-data</url>
-		<tag>dbrain-data-0.20</tag>
+		<tag>HEAD</tag>
 	</scm>
 </project>
