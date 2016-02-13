@@ -19,8 +19,6 @@ package org.dbrain.data.text;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by epoitras on 9/3/15.
  */

@@ -16,8 +16,8 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.impl.fqn.FqnPatternBuilderImpl;
 import org.dbrain.data.impl.fqn.FqnParseUtils;
+import org.dbrain.data.impl.fqn.FqnPatternBuilderImpl;
 
 /**
  * Pattern to match a Fqn.

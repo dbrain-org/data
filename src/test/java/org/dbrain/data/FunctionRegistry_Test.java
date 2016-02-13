@@ -16,12 +16,12 @@
 
 package org.dbrain.data;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by epoitras on 2/12/16.
@@ -30,10 +30,12 @@ public class FunctionRegistry_Test {
 
     @Test
     public void testGet() throws Exception {
-        FunctionRegistry<String> test = FunctionRegistry.<String>newBuilder().add( String.class, (s) -> s + "result" ).build();
+        FunctionRegistry<CharSequence> test = FunctionRegistry.newBuilder( CharSequence.class )
+                                                        .add( String.class, ( s ) -> s + " result" )
+                                                        .build();
 
         Function<String, String> f = test.get( String.class );
-        assertEquals( f.apply( "test" ), "testresult" );
+        assertEquals( f.apply( "test" ), "test result" );
     }
 
 

@@ -29,16 +29,24 @@ public class FunctionRegistry<T> {
     /**
      * Start building a registry.
      */
-    public static final <T> Builder<T> newBuilder() {
-        return new Builder();
+    public static final <T> Builder<T> newBuilder( Class<T> baseClass ) {
+        return new Builder( baseClass );
     }
 
-
+    private final Class<T> baseClass;
     private final Map<Class<? extends T>, Function> functionByClass;
 
 
-    private FunctionRegistry( Map<Class<? extends T>, Function> nameMap ) {
+    private FunctionRegistry( Class<T> baseClass, Map<Class<? extends T>, Function> nameMap ) {
+        this.baseClass = baseClass;
         this.functionByClass = nameMap;
+    }
+
+    /**
+     * @return The base class for this registry.
+     */
+    public Class<T> getBaseClass() {
+        return baseClass;
     }
 
     /**
@@ -58,12 +66,15 @@ public class FunctionRegistry<T> {
      */
     public static class Builder<T> {
 
+        private final Class<T> baseClass;
         private final Map<Class<? extends T>, Function> functionByClass = new HashMap<>();
 
         /**
          * Build a new type registry with only subclasses of the specific Base Class.
+         * @param baseClass
          */
-        Builder() {
+        Builder( Class<T> baseClass ) {
+            this.baseClass = baseClass;
         }
 
         /**
@@ -71,6 +82,9 @@ public class FunctionRegistry<T> {
          */
         public <U extends T, R> Builder<T> add( Class<? extends T> clazz, Function<U, R> fun ) {
             Objects.requireNonNull( clazz );
+            if ( !baseClass.isAssignableFrom( clazz )) {
+                throw new IllegalStateException( clazz + " do not extends " + baseClass );
+            }
             functionByClass.put( clazz, fun );
             return this;
         }
@@ -79,7 +93,7 @@ public class FunctionRegistry<T> {
          * @return A new function registry.
          */
         public FunctionRegistry<T> build() {
-            return new FunctionRegistry( functionByClass );
+            return new FunctionRegistry( baseClass, functionByClass );
         }
 
     }
