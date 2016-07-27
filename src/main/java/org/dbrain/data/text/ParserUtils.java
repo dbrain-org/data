@@ -16,8 +16,6 @@
 
 package org.dbrain.data.text;
 
-import java.util.function.IntConsumer;
-
 /**
  * Created by epoitras on 06/11/14.
  */
