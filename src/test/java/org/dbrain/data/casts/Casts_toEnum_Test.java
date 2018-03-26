@@ -14,8 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.casts;
 
+import org.dbrain.data.cast.Enums;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,11 +29,11 @@ public class Casts_toEnum_Test {
 
     @Test
     public void testFromName() throws Exception {
-        RoundingMode rm1 = Casts.toEnum( RoundingMode.class, RoundingMode.CEILING.name() );
-        RoundingMode rm2 = Casts.toEnum( RoundingMode.class, " " + RoundingMode.CEILING.name() + " " );
-        RoundingMode rm3 = Casts.toEnum( RoundingMode.class, "" );
-        RoundingMode rm4 = Casts.toEnum( RoundingMode.class, " " );
-        RoundingMode rm5 = Casts.toEnum( RoundingMode.class, null );
+        RoundingMode rm1 = Enums.toEnum( RoundingMode.class, RoundingMode.CEILING.name() );
+        RoundingMode rm2 = Enums.toEnum( RoundingMode.class, " " + RoundingMode.CEILING.name() + " " );
+        RoundingMode rm3 = Enums.toEnum( RoundingMode.class, "" );
+        RoundingMode rm4 = Enums.toEnum( RoundingMode.class, " " );
+        RoundingMode rm5 = Enums.toEnum( RoundingMode.class, null );
 
         Assert.assertEquals( RoundingMode.CEILING, rm1 );
         Assert.assertEquals( RoundingMode.CEILING, rm2 );
@@ -43,8 +44,8 @@ public class Casts_toEnum_Test {
 
     @Test
     public void testToName() throws Exception {
-        String v1 = Casts.toEnumName( RoundingMode.CEILING );
-        String v2 = Casts.toEnumName( null );
+        String v1 = Enums.toEnumName( RoundingMode.CEILING );
+        String v2 = Enums.toEnumName( null );
 
         Assert.assertEquals( RoundingMode.CEILING.name(), v1 );
         Assert.assertNull( v2 );

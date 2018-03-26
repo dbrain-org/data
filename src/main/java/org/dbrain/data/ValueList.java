@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.access.IndexedFieldAccessors;
+import org.dbrain.data.tabular.IndexedFieldAccessors;
 import org.dbrain.data.impl.value.ListValueImpl;
 import org.dbrain.data.impl.value.ValueListBuilderImpl;
 

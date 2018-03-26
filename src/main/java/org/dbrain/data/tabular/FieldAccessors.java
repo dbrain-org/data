@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.access;
+package org.dbrain.data.tabular;
 
-import org.dbrain.data.Casts;
+import org.dbrain.data.cast.*;
 
 import java.util.function.Function;
 
@@ -46,7 +46,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Byte getByte() {
-        return Casts.toByte( getObject() );
+        return Bytes.toByte( getObject() );
     }
 
     default <T> T getByteAs( Function<? super Byte, T> function ) {
@@ -61,7 +61,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Short getShort() {
-        return Casts.toShort( getObject() );
+        return Shorts.toShort( getObject() );
     }
 
     default <T> T getShortAs( Function<? super Short, T> function ) {
@@ -76,7 +76,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Integer getInt() {
-        return Casts.toInteger( getObject() );
+        return Integers.toInteger( getObject() );
     }
 
     default <T> T getIntAs( Function<? super Integer, T> function ) {
@@ -91,7 +91,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Long getLong() {
-        return Casts.toLong( getObject() );
+        return Longs.toLong( getObject() );
     }
 
     /**
@@ -113,7 +113,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Float getFloat() {
-        return Casts.toFloat( getObject() );
+        return Floats.toFloat( getObject() );
     }
 
     /**
@@ -135,7 +135,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Double getDouble() {
-        return Casts.toDouble( getObject() );
+        return Doubles.toDouble( getObject() );
     }
 
     /**
@@ -157,7 +157,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Boolean getBoolean() {
-        return Casts.toBoolean( getObject() );
+        return Booleans.toBoolean( getObject() );
     }
 
     /**
@@ -179,7 +179,7 @@ public interface FieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default String getString() {
-        return Casts.toString( getObject() );
+        return Strings.toString( getObject() );
     }
 
     /**

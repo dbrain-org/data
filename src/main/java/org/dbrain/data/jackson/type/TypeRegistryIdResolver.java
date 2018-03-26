@@ -18,4 +18,8 @@ public class TypeRegistryIdResolver extends AbstractTypeRegistryIdResolver {
 		return typeRegistry;
 	}
 
+	@Override
+	public String getDescForKnownTypeIds() {
+		return getClass().getName();
+	}
 }

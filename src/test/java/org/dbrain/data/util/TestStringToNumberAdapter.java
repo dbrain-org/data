@@ -18,6 +18,7 @@ package org.dbrain.data.util;
 
 import junit.framework.Assert;
 import org.dbrain.data.DataTruncationException;
+import org.dbrain.data.cast.Numbers;
 import org.junit.Test;
 
 import java.text.DecimalFormat;

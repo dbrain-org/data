@@ -17,7 +17,7 @@
 package org.dbrain.data.csv;
 
 
-import org.dbrain.data.access.ForwardCursor;
+import org.dbrain.data.tabular.ForwardTabularCursor;
 import org.dbrain.data.text.ReaderCursor;
 
 import java.io.Reader;
@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Tabular reader class to read CSV datasources.
  */
-public class CsvCursor implements ForwardCursor, AutoCloseable {
+public class CsvCursor implements ForwardTabularCursor, AutoCloseable {
 
     private int                  separator;
     private int                  quote;

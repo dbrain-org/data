@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.access;
+package org.dbrain.data.tabular;
 
-import org.dbrain.data.Casts;
+import org.dbrain.data.cast.*;
 
 import java.util.function.Function;
 
@@ -50,7 +50,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Byte getByte( String fieldName ) {
-        return Casts.toByte( getObject( fieldName ) );
+        return Bytes.toByte( getObject( fieldName ) );
     }
 
     default <T> T getByteAs( String fieldName, Function<? super Byte, T> function ) {
@@ -67,7 +67,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Short getShort( String fieldName ) {
-        return Casts.toShort( getObject( fieldName ) );
+        return Shorts.toShort( getObject( fieldName ) );
     }
 
     default <T> T getShortAs( String fieldName, Function<? super Short, T> function ) {
@@ -84,7 +84,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Integer getInt( String fieldName ) {
-        return Casts.toInteger( getObject( fieldName ) );
+        return Integers.toInteger( getObject( fieldName ) );
     }
 
     default <T> T getIntAs( String fieldName, Function<? super Integer, T> function ) {
@@ -101,7 +101,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Long getLong( String fieldName ) {
-        return Casts.toLong( getObject( fieldName ) );
+        return Longs.toLong( getObject( fieldName ) );
     }
 
     /**
@@ -127,7 +127,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Float getFloat( String fieldName ) {
-        return Casts.toFloat( getObject( fieldName ) );
+        return Floats.toFloat( getObject( fieldName ) );
     }
 
     /**
@@ -153,7 +153,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Double getDouble( String fieldName ) {
-        return Casts.toDouble( getObject( fieldName ) );
+        return Doubles.toDouble( getObject( fieldName ) );
     }
 
     /**
@@ -179,7 +179,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default Boolean getBoolean( String fieldName ) {
-        return Casts.toBoolean( getObject( fieldName ) );
+        return Booleans.toBoolean( getObject( fieldName ) );
     }
 
     /**
@@ -205,7 +205,7 @@ public interface NamedFieldAccessors {
      * @throws IllegalArgumentException if the field with the specified name does not exists.
      */
     default String getString( String fieldName ) {
-        return Casts.toString( getObject( fieldName ) );
+        return Strings.toString( getObject( fieldName ) );
     }
 
     /**

@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.access;
+package org.dbrain.data.tabular;
 
-import org.dbrain.data.Casts;
+import org.dbrain.data.cast.*;
 
 import java.util.function.Function;
 
@@ -59,7 +59,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Byte getByte( int fieldIndex ) {
-        return Casts.toByte( getObject( fieldIndex ) );
+        return Bytes.toByte( getObject( fieldIndex ) );
     }
 
     /**
@@ -85,7 +85,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Short getShort( int fieldIndex ) {
-        return Casts.toShort( getObject( fieldIndex ) );
+        return Shorts.toShort( getObject( fieldIndex ) );
     }
 
     /**
@@ -111,7 +111,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Integer getInt( int fieldIndex ) {
-        return Casts.toInteger( getObject( fieldIndex ) );
+        return Integers.toInteger( getObject( fieldIndex ) );
     }
 
     /**
@@ -137,7 +137,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Long getLong( int fieldIndex ) {
-        return Casts.toLong( getObject( fieldIndex ) );
+        return Longs.toLong( getObject( fieldIndex ) );
     }
 
     /**
@@ -163,7 +163,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Float getFloat( int fieldIndex ) {
-        return Casts.toFloat( getObject( fieldIndex ) );
+        return Floats.toFloat( getObject( fieldIndex ) );
     }
 
     /**
@@ -189,7 +189,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Double getDouble( int fieldIndex ) {
-        return Casts.toDouble( getObject( fieldIndex ) );
+        return Doubles.toDouble( getObject( fieldIndex ) );
     }
 
     /**
@@ -215,7 +215,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default Boolean getBoolean( int fieldIndex ) {
-        return Casts.toBoolean( getObject( fieldIndex ) );
+        return Booleans.toBoolean( getObject( fieldIndex ) );
     }
 
     /**
@@ -241,7 +241,7 @@ public interface IndexedFieldAccessors {
      * @throws IndexOutOfBoundsException if the index is out of bound.
      */
     default String getString( int fieldIndex ) {
-        return Casts.toString( getObject( fieldIndex ) );
+        return Strings.toString( getObject( fieldIndex ) );
     }
 
     /**

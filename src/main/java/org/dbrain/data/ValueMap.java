@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.access.NamedFieldAccessors;
+import org.dbrain.data.tabular.NamedFieldAccessors;
 import org.dbrain.data.impl.value.MapValueImpl;
 import org.dbrain.data.impl.value.ValueMapBuilderImpl;
 

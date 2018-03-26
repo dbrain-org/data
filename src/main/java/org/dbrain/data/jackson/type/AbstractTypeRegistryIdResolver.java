@@ -56,15 +56,6 @@ public abstract class AbstractTypeRegistryIdResolver implements TypeIdResolver {
 	}
 
 	@Override
-	public JavaType typeFromId( String id ) {
-		Class<?> result = getTypeRegistry().getTypeByName( id );
-		if ( result == null ) {
-			throw new IllegalStateException( id + " not registred in type registry." );
-		}
-		return TypeFactory.defaultInstance().constructType( result );
-	}
-
-	@Override
 	public JavaType typeFromId( DatabindContext context, String id ) {
 		Class<?> result = getTypeRegistry().getTypeByName( id );
 		if ( result == null ) {

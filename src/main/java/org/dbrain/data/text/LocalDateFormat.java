@@ -16,7 +16,7 @@
 
 package org.dbrain.data.text;
 
-import org.dbrain.data.Casts;
+import org.dbrain.data.cast.LocalDates;
 import org.dbrain.data.util.Strings;
 
 import java.text.ParsePosition;
@@ -57,7 +57,7 @@ public class LocalDateFormat implements Format<LocalDate> {
                 int index = pos.getErrorIndex() >= 0 ? pos.getErrorIndex() : pos.getIndex();
                 throw new ParseException( "Error parsing date [" + trimmedValue + "] at position " + index + "." );
             }
-            return Casts.toLocalDate( result );
+            return LocalDates.toLocalDate( result );
         }
     }
 

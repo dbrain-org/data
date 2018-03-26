@@ -14,24 +14,22 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.access;
+package org.dbrain.data.cast;
 
 /**
- * Allows to read tabular data in a Forward-only manner.
+ * Methods used to cast values to specific types.
+ *
+ * Unless noted, those functions handle null fluently so you can call func1(func2(func3(x))) without
+ * worrying that x might be null.
+ *
  */
-public interface ForwardCursor extends IndexedFieldAccessors, NamedFieldAccessors {
+public class SqlTimestamps {
 
     /**
-     * @return true if the cursor is at end-of-file.
+     * Cast date to sql timestamp.
      */
-    boolean eof();
-
-    /**
-     * Move the cursor to the next row in the resultset.
-     *
-     * @return true if the cursor is not at end of file.
-     */
-    boolean next();
-
+    public static java.sql.Timestamp toSqlTimestamp( java.util.Date date ) {
+        return date != null ? new java.sql.Timestamp( date.getTime() ) : null;
+    }
 
 }

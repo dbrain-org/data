@@ -16,7 +16,7 @@
 
 package org.dbrain.data;
 
-import org.dbrain.data.access.FieldAccessors;
+import org.dbrain.data.tabular.FieldAccessors;
 import org.dbrain.data.impl.value.BoolValueImpl;
 import org.dbrain.data.impl.value.NullValueImpl;
 import org.dbrain.data.impl.value.NumberValueImpl;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.util;
+package org.dbrain.data.cast;
 
 import org.dbrain.data.DataTruncationException;
 
@@ -33,23 +33,6 @@ import java.util.function.Function;
  * To change this template use File | Settings | File Templates.
  */
 public class Numbers {
-
-    public static Function<BigDecimal, BigDecimal> setDecimalParameters( final int precision,
-                                                                         final int scale,
-                                                                         final RoundingMode rounding ) {
-        return new Function<BigDecimal, BigDecimal>() {
-
-            final MathContext mathContext = new MathContext( precision, rounding );
-
-            @Override
-            public BigDecimal apply( BigDecimal bigDecimal ) {
-                if ( bigDecimal == null ) {
-                    return null;
-                }
-                return bigDecimal.setScale( scale, mathContext.getRoundingMode() );
-            }
-        };
-    }
 
     /**
      * Convert a string to a number using a NumberFormat.
