@@ -22,6 +22,11 @@ package org.dbrain.data.cursor;
 public interface ForwardCursor {
 
     /**
+     * @return true if the cursor is at beginning-of-file.
+     */
+    boolean bof();
+
+    /**
      * @return true if the cursor is at end-of-file.
      */
     boolean eof();

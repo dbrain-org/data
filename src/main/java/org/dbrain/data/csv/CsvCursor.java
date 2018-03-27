@@ -190,13 +190,17 @@ public class CsvCursor implements ForwardTabularCursor, AutoCloseable {
         }
     }
 
+    public boolean bof() {
+        return bof;
+    }
+
     /**
      * Retrieve the End of File status.
      *
      * @return True if stream at End of File.
      */
     public boolean eof() {
-        return bof ? next() : fieldValues == null;
+        return bof ? false : fieldValues == null;
     }
 
     /**

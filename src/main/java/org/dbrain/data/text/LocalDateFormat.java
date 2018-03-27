@@ -16,6 +16,7 @@
 
 package org.dbrain.data.text;
 
+import org.dbrain.data.cast.Dates;
 import org.dbrain.data.cast.LocalDates;
 import org.dbrain.data.util.Strings;
 
@@ -40,8 +41,7 @@ public class LocalDateFormat implements Format<LocalDate> {
 
     @Override
     public synchronized String format( LocalDate value ) throws FormatException {
-        return value != null ? dateFormat.format( Date.from( value.atStartOfDay( ZoneId.systemDefault() )
-                                                                  .toInstant() ) ) : null;
+        return value != null ? dateFormat.format(Dates.toDate( value, ZoneId.systemDefault() ) ) : null;
     }
 
     @Override
