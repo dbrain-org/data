@@ -17,14 +17,14 @@
 package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.Value;
+import org.dbrain.data.tree.Node;
 
 /**
  * Wrap a scalar value;
  */
-public final class NullValueImpl implements Value {
+public final class NullValueImpl implements Node {
 
-    public static final Value NULL = new NullValueImpl();
+    public static final Node NULL = new NullValueImpl();
 
     private NullValueImpl() {
     }

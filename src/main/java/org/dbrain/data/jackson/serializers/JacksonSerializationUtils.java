@@ -19,9 +19,9 @@ package org.dbrain.data.jackson.serializers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueList;
-import org.dbrain.data.ValueMap;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
+import org.dbrain.data.tree.NodeMap;
 import org.dbrain.data.impl.value.NullValueImpl;
 
 import java.io.IOException;
@@ -38,35 +38,35 @@ public class JacksonSerializationUtils {
         return parser.hasCurrentToken() ? parser.getCurrentToken() : parser.nextToken();
     }
 
-    public static Value parseValue( JsonParser parser, DeserializationContext ctxt  ) throws IOException {
+    public static Node parseValue(JsonParser parser, DeserializationContext ctxt  ) throws IOException {
         JsonToken token = getToken( parser );
         if ( token != null ) {
-            Value result;
+            Node result;
             switch ( token ) {
                 case VALUE_STRING:
-                    result = Value.of( parser.getValueAsString() );
+                    result = Node.of( parser.getValueAsString() );
                     break;
                 case VALUE_NUMBER_FLOAT:
-                    result = Value.of( parser.getDoubleValue() );
+                    result = Node.of( parser.getDoubleValue() );
                     break;
                 case VALUE_NUMBER_INT:
-                    result = Value.of( parser.getBigIntegerValue() );
+                    result = Node.of( parser.getBigIntegerValue() );
                     break;
                 case VALUE_NULL:
                     result = NullValueImpl.NULL;
                     break;
                 case VALUE_TRUE:
-                    result = Value.of( Boolean.TRUE );
+                    result = Node.of( Boolean.TRUE );
                     break;
                 case VALUE_FALSE:
-                    result = Value.of( Boolean.FALSE );
+                    result = Node.of( Boolean.FALSE );
                     break;
                 case START_OBJECT: {
-                    ValueMap values = ValueMap.newInstance();
+                    NodeMap values = NodeMap.newInstance();
                     while ( parser.nextToken() == JsonToken.FIELD_NAME ) {
                         String key = parser.getCurrentName();
                         parser.nextToken();
-                        Value v = parseValue( parser, ctxt );
+                        Node v = parseValue( parser, ctxt );
                         if ( v == null ) {
                             throw ctxt.wrongTokenException( parser, JsonToken.START_OBJECT, "Expected Value" );
                         }
@@ -81,9 +81,9 @@ public class JacksonSerializationUtils {
                 }
                 break;
                 case START_ARRAY: {
-                    ValueList values = ValueList.newInstance();
+                    NodeList values = NodeList.newInstance();
                     while ( parser.nextToken() != JsonToken.END_ARRAY ) {
-                        Value v = parseValue( parser, ctxt );
+                        Node v = parseValue( parser, ctxt );
                         if ( v == null ) {
                             throw ctxt.wrongTokenException( parser, JsonToken.START_OBJECT, "Expected Value" );
                         }

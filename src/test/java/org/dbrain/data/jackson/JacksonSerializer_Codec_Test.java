@@ -18,7 +18,7 @@ package org.dbrain.data.jackson;
 
 import org.dbrain.data.Path;
 import org.dbrain.data.TextSerializer;
-import org.dbrain.data.Value;
+import org.dbrain.data.tree.Node;
 import org.dbrain.data.jackson.artifacts.Person;
 import org.dbrain.data.jackson.artifacts.TestLongClass;
 import org.junit.Assert;
@@ -138,7 +138,7 @@ public class JacksonSerializer_Codec_Test {
         test.setFriend( new Person( "Bob", "Marley" ) );
         String s = standardSerializer.writeToString( test );
 
-        Value vPerson = standardSerializer.read( s, Value.class );
+        Node vPerson = standardSerializer.read( s, Node.class );
         System.out.println( vPerson );
 
         Person test2 = standardSerializer.read( s, Person.class );

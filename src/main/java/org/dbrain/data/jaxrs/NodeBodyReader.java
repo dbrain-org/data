@@ -1,8 +1,7 @@
 package org.dbrain.data.jaxrs;
 
-
 import org.dbrain.data.TextSerializer;
-import org.dbrain.data.ValueList;
+import org.dbrain.data.tree.Node;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -19,11 +18,11 @@ import java.nio.charset.Charset;
  * Simple body writer that stream the element to the entity,
  */
 @javax.ws.rs.ext.Provider
-public class ValueListBodyReader implements MessageBodyReader<ValueList> {
+public class NodeBodyReader implements MessageBodyReader<Node> {
 
     final TextSerializer serializer;
 
-    public ValueListBodyReader( TextSerializer serializer ) {
+    public NodeBodyReader(TextSerializer serializer ) {
         this.serializer = serializer;
     }
 
@@ -37,13 +36,13 @@ public class ValueListBodyReader implements MessageBodyReader<ValueList> {
 
     @Override
     public boolean isReadable( Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType ) {
-        return ValueList.class.isAssignableFrom( type );
+        return Node.class.isAssignableFrom( type );
     }
 
     @Override
-    public ValueList readFrom( Class<ValueList> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream ) throws IOException, WebApplicationException {
+    public Node readFrom(Class<Node> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream ) throws IOException, WebApplicationException {
         InputStreamReader isr = new InputStreamReader( entityStream, getCharset( mediaType ) );
-        return serializer.read( isr, ValueList.class );
+        return serializer.read( isr, Node.class );
     }
 
 }

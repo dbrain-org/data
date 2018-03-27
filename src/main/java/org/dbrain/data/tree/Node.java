@@ -14,8 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.tree;
 
+import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.tabular.FieldAccessors;
 import org.dbrain.data.impl.value.BoolValueImpl;
 import org.dbrain.data.impl.value.NullValueImpl;
@@ -30,45 +31,45 @@ import java.util.function.Function;
 /**
  * A simple value that can only contains primitive values.
  */
-public interface Value extends FieldAccessors {
+public interface Node extends FieldAccessors {
 
-    static Value nullValue() {
+    static Node nullValue() {
         return NullValueImpl.NULL;
     }
 
-    static Value of( String s ) {
+    static Node of(String s ) {
         return s != null ? new StringValueImpl( s ) : nullValue();
     }
 
-    static Value of( CharSequence s ) {
+    static Node of(CharSequence s ) {
         return s != null ? new StringValueImpl( s.toString() ) : nullValue();
     }
 
-    static Value of( Byte b ) {
+    static Node of(Byte b ) {
         return b != null ? new NumberValueImpl( b ) : nullValue();
     }
 
-    static Value of( Short s ) {
+    static Node of(Short s ) {
         return s != null ? new NumberValueImpl( s ) : nullValue();
     }
 
-    static Value of( Integer i ) {
+    static Node of(Integer i ) {
         return i != null ? new NumberValueImpl( i ) : nullValue();
     }
 
-    static Value of( Long l ) {
+    static Node of(Long l ) {
         return l != null ? new NumberValueImpl( l ) : nullValue();
     }
 
-    static Value of( BigInteger bi ) {
+    static Node of(BigInteger bi ) {
         return bi != null ? new NumberValueImpl( bi ) : nullValue();
     }
 
-    static Value of( BigDecimal bd ) {
+    static Node of(BigDecimal bd ) {
         return bd != null ? new NumberValueImpl( bd ) : nullValue();
     }
 
-    static Value of( Float v ) {
+    static Node of(Float v ) {
         if ( v != null ) {
             float value = v.floatValue();
             if ( Float.isNaN( value ) ) {
@@ -83,7 +84,7 @@ public interface Value extends FieldAccessors {
         }
     }
 
-    static Value of( Double v ) {
+    static Node of(Double v ) {
         if ( v != null ) {
             double doubleValue = v.doubleValue();
             if ( Double.isNaN( doubleValue ) ) {
@@ -98,7 +99,7 @@ public interface Value extends FieldAccessors {
         }
     }
 
-    static Value of( Boolean b ) {
+    static Node of(Boolean b ) {
         if ( b != null ) {
             return b ? BoolValueImpl.TRUE : BoolValueImpl.FALSE;
         } else {
@@ -109,64 +110,64 @@ public interface Value extends FieldAccessors {
     /**
      * Make sure Value is not null.
      */
-    static Value of( Value v ) {
+    static Node of(Node v ) {
         return v != null ? v : nullValue();
     }
 
     /**
      * Cast of one of the primitive type.
      */
-    static Value of( Object v, Function<Object, Value> valueFromObject ) {
+    static Node of(Object v, Function<Object, Node> valueFromObject ) {
         if ( v == null ) {
             return nullValue();
-        } else if ( v instanceof Value ) {
-            return (Value) v;
+        } else if ( v instanceof Node) {
+            return (Node) v;
         } else if ( v instanceof String ) {
-            return Value.of( (String) v );
+            return Node.of( (String) v );
         } else if ( v instanceof Byte ) {
-            return Value.of( (Byte) v );
+            return Node.of( (Byte) v );
         } else if ( v instanceof Short ) {
-            return Value.of( (Short) v );
+            return Node.of( (Short) v );
         } else if ( v instanceof Integer ) {
-            return Value.of( (Integer) v );
+            return Node.of( (Integer) v );
         } else if ( v instanceof Long ) {
-            return Value.of( (Long) v );
+            return Node.of( (Long) v );
         } else if ( v instanceof BigDecimal ) {
-            return Value.of( (BigDecimal) v );
+            return Node.of( (BigDecimal) v );
         } else if ( v instanceof BigInteger ) {
-            return Value.of( (BigInteger) v );
+            return Node.of( (BigInteger) v );
         } else if ( v instanceof Float ) {
-            return Value.of( (Float) v );
+            return Node.of( (Float) v );
         } else if ( v instanceof Double ) {
-            return Value.of( (Double) v );
+            return Node.of( (Double) v );
         } else if ( v instanceof Boolean ) {
-            return Value.of( (Boolean) v );
+            return Node.of( (Boolean) v );
         } else if ( v instanceof Map ) {
-            return ValueMap.of( (Map) v );
+            return NodeMap.of( (Map) v );
         } else if ( v instanceof Iterable ) {
-            return ValueList.of( (Iterable) v );
+            return NodeList.of( (Iterable) v );
         } else {
             return valueFromObject.apply( v );
         }
     }
 
-    static Value of( Object o ) {
+    static Node of(Object o ) {
         return of( o, o1 -> {
             throw new DataCoercionException( "Cannot cast " + o1.getClass().getName() + " to value." );
         } );
     }
 
-    static Object toObject( Value value ) {
-        if ( value == null ) {
+    static Object toObject( Node node) {
+        if ( node == null ) {
             return null;
         } else {
-            return value.getObject();
+            return node.getObject();
         }
     }
 
-    ValueMap getMap();
+    NodeMap getMap();
 
-    ValueList getList();
+    NodeList getList();
 
     boolean isNull();
 

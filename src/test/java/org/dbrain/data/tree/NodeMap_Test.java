@@ -14,8 +14,11 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.tree;
 
+import org.dbrain.data.DataCoercionException;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,66 +28,66 @@ import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ValueMap_Test {
+public class NodeMap_Test {
 
     @Test
     public void testConstruction() throws Exception {
-        ValueMap map;
+        NodeMap map;
 
         // Simple constructor
-        map = ValueMap.newInstance();
+        map = NodeMap.newInstance();
         assertEquals( map.size(), 0 );
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetBoolean() throws Exception {
-        ValueMap.newInstance().getBoolean();
+        NodeMap.newInstance().getBoolean();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetByte() throws Exception {
-        ValueMap.newInstance().getByte();
+        NodeMap.newInstance().getByte();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetShort() throws Exception {
-        ValueMap.newInstance().getShort();
+        NodeMap.newInstance().getShort();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetInteger() throws Exception {
-        ValueMap.newInstance().getInt();
+        NodeMap.newInstance().getInt();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetLong() throws Exception {
-        ValueMap.newInstance().getLong();
+        NodeMap.newInstance().getLong();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetFloat() throws Exception {
-        ValueMap.newInstance().getFloat();
+        NodeMap.newInstance().getFloat();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetDouble() throws Exception {
-        ValueMap.newInstance().getDouble();
+        NodeMap.newInstance().getDouble();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetString() throws Exception {
-        ValueMap.newInstance().getString();
+        NodeMap.newInstance().getString();
     }
 
     @Test( expected = DataCoercionException.class )
     public void testGetList() throws Exception {
-        ValueMap.newInstance().getList();
+        NodeMap.newInstance().getList();
     }
 
     @Test
     public void testGetObject() throws Exception {
-        ValueMap m = ValueMap.newInstance();
-        m.put( "key", Value.of( "value" ) );
+        NodeMap m = NodeMap.newInstance();
+        m.put( "key", Node.of( "value" ) );
 
         Object o = m.getObject();
         assertTrue( o instanceof java.util.Map );
@@ -97,10 +100,10 @@ public class ValueMap_Test {
 
     @Test
     public void testIsEmpty() throws Exception {
-        ValueMap m = ValueMap.newInstance();
+        NodeMap m = NodeMap.newInstance();
 
         assertTrue( m.isEmpty() );
-        m.put( "test", Value.of( "Test" ) );
+        m.put( "test", Node.of( "Test" ) );
         Assert.assertFalse( m.isEmpty() );
         m.remove( "test" );
         assertTrue( m.isEmpty() );
@@ -109,12 +112,12 @@ public class ValueMap_Test {
 
     @Test
     public void testPutAll() throws Exception {
-        ValueMap m1 = ValueMap.newInstance();
-        ValueMap m2 = ValueMap.newInstance();
+        NodeMap m1 = NodeMap.newInstance();
+        NodeMap m2 = NodeMap.newInstance();
 
-        m1.put( "test1", Value.of( "Test" ) );
-        m1.put( "test2", Value.of( "Test2" ) );
-        m1.put( "test3", Value.of( "Test3" ) );
+        m1.put( "test1", Node.of( "Test" ) );
+        m1.put( "test2", Node.of( "Test2" ) );
+        m1.put( "test3", Node.of( "Test3" ) );
 
         m2.putAll( m1 );
         assertEquals( m1, m2 );
@@ -122,10 +125,10 @@ public class ValueMap_Test {
 
     @Test
     public void testClear() throws Exception {
-        ValueMap m1 = ValueMap.newInstance();
-        m1.put( "test1", Value.of( "Test" ) );
-        m1.put( "test2", Value.of( "Test2" ) );
-        m1.put( "test3", Value.of( "Test3" ) );
+        NodeMap m1 = NodeMap.newInstance();
+        m1.put( "test1", Node.of( "Test" ) );
+        m1.put( "test2", Node.of( "Test2" ) );
+        m1.put( "test3", Node.of( "Test3" ) );
 
         m1.clear();
         assertTrue( m1.isEmpty() );
@@ -137,15 +140,15 @@ public class ValueMap_Test {
     @Test
     public void testGetValue() {
         String k = "test";
-        Value s = Value.of( "String" );
+        Node s = Node.of( "String" );
 
-        ValueMap v = ValueMap.newInstance();
+        NodeMap v = NodeMap.newInstance();
 
         Assert.assertFalse( v.containsKey( k ) );
         Assert.assertFalse( v.containsValue( s ) );
         assertEquals( 0, v.size() );
 
-        v.put( k, Value.of( "String" ) );
+        v.put( k, Node.of( "String" ) );
         assertTrue( v.containsKey( k ) );
         assertTrue( v.containsValue( s ) );
         assertEquals( 1, v.size() );
@@ -161,7 +164,7 @@ public class ValueMap_Test {
 
     @Test
     public void testNewBuilder() throws Exception {
-        ValueMap vl = ValueMap.newBuilder() //
+        NodeMap vl = NodeMap.newBuilder() //
                 .putNull( "0" ) //
                 .put( "1", new Byte( (byte) 1 ) ) //
                 .put( "2", new Short( (short) 2 ) ) //
@@ -173,21 +176,21 @@ public class ValueMap_Test {
                 .put( "8", true ) //
                 .put( "9", 1.1f ) //
                 .put( "10", 1.2d ) //
-                .put( "11", Value.of( "value" ) ) //
+                .put( "11", Node.of( "value" ) ) //
                 .build();
 
-        Assert.assertTrue( vl.get( "0" ).equals( Value.nullValue() ) );
-        Assert.assertTrue( vl.get( "1" ).equals( Value.of( 1 ) ) );
-        Assert.assertTrue( vl.get( "2" ).equals( Value.of( 2 ) ) );
-        Assert.assertTrue( vl.get( "3" ).equals( Value.of( 3 ) ) );
-        Assert.assertTrue( vl.get( "4" ).equals( Value.of( 4 ) ) );
-        Assert.assertTrue( vl.get( "5" ).equals( Value.of( 5 ) ) );
-        Assert.assertTrue( vl.get( "6" ).equals( Value.of( 6.1 ) ) );
-        Assert.assertTrue( vl.get( "7" ).equals( Value.of( "string" ) ) );
-        Assert.assertTrue( vl.get( "8" ).equals( Value.of( true ) ) );
-        Assert.assertTrue( vl.get( "9" ).equals( Value.of( 1.1f ) ) );
-        Assert.assertTrue( vl.get( "10" ).equals( Value.of( 1.2d ) ) );
-        Assert.assertTrue( vl.get( "11" ).equals( Value.of( "value" ) ) );
+        Assert.assertTrue( vl.get( "0" ).equals( Node.nullValue() ) );
+        Assert.assertTrue( vl.get( "1" ).equals( Node.of( 1 ) ) );
+        Assert.assertTrue( vl.get( "2" ).equals( Node.of( 2 ) ) );
+        Assert.assertTrue( vl.get( "3" ).equals( Node.of( 3 ) ) );
+        Assert.assertTrue( vl.get( "4" ).equals( Node.of( 4 ) ) );
+        Assert.assertTrue( vl.get( "5" ).equals( Node.of( 5 ) ) );
+        Assert.assertTrue( vl.get( "6" ).equals( Node.of( 6.1 ) ) );
+        Assert.assertTrue( vl.get( "7" ).equals( Node.of( "string" ) ) );
+        Assert.assertTrue( vl.get( "8" ).equals( Node.of( true ) ) );
+        Assert.assertTrue( vl.get( "9" ).equals( Node.of( 1.1f ) ) );
+        Assert.assertTrue( vl.get( "10" ).equals( Node.of( 1.2d ) ) );
+        Assert.assertTrue( vl.get( "11" ).equals( Node.of( "value" ) ) );
 
     }
 }

@@ -17,7 +17,7 @@
 package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.Value;
+import org.dbrain.data.tree.Node;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  * Wrap a number value;
  */
-public final class NumberValueImpl implements Value {
+public final class NumberValueImpl implements Node {
 
     private final BigDecimal value;
 

@@ -14,8 +14,9 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.tree;
 
+import org.dbrain.data.DataCoercionException;
 import org.dbrain.data.tabular.NamedFieldAccessors;
 import org.dbrain.data.impl.value.MapValueImpl;
 import org.dbrain.data.impl.value.ValueMapBuilderImpl;
@@ -28,22 +29,22 @@ import java.util.function.Function;
 /**
  * An map of value.
  */
-public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFieldAccessors {
+public interface NodeMap extends Node, java.util.Map<String, Node>, NamedFieldAccessors {
 
     /**
      * Create a new empty map.
      */
-    static ValueMap newInstance() {
+    static NodeMap newInstance() {
         return new MapValueImpl();
     }
 
     /**
      * From a map of strings.
      */
-    static ValueMap of( Map<String, ?> v ) {
-        ValueMap result = newInstance();
+    static NodeMap of(Map<String, ?> v ) {
+        NodeMap result = newInstance();
         for ( Map.Entry<String, ?> e : v.entrySet() ) {
-            result.put( e.getKey(), Value.of( e.getValue() ) );
+            result.put( e.getKey(), Node.of( e.getValue() ) );
         }
         return result;
     }
@@ -51,12 +52,12 @@ public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFiel
     /**
      * Convert a Map to a value map using a key mapper.
      */
-    static ValueMap of( Map<?, ?> v, Function<Object, String> keyMapper ) {
-        ValueMap result = newInstance();
+    static NodeMap of(Map<?, ?> v, Function<Object, String> keyMapper ) {
+        NodeMap result = newInstance();
         for ( Map.Entry<?, ?> e : v.entrySet() ) {
             String key = keyMapper.apply( e.getKey() );
-            Value oldValue = result.put( key, Value.of( e.getValue() ) );
-            if ( oldValue != null ) {
+            Node oldNode = result.put( key, Node.of( e.getValue() ) );
+            if ( oldNode != null ) {
                 throw new DataCoercionException( "Duplicate value when casting to map: " + key );
             }
         }
@@ -66,7 +67,7 @@ public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFiel
     /**
      * Create a new builder.
      */
-    static ValueMap.Builder newBuilder() {
+    static NodeMap.Builder newBuilder() {
         return new ValueMapBuilderImpl();
     }
 
@@ -97,9 +98,9 @@ public interface ValueMap extends Value, java.util.Map<String, Value>, NamedFiel
 
         Builder put( String name, Boolean v );
 
-        Builder put( String name, Value v );
+        Builder put( String name, Node v );
 
-        ValueMap build();
+        NodeMap build();
 
     }
 

@@ -17,9 +17,9 @@
 package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueList;
-import org.dbrain.data.ValueMap;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
+import org.dbrain.data.tree.NodeMap;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,11 +32,11 @@ import java.util.function.Function;
 /**
  * Implementation of the Value.Map.
  */
-public class MapValueImpl implements ValueMap {
+public class MapValueImpl implements NodeMap {
 
-    private final HashMap<String, Value> delegate;
+    private final HashMap<String, Node> delegate;
 
-    public MapValueImpl( HashMap<String, Value> delegate ) {
+    public MapValueImpl( HashMap<String, Node> delegate ) {
         this.delegate = delegate;
     }
 
@@ -101,7 +101,7 @@ public class MapValueImpl implements ValueMap {
     }
 
     @Override
-    public ValueList getList() {
+    public NodeList getList() {
         throw new DataCoercionException( "Cannot cast map to list." );
     }
 
@@ -121,8 +121,8 @@ public class MapValueImpl implements ValueMap {
     }
 
     @Override
-    public Value get( Object key ) {
-        return Value.of( delegate.get( key ) );
+    public Node get(Object key ) {
+        return Node.of( delegate.get( key ) );
     }
 
     @Override
@@ -131,20 +131,20 @@ public class MapValueImpl implements ValueMap {
     }
 
     @Override
-    public Value put( String key, Value value ) {
+    public Node put(String key, Node node) {
         Objects.requireNonNull( key );
-        return delegate.put( key, Value.of( value ) );
+        return delegate.put( key, Node.of(node) );
     }
 
     @Override
-    public void putAll( java.util.Map<? extends String, ? extends Value> m ) {
-        for ( ValueMap.Entry<? extends String, ? extends Value> e : m.entrySet() ) {
+    public void putAll( java.util.Map<? extends String, ? extends Node> m ) {
+        for ( NodeMap.Entry<? extends String, ? extends Node> e : m.entrySet() ) {
             put( e.getKey(), e.getValue() );
         }
     }
 
     @Override
-    public Value remove( Object key ) {
+    public Node remove(Object key ) {
         return delegate.remove( key );
     }
 
@@ -155,7 +155,7 @@ public class MapValueImpl implements ValueMap {
 
     @Override
     public boolean containsValue( Object value ) {
-        return delegate.containsValue( Value.of( value ) );
+        return delegate.containsValue( Node.of( value ) );
     }
 
     @Override
@@ -164,25 +164,25 @@ public class MapValueImpl implements ValueMap {
     }
 
     @Override
-    public Collection<Value> values() {
+    public Collection<Node> values() {
         return delegate.values();
     }
 
     @Override
-    public Set<Entry<String, Value>> entrySet() {
+    public Set<Entry<String, Node>> entrySet() {
         return delegate.entrySet();
     }
 
     @Override
-    public Value getOrDefault( Object key, Value defaultValue ) {
-        Value result = get( key );
-        return result.isNull() ? Value.of( defaultValue ) : result;
+    public Node getOrDefault(Object key, Node defaultNode) {
+        Node result = get( key );
+        return result.isNull() ? Node.of(defaultNode) : result;
     }
 
     @Override
-    public Value putIfAbsent( String key, Value value ) {
+    public Node putIfAbsent(String key, Node node) {
         if ( !containsKey( key ) ) {
-            return put( key, Value.of( value ) );
+            return put( key, Node.of(node) );
         } else {
             return get( key );
         }
@@ -190,49 +190,49 @@ public class MapValueImpl implements ValueMap {
 
     @Override
     public boolean remove( Object key, Object value ) {
-        return delegate.remove( key, Value.of( value ) );
+        return delegate.remove( key, Node.of( value ) );
     }
 
     @Override
-    public boolean replace( String key, Value oldValue, Value newValue ) {
-        return delegate.replace( key, Value.of( oldValue ), Value.of( newValue ) );
+    public boolean replace(String key, Node oldNode, Node newNode) {
+        return delegate.replace( key, Node.of(oldNode), Node.of(newNode) );
     }
 
     @Override
-    public Value replace( String key, Value value ) {
-        return delegate.replace( key, Value.of( value ) );
+    public Node replace(String key, Node node) {
+        return delegate.replace( key, Node.of(node) );
     }
 
     @Override
-    public Value computeIfAbsent( String key, Function<? super String, ? extends Value> mappingFunction ) {
+    public Node computeIfAbsent(String key, Function<? super String, ? extends Node> mappingFunction ) {
         return delegate.computeIfAbsent( key, mappingFunction );
     }
 
     @Override
-    public Value computeIfPresent( String key,
-                                   BiFunction<? super String, ? super Value, ? extends Value> remappingFunction ) {
+    public Node computeIfPresent(String key,
+                                 BiFunction<? super String, ? super Node, ? extends Node> remappingFunction ) {
         return delegate.computeIfPresent( key, remappingFunction );
     }
 
     @Override
-    public Value compute( String key, BiFunction<? super String, ? super Value, ? extends Value> remappingFunction ) {
+    public Node compute(String key, BiFunction<? super String, ? super Node, ? extends Node> remappingFunction ) {
         return delegate.compute( key, remappingFunction );
     }
 
     @Override
-    public Value merge( String key,
-                        Value value,
-                        BiFunction<? super Value, ? super Value, ? extends Value> remappingFunction ) {
-        return delegate.merge( key, value, remappingFunction );
+    public Node merge(String key,
+                      Node node,
+                      BiFunction<? super Node, ? super Node, ? extends Node> remappingFunction ) {
+        return delegate.merge( key, node, remappingFunction );
     }
 
     @Override
-    public void forEach( BiConsumer<? super String, ? super Value> action ) {
+    public void forEach( BiConsumer<? super String, ? super Node> action ) {
         delegate.forEach( action );
     }
 
     @Override
-    public void replaceAll( BiFunction<? super String, ? super Value, ? extends Value> function ) {
+    public void replaceAll( BiFunction<? super String, ? super Node, ? extends Node> function ) {
         delegate.replaceAll( function );
     }
 

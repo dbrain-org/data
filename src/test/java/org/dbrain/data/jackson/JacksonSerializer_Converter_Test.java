@@ -16,9 +16,9 @@
 
 package org.dbrain.data.jackson;
 
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueList;
-import org.dbrain.data.ValueMap;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
+import org.dbrain.data.tree.NodeMap;
 import org.dbrain.data.jackson.artifacts.MapOfLocaleAsKey;
 import org.dbrain.data.jackson.artifacts.Person;
 import org.dbrain.data.jackson.artifacts.TestLongClass;
@@ -39,7 +39,7 @@ public class JacksonSerializer_Converter_Test {
     @Test
     public void testObjectToValue() throws Exception {
         TestLongClass tlc = new TestLongClass();
-        ValueMap v = textSerializer.convert( tlc, ValueMap.class );
+        NodeMap v = textSerializer.convert( tlc, NodeMap.class );
 
         Assert.assertNotNull( v );
         Assert.assertEquals( tlc.getBoxedBigDecimal().longValue(), v.getLong( "boxedBigDecimal" ).longValue() );
@@ -48,8 +48,8 @@ public class JacksonSerializer_Converter_Test {
     @Test
     public void testObjectToValuePrimitive() throws Exception {
 
-        Value v = textSerializer.convert( "Test", Value.class );
-        Assert.assertEquals( v, Value.of( "Test" ) );
+        Node v = textSerializer.convert( "Test", Node.class );
+        Assert.assertEquals( v, Node.of( "Test" ) );
 
     }
 
@@ -61,16 +61,16 @@ public class JacksonSerializer_Converter_Test {
     public void testLocale() throws Exception {
         Locale original = new Locale( "fr", "CA" );
 
-        Value value1 = textSerializer.convert( original, Value.class );
-        Locale copy1 = textSerializer.convert( value1, Locale.class );
+        Node node1 = textSerializer.convert( original, Node.class );
+        Locale copy1 = textSerializer.convert(node1, Locale.class );
 
         String string1 = textSerializer.writeToString( original );
         Locale copy2 = textSerializer.read( string1, Locale.class );
 
         // Read the json untyped.
-        Value untypedValue = textSerializer.read( string1, Value.class );
+        Node untypedNode = textSerializer.read( string1, Node.class );
 
-        Assert.assertEquals( Value.of( "fr_CA" ), untypedValue );
+        Assert.assertEquals( Node.of( "fr_CA" ), untypedNode);
         Assert.assertEquals( original, copy1 );
         Assert.assertEquals( original, copy2 );
     }
@@ -84,16 +84,16 @@ public class JacksonSerializer_Converter_Test {
         MapOfLocaleAsKey original = new MapOfLocaleAsKey();
         original.put( new Locale( "fr", "CA" ), "test" );
 
-        Value value1 = textSerializer.convert( original, Value.class );
-        MapOfLocaleAsKey copy1 = textSerializer.convert( value1, MapOfLocaleAsKey.class );
+        Node node1 = textSerializer.convert( original, Node.class );
+        MapOfLocaleAsKey copy1 = textSerializer.convert(node1, MapOfLocaleAsKey.class );
 
         String string1 = textSerializer.writeToString( original );
         MapOfLocaleAsKey copy2 = textSerializer.read( string1, MapOfLocaleAsKey.class );
 
         // Read the json untyped.
-        Value untypedValue = textSerializer.read( string1, Value.class );
+        Node untypedNode = textSerializer.read( string1, Node.class );
 
-        Assert.assertEquals( ValueMap.newBuilder().put( "fr_CA", "test" ).build(), untypedValue );
+        Assert.assertEquals( NodeMap.newBuilder().put( "fr_CA", "test" ).build(), untypedNode);
         Assert.assertEquals( original, copy1 );
         Assert.assertEquals( original, copy2 );
     }
@@ -101,30 +101,30 @@ public class JacksonSerializer_Converter_Test {
 
     @Test
     public void testDeserilizeList() throws Exception {
-        ValueList list = textSerializer.read( "[1,2,3,4]", ValueList.class );
+        NodeList list = textSerializer.read( "[1,2,3,4]", NodeList.class );
 
         Assert.assertEquals( 4, list.size() );
-        Assert.assertTrue( list.contains( Value.of( 1 ) ) );
-        Assert.assertTrue( list.contains( Value.of( 2 ) ) );
-        Assert.assertTrue( list.contains( Value.of( 3 ) ) );
-        Assert.assertTrue( list.contains( Value.of( 4 ) ) );
+        Assert.assertTrue( list.contains( Node.of( 1 ) ) );
+        Assert.assertTrue( list.contains( Node.of( 2 ) ) );
+        Assert.assertTrue( list.contains( Node.of( 3 ) ) );
+        Assert.assertTrue( list.contains( Node.of( 4 ) ) );
     }
 
     @Test
     public void testDeserilizeMap() throws Exception {
-        ValueMap map = textSerializer.read( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", ValueMap.class );
+        NodeMap map = textSerializer.read( "{\"1\":1,\"2\":2,\"3\":3,\"4\":4}", NodeMap.class );
 
         Assert.assertEquals( 4, map.size() );
-        Assert.assertEquals( map.get( "1" ), Value.of( 1 ) );
-        Assert.assertEquals( map.get( "2" ), Value.of( 2 ) );
-        Assert.assertEquals( map.get( "3" ), Value.of( 3 ) );
-        Assert.assertEquals( map.get( "4" ), Value.of( 4 ) );
+        Assert.assertEquals( map.get( "1" ), Node.of( 1 ) );
+        Assert.assertEquals( map.get( "2" ), Node.of( 2 ) );
+        Assert.assertEquals( map.get( "3" ), Node.of( 3 ) );
+        Assert.assertEquals( map.get( "4" ), Node.of( 4 ) );
     }
 
     @Test
     public void testValueToString() throws Exception {
-        ValueMap map = ValueMap.newInstance();
-        map.put( "test", Value.of( 123L ) );
+        NodeMap map = NodeMap.newInstance();
+        map.put( "test", Node.of( 123L ) );
         Assert.assertEquals( textSerializer.writeToString( map ), "{\"test\":123}" );
     }
 

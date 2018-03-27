@@ -14,9 +14,8 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.casts;
+package org.dbrain.data.cast;
 
-import org.dbrain.data.cast.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

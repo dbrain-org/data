@@ -17,8 +17,8 @@
 package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueList;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 /**
  * A list of simple values.
  */
-public class ListValueImpl implements ValueList {
+public class ListValueImpl implements NodeList {
 
-    private final java.util.List<Value> delegate;
+    private final java.util.List<Node> delegate;
 
-    private ListValueImpl( java.util.List<Value> delegate ) {
+    private ListValueImpl( java.util.List<Node> delegate ) {
         this.delegate = delegate;
     }
 
@@ -92,7 +92,7 @@ public class ListValueImpl implements ValueList {
     }
 
     @Override
-    public Iterator<Value> iterator() {
+    public Iterator<Node> iterator() {
         return delegate.iterator();
     }
 
@@ -107,8 +107,8 @@ public class ListValueImpl implements ValueList {
     }
 
     @Override
-    public boolean add( Value jsonValue ) {
-        return delegate.add( jsonValue );
+    public boolean add( Node jsonNode) {
+        return delegate.add(jsonNode);
     }
 
     @Override
@@ -122,12 +122,12 @@ public class ListValueImpl implements ValueList {
     }
 
     @Override
-    public boolean addAll( Collection<? extends Value> c ) {
+    public boolean addAll( Collection<? extends Node> c ) {
         return delegate.addAll( c );
     }
 
     @Override
-    public boolean addAll( int index, Collection<? extends Value> c ) {
+    public boolean addAll( int index, Collection<? extends Node> c ) {
         return delegate.addAll( index, c );
     }
 
@@ -162,22 +162,22 @@ public class ListValueImpl implements ValueList {
     }
 
     @Override
-    public Value get( int index ) {
+    public Node get(int index ) {
         return delegate.get( index );
     }
 
     @Override
-    public Value set( int index, Value element ) {
+    public Node set(int index, Node element ) {
         return delegate.set( index, element );
     }
 
     @Override
-    public void add( int index, Value element ) {
+    public void add( int index, Node element ) {
         delegate.add( index, element );
     }
 
     @Override
-    public Value remove( int index ) {
+    public Node remove(int index ) {
         return delegate.remove( index );
     }
 
@@ -192,17 +192,17 @@ public class ListValueImpl implements ValueList {
     }
 
     @Override
-    public ListIterator<Value> listIterator() {
+    public ListIterator<Node> listIterator() {
         return delegate.listIterator();
     }
 
     @Override
-    public ListIterator<Value> listIterator( int index ) {
+    public ListIterator<Node> listIterator(int index ) {
         return delegate.listIterator( index );
     }
 
     @Override
-    public java.util.List<Value> subList( int fromIndex, int toIndex ) {
+    public java.util.List<Node> subList(int fromIndex, int toIndex ) {
         return delegate.subList( fromIndex, toIndex );
     }
 

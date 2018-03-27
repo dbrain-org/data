@@ -16,90 +16,90 @@
 
 package org.dbrain.data.impl.value;
 
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueMap;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeMap;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class ValueMapBuilderImpl implements ValueMap.Builder {
+public class ValueMapBuilderImpl implements NodeMap.Builder {
 
-    private ValueMap building = ValueMap.newInstance();
+    private NodeMap building = NodeMap.newInstance();
 
     @Override
-    public ValueMap.Builder putNull( String name ) {
+    public NodeMap.Builder putNull(String name ) {
         building.put( name, null );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Byte v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Byte v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Short v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Short v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Integer v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Integer v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Long v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Long v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, BigInteger v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, BigInteger v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, BigDecimal v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, BigDecimal v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Float v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Float v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Double v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Double v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, String v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, String v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Boolean v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Boolean v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap.Builder put( String name, Value v ) {
-        building.put( name, Value.of( v ) );
+    public NodeMap.Builder put(String name, Node v ) {
+        building.put( name, Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueMap build() {
+    public NodeMap build() {
         try {
             return building;
         } finally {

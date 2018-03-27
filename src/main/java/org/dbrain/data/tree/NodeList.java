@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.tree;
 
 import org.dbrain.data.tabular.IndexedFieldAccessors;
 import org.dbrain.data.impl.value.ListValueImpl;
@@ -26,37 +26,37 @@ import java.math.BigInteger;
 /**
  * An ordered list of value.
  */
-public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAccessors {
+public interface NodeList extends Node, java.util.List<Node>, IndexedFieldAccessors {
 
     /**
      * Create a new empty list.
      */
-    static ValueList newInstance() {
+    static NodeList newInstance() {
         return new ListValueImpl();
     }
 
     /**
      * Create a new builder.
      */
-    static ValueList.Builder newBuilder() {
+    static NodeList.Builder newBuilder() {
         return new ValueListBuilderImpl();
     }
 
     /**
      * List from array.
      */
-    static <T extends Object> ValueList asList( Object... list ) {
+    static <T extends Object> NodeList asList(Object... list ) {
         return of( list );
     }
 
     /**
      * List from array.
      */
-    static <T extends Object> ValueList of( T[] list ) {
+    static <T extends Object> NodeList of(T[] list ) {
         if ( list != null ) {
-            ValueList result = newInstance();
+            NodeList result = newInstance();
             for ( Object o : list ) {
-                result.add( Value.of( o ) );
+                result.add( Node.of( o ) );
             }
             return result;
         } else {
@@ -67,11 +67,11 @@ public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAcc
     /**
      * Create a ValueList from a generic list.
      */
-    static ValueList of( Iterable<Object> list ) {
+    static NodeList of(Iterable<Object> list ) {
         if ( list != null ) {
-            ValueList result = newInstance();
+            NodeList result = newInstance();
             for ( Object o : list ) {
-                result.add( Value.of( o ) );
+                result.add( Node.of( o ) );
             }
             return result;
         } else {
@@ -106,9 +106,9 @@ public interface ValueList extends Value, java.util.List<Value>, IndexedFieldAcc
 
         Builder add( Boolean v );
 
-        Builder add( Value v );
+        Builder add( Node v );
 
-        ValueList build();
+        NodeList build();
 
     }
 

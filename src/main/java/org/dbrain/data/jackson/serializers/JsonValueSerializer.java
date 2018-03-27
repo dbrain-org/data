@@ -20,9 +20,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueList;
-import org.dbrain.data.ValueMap;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
+import org.dbrain.data.tree.NodeMap;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,12 +30,12 @@ import java.util.Map;
 /**
  * Created by epoitras on 08/01/15.
  */
-public class JsonValueSerializer extends JsonSerializer<Value> {
+public class JsonValueSerializer extends JsonSerializer<Node> {
 
-    private void writeMap( ValueMap value, JsonGenerator w ) throws IOException {
+    private void writeMap(NodeMap value, JsonGenerator w ) throws IOException {
         w.writeStartObject();
         try {
-            for ( Map.Entry<String, Value> e : value.entrySet() ) {
+            for ( Map.Entry<String, Node> e : value.entrySet() ) {
                 w.writeFieldName( e.getKey() );
                 writeValue( e.getValue(), w );
             }
@@ -44,10 +44,10 @@ public class JsonValueSerializer extends JsonSerializer<Value> {
         }
     }
 
-    private void writeList( ValueList value, JsonGenerator w ) throws IOException {
+    private void writeList(NodeList value, JsonGenerator w ) throws IOException {
         w.writeStartArray();
         try {
-            for ( Value e : value ) {
+            for ( Node e : value ) {
                 writeValue( e, w );
             }
         } finally {
@@ -58,23 +58,23 @@ public class JsonValueSerializer extends JsonSerializer<Value> {
     /**
      * Write a value to a generator.
      */
-    public void writeValue( Value value, JsonGenerator w ) throws IOException {
-        if ( value == null || value.isNull() ) {
+    public void writeValue(Node node, JsonGenerator w ) throws IOException {
+        if ( node == null || node.isNull() ) {
             w.writeNull();
-        } else if ( value instanceof ValueMap ) {
-            writeMap( (ValueMap) value, w );
-        } else if ( value instanceof ValueList ) {
-            writeList( (ValueList) value, w );
+        } else if ( node instanceof NodeMap) {
+            writeMap( (NodeMap) node, w );
+        } else if ( node instanceof NodeList) {
+            writeList( (NodeList) node, w );
         } else {
-            w.writeObject( value.getObject() );
+            w.writeObject( node.getObject() );
         }
     }
 
 
     @Override
-    public void serialize( Value value,
+    public void serialize( Node node,
                            JsonGenerator jgen,
                            SerializerProvider provider ) throws IOException, JsonProcessingException {
-        writeValue( value, jgen );
+        writeValue(node, jgen );
     }
 }

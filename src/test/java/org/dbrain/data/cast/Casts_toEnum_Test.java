@@ -14,9 +14,8 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.casts;
+package org.dbrain.data.cast;
 
-import org.dbrain.data.cast.Enums;
 import org.junit.Assert;
 import org.junit.Test;
 

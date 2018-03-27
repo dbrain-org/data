@@ -14,11 +14,10 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data.casts;
+package org.dbrain.data.cast;
 
 import junit.framework.Assert;
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.cast.LocalDates;
 import org.junit.Test;
 
 import java.time.LocalDate;

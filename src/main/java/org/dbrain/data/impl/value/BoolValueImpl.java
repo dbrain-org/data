@@ -17,17 +17,17 @@
 package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.Value;
+import org.dbrain.data.tree.Node;
 
 import java.util.Objects;
 
 /**
  * Wrap a scalar value;
  */
-public final class BoolValueImpl implements Value {
+public final class BoolValueImpl implements Node {
 
-    public static final Value TRUE  = new BoolValueImpl( Boolean.TRUE );
-    public static final Value FALSE = new BoolValueImpl( Boolean.FALSE );
+    public static final Node TRUE  = new BoolValueImpl( Boolean.TRUE );
+    public static final Node FALSE = new BoolValueImpl( Boolean.FALSE );
 
     private final Boolean value;
 

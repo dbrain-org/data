@@ -16,90 +16,90 @@
 
 package org.dbrain.data.impl.value;
 
-import org.dbrain.data.Value;
-import org.dbrain.data.ValueList;
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class ValueListBuilderImpl implements ValueList.Builder {
+public class ValueListBuilderImpl implements NodeList.Builder {
 
-    private ValueList building = ValueList.newInstance();
+    private NodeList building = NodeList.newInstance();
 
     @Override
-    public ValueList.Builder addNull() {
-        building.add( Value.nullValue() );
+    public NodeList.Builder addNull() {
+        building.add( Node.nullValue() );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Byte v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Byte v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Short v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Short v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Integer v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Integer v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Long v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Long v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( BigInteger v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(BigInteger v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( BigDecimal v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(BigDecimal v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Float v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Float v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Double v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Double v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( String v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(String v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Boolean v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Boolean v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList.Builder add( Value v ) {
-        building.add( Value.of( v ) );
+    public NodeList.Builder add(Node v ) {
+        building.add( Node.of( v ) );
         return this;
     }
 
     @Override
-    public ValueList build() {
+    public NodeList build() {
         try {
             return building;
         } finally {

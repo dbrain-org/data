@@ -14,15 +14,18 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.tree;
 
+import org.dbrain.data.tree.Node;
+import org.dbrain.data.tree.NodeList;
+import org.dbrain.data.tree.NodeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test Value methods that are not tested otherwise.
  */
-public class Value_Test {
+public class Node_Test {
 
     /**
      * Test the isNull method.
@@ -30,45 +33,45 @@ public class Value_Test {
     @Test
     public void testIsNull() throws Exception {
 
-        Value v;
+        Node v;
 
-        v = Value.of( "" );
+        v = Node.of( "" );
         Assert.assertFalse( v.isNull() );
 
-        v = Value.of( 0.0D );
+        v = Node.of( 0.0D );
         Assert.assertFalse( v.isNull() );
 
-        v = Value.of( Boolean.TRUE );
+        v = Node.of( Boolean.TRUE );
         Assert.assertFalse( v.isNull() );
 
-        v = ValueList.newInstance();
+        v = NodeList.newInstance();
         Assert.assertFalse( v.isNull() );
 
-        v = ValueMap.newInstance();
+        v = NodeMap.newInstance();
         Assert.assertFalse( v.isNull() );
 
-        v = Value.of( (Boolean) null );
+        v = Node.of( (Boolean) null );
         Assert.assertTrue( v.isNull() );
 
-        v = Value.of( (Double) null );
+        v = Node.of( (Double) null );
         Assert.assertTrue( v.isNull() );
 
-        v = Value.of( (String) null );
+        v = Node.of( (String) null );
         Assert.assertTrue( v.isNull() );
 
-        v = Value.nullValue();
+        v = Node.nullValue();
         Assert.assertTrue( v.isNull() );
 
     }
 
     @Test
     public void testHashCode() throws Exception {
-        Value v1 = Value.of( 2 );
-        Value v2 = Value.of( 2 );
+        Node v1 = Node.of( 2 );
+        Node v2 = Node.of( 2 );
         Assert.assertTrue( v1.hashCode() == v2.hashCode() );
 
-        v1 = Value.of( (Object) null );
-        v2 = Value.of( (Object) null );
+        v1 = Node.of( (Object) null );
+        v2 = Node.of( (Object) null );
         Assert.assertTrue( v1.hashCode() == v2.hashCode() );
 
     }

@@ -14,8 +14,10 @@
  *     limitations under the License.
  */
 
-package org.dbrain.data;
+package org.dbrain.data.tree;
 
+import org.dbrain.data.DataCoercionException;
+import org.dbrain.data.tree.Node;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,11 +29,11 @@ import java.util.Collection;
  * Test different valueOf.
  */
 @RunWith( Parameterized.class )
-public class Value_of_infinity_Test {
+public class Node_of_infinity_Test {
 
     private Object v;
 
-    public Value_of_infinity_Test( Object v ) {
+    public Node_of_infinity_Test(Object v ) {
         this.v = v;
     }
 
@@ -47,7 +49,7 @@ public class Value_of_infinity_Test {
 
     @Test( expected = DataCoercionException.class )
     public void testInvalidNumbers() throws Exception {
-        Value.of( v );
+        Node.of( v );
     }
 
 }

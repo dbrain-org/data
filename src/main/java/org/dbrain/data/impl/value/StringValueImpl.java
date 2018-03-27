@@ -17,14 +17,14 @@
 package org.dbrain.data.impl.value;
 
 import org.dbrain.data.DataCoercionException;
-import org.dbrain.data.Value;
+import org.dbrain.data.tree.Node;
 
 import java.util.Objects;
 
 /**
  * Wrap a scalar value;
  */
-public final class StringValueImpl implements Value {
+public final class StringValueImpl implements Node {
 
     private final String value;
 
